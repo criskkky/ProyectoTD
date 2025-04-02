@@ -1,0 +1,8 @@
+{
+    "conventionalCommits.scopes": [
+        "front",
+        "back",
+        "config"
+    ],
+    "conventionalCommits.gitmoji": false,
+}
