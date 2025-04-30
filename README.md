@@ -83,12 +83,12 @@ A continuación se presenta la estructura esquemática del proyecto (podría cam
     <tbody>
         <tr>
             <td>Backend</td>
-            <td>Node.js, Express, MySQL, Sequelize, Passport.js</td>
+            <td>Node.js, Express, MySQL, TypeORM, Passport.js, JWT</td>
             <td>Desarrollo de la lógica del servidor, autenticación y conexión con la base de datos</td>
         </tr>
         <tr>
             <td>Frontend</td>
-            <td>React, Vite, Axios, React Router Dom, SweetAlert2</td>
+            <td>React, React DOM, Vite, Axios, React Router Dom, SweetAlert2</td>
             <td>Construcción de la interfaz de usuario y manejo de la interacción con el servidor</td>
         </tr>
         <tr>
@@ -98,8 +98,8 @@ A continuación se presenta la estructura esquemática del proyecto (podría cam
         </tr>
         <tr>
             <td>Herramientas de desarrollo</td>
-            <td>ESLint, Prettier, DBeaver</td>
-            <td>Mejora de la calidad del código y administración de la base de datos</td>
+            <td>ESLint, Prettier, Nodemon, Morgan</td>
+            <td>Mejora de la calidad del código y administración del entorno de desarrollo</td>
         </tr>
         <tr>
             <td>Control de versiones</td>
