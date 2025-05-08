@@ -13,11 +13,12 @@ async function createUsers() {
     await Promise.all([
       userRepository.save(
         userRepository.create({
-          nombreCompleto: "Padmin Sadmin Tadmin Cadmin",
+          nombres: "Padmin Sadmin",
+          apellidos: "Tadmin Cadmin",
           rut: "11.111.111-1",
           email: "admin@sistema.com",
           password: await encryptPassword("admin123"),
-          rol: "administrador",
+          rol: "admin",
         })
       ),
     ]);
