@@ -1,0 +1,72 @@
+version: "3.9"
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    restart: always
+    env_file:
+      - ./backend/src/config/.env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  backend:
+    image: node:20
+    container_name: backend
+    working_dir: /app/backend
+    command: sh -c "npm install && npm run dev"
+    volumes:
+      - ./backend:/app/backend
+    environment:
+      - NODE_ENV=development
+    env_file:
+      - ./backend/src/config/.env
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mysql
+
+  frontend:
+    image: node:20
+    container_name: frontend
+    working_dir: /app/frontend
+    command: sh -c "npm install && npm run dev"
+    volumes:
+      - ./frontend:/app/frontend
+    environment:
+      - NODE_ENV=development
+    ports:
+      - "80:5173"
+    depends_on:
+      - backend
+
+  ubuntu:
+    image: ubuntu:22.04
+    container_name: ubuntu-dev
+    tty: true
+    stdin_open: true
+    command: bash
+    volumes:
+      - ./:/workspace
+    working_dir: /workspace
+    depends_on:
+      - mysql
+    environment:
+      - DEBIAN_FRONTEND=noninteractive
+    # Instala herramientas útiles y cliente mysql al iniciar
+    entrypoint: >
+      bash -c "
+        apt-get update &&
+        apt-get install -y nano vim git curl mysql-client &&
+        bash
+      "
+
+volumes:
+  mysql_data:
