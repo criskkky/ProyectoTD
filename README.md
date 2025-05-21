@@ -83,8 +83,8 @@ A continuación se presenta la estructura esquemática del proyecto (podría cam
     <tbody>
         <tr>
             <td>Backend</td>
-            <td>Node.js, Express, MySQL, TypeORM, Passport.js, JWT</td>
-            <td>Desarrollo de la lógica del servidor, autenticación y conexión con la base de datos</td>
+            <td>Node.js, Express, MySQL, TypeORM, Passport.js, JWT, bcryptjs, Joi, dotenv</td>
+            <td>Desarrollo de la lógica del servidor, autenticación, validaciones y conexión con la base de datos</td>
         </tr>
         <tr>
             <td>Frontend</td>
