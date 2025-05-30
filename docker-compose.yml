@@ -8,10 +8,10 @@ services:
     env_file:
       - ./backend/src/config/.env
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_DATABASE: ${DB_NAME}
-      MYSQL_USER: ${DB_USER}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: testeo
+      MYSQL_DATABASE: proyecto
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: testeo
     ports:
       - "3306:3306"
     volumes:
@@ -21,7 +21,7 @@ services:
     image: node:20
     container_name: backend
     working_dir: /app/backend
-    command: sh -c "npm install && npm run dev"
+    command: sh -c "npm install && npm run dev -- --host"
     volumes:
       - ./backend:/app/backend
     environment:
@@ -37,13 +37,13 @@ services:
     image: node:20
     container_name: frontend
     working_dir: /app/frontend
-    command: sh -c "npm install && npm run dev"
+    command: sh -c "npm install && npm run dev -- --host"
     volumes:
       - ./frontend:/app/frontend
     environment:
       - NODE_ENV=development
     ports:
-      - "80:5173"
+      - "5173:5173"
     depends_on:
       - backend
 
