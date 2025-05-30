@@ -15,7 +15,7 @@ async function createUsers() {
         userRepository.create({
           nombres: "Padmin Sadmin",
           apellidos: "Tadmin Cadmin",
-          rut: "11.111.111-1",
+          rut: "12345678-1",
           email: "admin@sistema.com",
           password: await encryptPassword("admin123"),
           rol: "admin",
