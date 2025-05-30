@@ -1,7 +1,7 @@
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { logout } from '@services/auth.service.js';
-// import '@styles/navbar.css';
 import { useState } from "react";
+import { FaBars } from "react-icons/fa";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -43,9 +43,9 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="navbar">
-      <div className={`nav-menu ${menuOpen ? 'activado' : ''}`}>
-        <ul>
+    <nav className="navbar bg-white shadow-md px-4 py-2 flex items-center justify-between">
+      <div className={`nav-menu ${menuOpen ? 'block' : 'hidden'} absolute top-16 left-0 w-full bg-white z-10 md:static md:block md:w-auto md:bg-transparent`}>
+        <ul className="flex flex-col md:flex-row md:space-x-6">
           <li>
             <NavLink
               to="/home"
@@ -53,7 +53,13 @@ const Navbar = () => {
                 setMenuOpen(false);
                 addActiveClass();
               }}
-              className={({ isActive }) => (isActive ? 'active' : '')}
+              className={() =>
+                `block px-4 py-2 rounded hover:bg-gray-100 transition-colors ${
+                  (location.pathname === "/home" || location.pathname === "/")
+                    ? 'text-blue-600 font-bold'
+                    : 'text-gray-700'
+                }`
+              }
             >
               Inicio
             </NavLink>
@@ -67,14 +73,15 @@ const Navbar = () => {
                     setMenuOpen(false);
                     addActiveClass();
                   }}
-                  className={({ isActive }) => (isActive ? 'active' : '')}
+                  className={({ isActive }) =>
+                    `block px-4 py-2 rounded hover:bg-gray-100 transition-colors ${isActive ? 'text-blue-600 font-bold' : 'text-gray-700'}`
+                  }
                 >
                   Usuarios
                 </NavLink>
               </li>
             </>
           )}
-              
           <li>
             <NavLink
               to="/auth"
@@ -82,17 +89,23 @@ const Navbar = () => {
                 logoutSubmit();
                 setMenuOpen(false);
               }}
-              className={({ isActive }) => (isActive ? 'active' : '')}
+              className={({ isActive }) =>
+                `block px-4 py-2 rounded hover:bg-gray-100 transition-colors ${isActive ? 'text-blue-600 font-bold' : 'text-gray-700'}`
+              }
             >
               Cerrar sesión
             </NavLink>
           </li>
         </ul>
       </div>
-      <div className="hamburger" onClick={toggleMenu}>
-        <span className="bar"></span>
-        <span className="bar"></span>
-        <span className="bar"></span>
+      <div className="md:hidden">
+        <button
+          className="hamburger p-2 rounded hover:bg-gray-200 transition-colors"
+          onClick={toggleMenu}
+          aria-label="Abrir menú"
+        >
+          <FaBars size={24} />
+        </button>
       </div>
     </nav>
   );
