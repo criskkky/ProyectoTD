@@ -26,7 +26,7 @@ const Login = () => {
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 via-white to-blue-200">
+    <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-800 via-blue-700 to-blue-600">
       <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8">
         <Form
           title="Iniciar sesión"

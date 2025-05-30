@@ -21,7 +21,7 @@ const Form = ({ title, fields, buttonText, onSubmit, footerContent, backgroundCo
 
   return (
     <form
-      className="w-full max-w-md mx-auto p-8 rounded-lg shadow-md flex flex-col gap-4"
+      className="w-full max-w-md mx-auto p-8 rounded-lg shadow-md flex flex-col gap-2"
       style={{ backgroundColor: backgroundColor }}
       onSubmit={handleSubmit(onFormSubmit)}
       autoComplete="off"
@@ -111,7 +111,7 @@ const Form = ({ title, fields, buttonText, onSubmit, footerContent, backgroundCo
         </div>
       ))}
       {buttonText && <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded transition">{buttonText}</button>}
-      {footerContent && <div className="mt-4 text-center text-sm text-gray-500">{footerContent}</div>}
+      {footerContent && <div className="text-center text-sm text-gray-500">{footerContent}</div>}
     </form>
   );
 };
