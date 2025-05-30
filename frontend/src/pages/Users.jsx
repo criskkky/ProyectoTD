@@ -4,7 +4,7 @@ import Search from '../components/Search';
 import Popup from '../components/Popup';
 import { MdDelete, MdEdit, MdEditOff, MdDeleteOutline } from 'react-icons/md';
 import { useCallback, useState } from 'react';
-import '@styles/users.css';
+// import '@styles/users.css';
 import useEditUser from '@hooks/users/useEditUser';
 import useDeleteUser from '@hooks/users/useDeleteUser';
 
