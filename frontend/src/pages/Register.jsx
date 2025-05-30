@@ -2,10 +2,7 @@ import Table from '@components/Table';
 import useUsers from '@hooks/users/useGetUsers.jsx';
 import Search from '../components/Search';
 import Popup from '../components/Popup';
-import DeleteIcon from '../assets/deleteIcon.svg';
-import UpdateIcon from '../assets/updateIcon.svg';
-import UpdateIconDisable from '../assets/updateIconDisabled.svg';
-import DeleteIconDisable from '../assets/deleteIconDisabled.svg';
+import { MdDelete, MdEdit, MdEditOff, MdDeleteOutline } from 'react-icons/md';
 import { useCallback, useState } from 'react';
 import '@styles/users.css';
 import useEditUser from '@hooks/users/useEditUser';
@@ -52,16 +49,16 @@ const Users = () => {
             <Search value={filterRut} onChange={handleRutFilterChange} placeholder={'Filtrar por rut'} />
             <button onClick={handleClickUpdate} disabled={dataUser.length === 0}>
               {dataUser.length === 0 ? (
-                <img src={UpdateIconDisable} alt="edit-disabled" />
+                <MdEditOff size={24} title="edit-disabled" />
               ) : (
-                <img src={UpdateIcon} alt="edit" />
+                <MdEdit size={24} title="edit" />
               )}
             </button>
             <button className='delete-user-button' disabled={dataUser.length === 0} onClick={() => handleDelete(dataUser)}>
               {dataUser.length === 0 ? (
-                <img src={DeleteIconDisable} alt="delete-disabled" />
+                <MdDeleteOutline size={24} title="delete-disabled" />
               ) : (
-                <img src={DeleteIcon} alt="delete" />
+                <MdDelete size={24} title="delete" />
               )}
             </button>
           </div>
