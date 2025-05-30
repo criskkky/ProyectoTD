@@ -10,10 +10,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@formkit/tempo": "^0.1.2",
+    "axios": "^1.9.0",
+    "js-cookie": "^3.0.5",
+    "jwt-decode": "^4.0.0",
     "lodash": "^4.17.21",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-router-dom": "^7.6.1"
+    "react-router-dom": "^7.6.1",
+    "rut.js": "^2.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.1",
