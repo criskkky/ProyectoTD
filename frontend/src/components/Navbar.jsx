@@ -7,7 +7,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const user = JSON.parse(sessionStorage.getItem('usuario')) || '';
-  const userRole = user?.rol;
+  // const userRole = user?.rol;
   const [menuOpen, setMenuOpen] = useState(false);
 
   const logoutSubmit = () => {
@@ -71,22 +71,42 @@ const Navbar = () => {
                 Inicio
               </NavLink>
             </li>
-            {userRole === 'admin' && (
-              <li>
-                <NavLink
-                  to="/users"
-                  onClick={() => {
-                    setMenuOpen(false);
-                    addActiveClass();
-                  }}
-                  className={({ isActive }) =>
-                    `block px-4 py-2 rounded hover:bg-gray-100 transition-colors ${isActive ? 'text-blue-600 font-bold' : 'text-gray-700'}`
-                  }
-                >
-                  Usuarios
-                </NavLink>
-              </li>
-            )}
+            <li>
+              <NavLink
+                to="/explore"
+                onClick={() => {
+                  setMenuOpen(false);
+                  addActiveClass();
+                }}
+                className={() =>
+                  `block px-4 py-2 rounded hover:bg-gray-100 transition-colors ${
+                    location.pathname === "/explore"
+                      ? 'text-blue-600 font-bold'
+                      : 'text-gray-700'
+                  }`
+                }
+              >
+                Explorar
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to="/dashboard"
+                onClick={() => {
+                  setMenuOpen(false);
+                  addActiveClass();
+                }}
+                className={() =>
+                  `block px-4 py-2 rounded hover:bg-gray-100 transition-colors ${
+                    location.pathname === "/dashboard"
+                      ? 'text-blue-600 font-bold'
+                      : 'text-gray-700'
+                  }`
+                }
+              >
+                Dashboard
+              </NavLink>
+            </li>
           </ul>
         </div>
       </div>
