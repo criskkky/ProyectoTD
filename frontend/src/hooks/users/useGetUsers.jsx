@@ -8,7 +8,8 @@ const useUsers = () => {
         try {
             const response = await getUsers();
             const formattedData = response.map(user => ({
-                nombreCompleto: user.nombreCompleto,
+                nombres: user.nombres,
+                apellidos: user.apellidos,
                 rut: user.rut,
                 email: user.email,
                 rol: user.rol,

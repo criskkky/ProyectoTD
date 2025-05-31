@@ -68,7 +68,7 @@ const Users = () => {
           columns={columns}
           filter={filterRut}
           dataToFilter={'rut'}
-          initialSortName={'nombreCompleto'}
+          initialSortName={'nombres'}
           onSelectionChange={handleSelectionChange}
         />
       </div>
