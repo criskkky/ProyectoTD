@@ -1,6 +1,9 @@
 import { FaQuestionCircle, FaSignInAlt, FaUserTie, FaSearch, FaClipboardList } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+  const navigate = useNavigate();
+
   return (
     <>
       {/* Home */}
@@ -68,10 +71,21 @@ const Home = () => {
           </div>
         </div>
       </div>
-      {/* Linea horizontal que se deshace */}
+      {/* Linea horizontal */}
       <hr className="mx-80 my-10 border-t border-gray-300" />
-      {/* Sección de testimonios */}
-      
+      {/* Sección */}
+      <div className="text-center">
+        <h2 className="text-3xl font-bold text-gray-900 mb-4">¿Qué estas esperando?</h2>
+        <p className="text-lg text-gray-700 mb-6">
+          Crea tu cuenta y sumate a la nueva forma de encontrar trabajo en Chile. 
+        </p>
+        <button 
+          onClick={() => navigate('/register')}
+          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
+        >
+          Regístrate ahora
+        </button>
+      </div>
     </>
   );
 }
