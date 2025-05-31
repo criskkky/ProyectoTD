@@ -1,7 +1,7 @@
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { logout } from '@services/auth.service.js';
 import { useState } from "react";
-import { FaBars } from "react-icons/fa";
+import { FaBars, FaReact } from "react-icons/fa";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -44,9 +44,15 @@ const Navbar = () => {
 
   return (
     <nav className="navbar bg-white shadow-md px-4 py-2 flex items-center justify-between">
-      <div className="flex-1">
+      {/* Logo */}
+      <div className="flex items-center flex-shrink-0 mr-4">
+        <FaReact size={32} className="text-blue-500" />
+        <span className="ml-2 font-bold text-xl text-blue-600 hidden sm:inline">ProyectoTD</span>
+      </div>
+      {/* Menú central */}
+      <div className="flex-1 flex justify-center">
         <div className={`nav-menu ${menuOpen ? 'block' : 'hidden'} absolute top-16 left-0 w-full bg-white z-10 md:static md:block md:w-auto md:bg-transparent`}>
-          <ul className="flex flex-col md:flex-row md:space-x-6">
+          <ul className="flex flex-col md:flex-row md:space-x-6 items-center">
             <li>
               <NavLink
                 to="/home"
@@ -66,26 +72,25 @@ const Navbar = () => {
               </NavLink>
             </li>
             {userRole === 'admin' && (
-              <>
-                <li>
-                  <NavLink
-                    to="/users"
-                    onClick={() => {
-                      setMenuOpen(false);
-                      addActiveClass();
-                    }}
-                    className={({ isActive }) =>
-                      `block px-4 py-2 rounded hover:bg-gray-100 transition-colors ${isActive ? 'text-blue-600 font-bold' : 'text-gray-700'}`
-                    }
-                  >
-                    Usuarios
-                  </NavLink>
-                </li>
-              </>
+              <li>
+                <NavLink
+                  to="/users"
+                  onClick={() => {
+                    setMenuOpen(false);
+                    addActiveClass();
+                  }}
+                  className={({ isActive }) =>
+                    `block px-4 py-2 rounded hover:bg-gray-100 transition-colors ${isActive ? 'text-blue-600 font-bold' : 'text-gray-700'}`
+                  }
+                >
+                  Usuarios
+                </NavLink>
+              </li>
             )}
           </ul>
         </div>
       </div>
+      {/* Botones de sesión y menú hamburguesa */}
       <div className="flex items-center space-x-4">
         <div className="hidden md:block">
           {user ? (
