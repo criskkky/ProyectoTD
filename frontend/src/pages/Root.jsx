@@ -20,3 +20,13 @@ return (
 }
 
 export default Root;
+
+if (typeof document !== 'undefined') {
+    const style = document.createElement('style');
+    style.innerHTML = `
+        button {
+            cursor: pointer;
+        }
+    `;
+    document.head.appendChild(style);
+}
