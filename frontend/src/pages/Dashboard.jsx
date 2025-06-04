@@ -2,11 +2,13 @@ import React from "react";
 import { FaUserCircle, FaClipboardList, FaPlusCircle, FaEnvelope, FaEdit, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
+const user = JSON.parse(sessionStorage.getItem('usuario')) || '';
+
 // Simulación de datos
 const servicios = [
-  { id: 1, titulo: "Clases de Matemáticas" },
-  { id: 2, titulo: "Soporte Técnico PC" },
-  { id: 3, titulo: "Traducción Inglés-Español" },
+  { id: 1, titulo: "Clases de Matemáticas", estado: "activo", fechapublicacion: "04-06-2025" },
+  { id: 2, titulo: "Soporte Técnico PC", estado: "inactivo", fechapublicacion: "01-05-2025" },
+  { id: 3, titulo: "Traducción Inglés-Español", estado: "bloqueado", fechapublicacion: "15-04-2025" },
 ];
 
 const Dashboard = () => {
@@ -14,11 +16,10 @@ const Dashboard = () => {
   const publicaciones = servicios.length;
   const solicitudesRecibidas = 5;
 
-  // Simulación de perfil
   const perfil = {
-    nombre: "Juan Pérez",
-    email: "juan@email.com",
-    profesion: "Profesor",
+    nombre: user.nombres || "Error",
+    apellidos: user.apellidos || "Error",
+    email: user.email || "Error"
   };
 
   // Handlers simulados
@@ -63,13 +64,15 @@ const Dashboard = () => {
               className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
               onClick={() => navigate("/publicar-servicio")}
             >
-              <FaPlusCircle /> Nuevo servicio
+              <FaPlusCircle /> Crear publicación
             </button>
           </div>
           <table className="w-full text-left">
             <thead>
               <tr className="border-b">
                 <th className="py-2">Título</th>
+                <th className="py-2">Estado</th>
+                <th className="py-2">Fecha de publicación</th>
                 <th className="py-2">Acciones</th>
               </tr>
             </thead>
@@ -77,6 +80,8 @@ const Dashboard = () => {
               {servicios.map((servicio) => (
                 <tr key={servicio.id} className="border-b hover:bg-gray-50">
                   <td className="py-2">{servicio.titulo}</td>
+                  <td className="py-2">{servicio.estado}</td>
+                  <td className="py-2">{servicio.fechapublicacion}</td>
                   <td className="py-2 flex gap-2">
                     <button
                       className="text-blue-600 hover:underline flex items-center gap-1"
@@ -103,7 +108,7 @@ const Dashboard = () => {
             <FaUserCircle size={40} className="text-blue-500" />
             <div>
               <h2 className="text-xl font-bold text-gray-900">Mi perfil</h2>
-              <p className="text-gray-700">{perfil.nombre} - {perfil.profesion}</p>
+              <p className="text-gray-700">{perfil.nombre} {perfil.apellidos}</p>
               <p className="text-gray-500">{perfil.email}</p>
             </div>
           </div>
