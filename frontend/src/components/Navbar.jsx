@@ -107,6 +107,32 @@ const Navbar = () => {
                 Dashboard
               </NavLink>
             </li>
+            <li className="md:hidden w-full">
+              {user ? (
+                <NavLink
+                  to="/auth"
+                  onClick={() => {
+                    logoutSubmit();
+                    setMenuOpen(false);
+                  }}
+                  className={({ isActive }) =>
+                    `block px-4 py-2 rounded hover:bg-gray-100 transition-colors w-full text-center ${isActive ? 'text-blue-600 font-bold' : 'text-gray-700'}`
+                  }
+                >
+                  Cerrar sesión
+                </NavLink>
+              ) : (
+                <NavLink
+                  to="/auth"
+                  onClick={() => setMenuOpen(false)}
+                  className={({ isActive }) =>
+                    `block px-4 py-2 rounded hover:bg-gray-100 transition-colors w-full text-center ${isActive ? 'text-blue-600 font-bold' : 'text-gray-700'}`
+                  }
+                >
+                  Iniciar sesión
+                </NavLink>
+              )}
+            </li>
           </ul>
         </div>
       </div>
@@ -147,37 +173,6 @@ const Navbar = () => {
             <FaBars size={24} />
           </button>
         </div>
-      </div>
-      {/* Botón de sesión en menú móvil */}
-      <div className={`md:hidden ${menuOpen ? 'block' : 'hidden'} absolute top-full right-0 w-full bg-white z-20`}>
-        <ul>
-          <li>
-            {user ? (
-              <NavLink
-                to="/auth"
-                onClick={() => {
-                  logoutSubmit();
-                  setMenuOpen(false);
-                }}
-                className={({ isActive }) =>
-                  `block px-4 py-2 rounded hover:bg-gray-100 transition-colors ${isActive ? 'text-blue-600 font-bold' : 'text-gray-700'}`
-                }
-              >
-                Cerrar sesión
-              </NavLink>
-            ) : (
-              <NavLink
-                to="/auth"
-                onClick={() => setMenuOpen(false)}
-                className={({ isActive }) =>
-                  `block px-4 py-2 rounded hover:bg-gray-100 transition-colors ${isActive ? 'text-blue-600 font-bold' : 'text-gray-700'}`
-                }
-              >
-                Iniciar sesión
-              </NavLink>
-            )}
-          </li>
-        </ul>
       </div>
     </nav>
   );

@@ -7,19 +7,16 @@ const Home = () => {
   return (
     <>
       {/* Home */}
-      <div className="home flex flex-col md:flex-row md:justify-center md:items-start mt-10 gap-8">
+      <div className="home flex flex-col xl:flex-row md:justify-center md:items-start mt-10 gap-8 px-4">
         {/* Columna izquierda: Bienvenida y descripción */}
-        <div className="md:w-1/2 max-w-2xl mx-auto md:mx-0 py-6">
+        <div className="md:w-1/2 max-w-2xl mx-auto md:mx-0 py-6 px-2 md:px-0">
           <h1 className="text-4xl font-bold text-left text-gray-900">¡Bienvenid@!</h1>
-
           <h3 className="text-xl font-semibold text-left mt-4 text-blue-600">
             ¡Nos alegra tenerte por aquí!
           </h3>
-
           <p className="text-left mt-1 text-lg text-gray-700">
             Te presentamos <b>ProyectoTD</b>, la plataforma de autopromoción laboral que conecta a personas en Chile con trabajadores de distintas áreas, ya sea de forma presencial, online o mixta.
           </p>
-
           <h3 className="text-xl font-semibold text-left mt-1 text-blue-600">
             ¿Qué encontrarás en nuestra plataforma?
           </h3>
@@ -28,7 +25,7 @@ const Home = () => {
           </p>
         </div>
         {/* Columna derecha: ¿Cómo empezar? */}
-        <div className="md:w-[50rem] max-w-lg mx-auto md:mx-0">
+        <div className="md:w-[50rem] max-w-lg mx-auto md:mx-0 px-2 md:px-0">
           <div className="bg-white rounded-xl shadow-lg p-6 border border-blue-100">
             <h2 className="text-xl font-bold text-blue-700 mb-4 flex items-center gap-2">
               <FaQuestionCircle className="inline-block text-blue-500" size={24} />
@@ -72,15 +69,22 @@ const Home = () => {
         </div>
       </div>
       {/* Linea horizontal */}
-      <hr className="mx-80 my-10 border-t border-gray-300" />
+      <hr className="mx-4 md:mx-80 my-10 border-t border-gray-300" />
       {/* Sección */}
-      <div className="text-center">
+      <div className="text-center px-4 md:px-0">
         <h2 className="text-3xl font-bold text-gray-900 mb-4">¿Qué estas esperando?</h2>
         <p className="text-lg text-gray-700 mb-6">
-          Crea tu cuenta y sumate a la nueva forma de encontrar trabajo en Chile. 
+          Crea tu cuenta y súmate a la nueva forma de encontrar trabajo en Chile. 
         </p>
         <button 
-          onClick={() => navigate('/register')}
+          onClick={() => {
+            const usuario = sessionStorage.getItem('usuario');
+            if (usuario) {
+              navigate('/dashboard');
+            } else {
+              navigate('/register');
+            }
+          }}
           className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded"
         >
           Regístrate ahora

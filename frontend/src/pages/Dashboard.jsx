@@ -1,10 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FaUserCircle, FaClipboardList, FaPlusCircle, FaEnvelope, FaEdit, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
-const user = JSON.parse(sessionStorage.getItem('usuario')) || '';
-
-// Simulación de datos
 const servicios = [
   { id: 1, titulo: "Clases de Matemáticas", estado: "activo", fechapublicacion: "04-06-2025" },
   { id: 2, titulo: "Soporte Técnico PC", estado: "inactivo", fechapublicacion: "01-05-2025" },
@@ -13,7 +10,15 @@ const servicios = [
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const [user, setUser] = useState({});
+
+  useEffect(() => {
+    const usuario = JSON.parse(sessionStorage.getItem('usuario')) || {};
+    setUser(usuario);
+  }, []);
+
   const publicaciones = servicios.length;
+  const maxPublicaciones = user.rol === "premium" ? 6 : 3;
   const solicitudesRecibidas = 5;
 
   const perfil = {
@@ -21,6 +26,9 @@ const Dashboard = () => {
     apellidos: user.apellidos || "Error",
     email: user.email || "Error"
   };
+
+  // Debug de user all data
+  console.log("User data:", user);
 
   // Handlers simulados
   const handleEditarServicio = (id) => {
@@ -36,15 +44,15 @@ const Dashboard = () => {
   };
 
   return (
-    <main className="min-h-screen bg-gray-50 py-10">
+    <main className="min-h-screen py-10 px-4 md:px-0">
       <div className="max-w-5xl mx-auto space-y-8">
         {/* Panel de estadísticas */}
         <section className="bg-white rounded-xl shadow-md p-6 flex flex-col md:flex-row gap-6">
           <div className="flex-1 flex items-center gap-4">
             <FaClipboardList size={36} className="text-blue-600" />
             <div>
-              <h2 className="text-lg font-semibold">Publicaciones</h2>
-              <p className="text-2xl font-bold">{publicaciones}</p>
+              <h2 className="text-lg font-semibold">Publicaciones realizadas</h2>
+              <p className="text-2xl font-bold">{publicaciones}/{maxPublicaciones}</p>
             </div>
           </div>
           <div className="flex-1 flex items-center gap-4">
@@ -87,13 +95,15 @@ const Dashboard = () => {
                       className="text-blue-600 hover:underline flex items-center gap-1"
                       onClick={() => handleEditarServicio(servicio.id)}
                     >
-                      <FaEdit /> Editar
+                      <FaEdit />
+                      <span className="hidden md:inline">Editar</span>
                     </button>
                     <button
                       className="text-red-600 hover:underline flex items-center gap-1"
                       onClick={() => handleEliminarServicio(servicio.id)}
                     >
-                      <FaTrash /> Eliminar
+                      <FaTrash />
+                      <span className="hidden md:inline">Eliminar</span>
                     </button>
                   </td>
                 </tr>
