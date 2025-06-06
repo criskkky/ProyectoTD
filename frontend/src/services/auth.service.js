@@ -25,8 +25,13 @@ export async function login(dataUser) {
 
 export async function register(data) {
     try {
-        const dataRegister = convertirMinusculas(data);
-        const { nombres, apellidos, email, rut, password } = dataRegister
+        // Remover password del objeto data y convertir el resto a minúsculas
+        const { password, ...rest } = data;
+        const dataRegister = {
+            ...convertirMinusculas(rest),
+            password // Añadir nuevamente la contraseña
+        };
+        const { nombres, apellidos, email, rut } = dataRegister;
         const response = await axios.post('/auth/register', {
             nombres,
             apellidos,
