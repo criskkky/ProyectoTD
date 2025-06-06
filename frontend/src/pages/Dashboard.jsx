@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 const servicios = [
   { id: 1, titulo: "Clases de Matemáticas", estado: "activo", fechapublicacion: "04-06-2025", categoria: "educación", modalidad: "mixto" },
   { id: 2, titulo: "Soporte Técnico PC", estado: "inactivo", fechapublicacion: "01-05-2025", categoria: "tecnología", modalidad: "presencial" },
-  { id: 3, titulo: "Traducción Inglés-Español", estado: "bloqueado", fechapublicacion: "15-04-2025", categoria: "Idiomas", modalidad: "online" },
+  { id: 3, titulo: "Traducción Inglés-Español", estado: "bloqueado", fechapublicacion: "15-04-2025", categoria: "idiomas", modalidad: "online" },
 ];
 
 const Dashboard = () => {
