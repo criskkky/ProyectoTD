@@ -3,6 +3,7 @@ import { FaUserCircle, FaClipboardList, FaPlusCircle, FaEnvelope, FaEdit, FaTras
 import { useNavigate } from "react-router-dom";
 import Popup from "../components/Popup";
 import useEditProfile from "../hooks/profile/useEditProfile";
+import { startCase } from 'lodash';
 
 const servicios = [
   { id: 1, titulo: "Clases de Matemáticas", estado: "activo", fechapublicacion: "04-06-2025", categoria: "educación", modalidad: "mixto" },
@@ -128,21 +129,46 @@ const Dashboard = () => {
 
         {/* Edición rápida de perfil */}
         <section className="bg-white rounded-xl shadow-md p-6">
-          <div className="flex items-center gap-4 mb-4">
-            <FaUserCircle size={40} className="text-blue-500" />
-            <div>
-              <h2 className="text-xl font-bold text-gray-900">Mi perfil</h2>
-              <p className="text-gray-800">ID: {perfil.id}</p>
-              <p className="text-gray-700">{perfil.nombre} {perfil.apellidos}</p>
-              <p className="text-gray-500">{perfil.email}</p>
+          <div className="flex flex-col md:flex-row items-center gap-6 mb-4">
+            {/* Columna 1: Foto */}
+            <FaUserCircle size={50} className="text-blue-500" />
+
+            {/* Columna 2: ID, Nombre y Apellidos */}
+            <div className="flex-1 w-full">
+              <p className="font-semibold">
+                ID: <span className="font-normal">{perfil.id}</span>
+              </p>
+              <p className="font-semibold">
+                Nombre: <span className="font-normal">{startCase(perfil.nombre)} {startCase(perfil.apellidos)}</span>
+              </p>
+            </div>
+            {/* Columna 3: Rol y Correo */}
+            <div className="flex-1 w-full">
+              <p className="font-semibold flex items-center gap-2">
+                Rol:
+                <span
+                  className={`font-normal px-2 rounded 
+                    ${user.rol === "admin" ? "bg-red-600 text-white" : 
+                      user.rol === "user" ? "bg-blue-600 text-white" : 
+                      "bg-gray-200 text-gray-800"}`}
+                >
+                  {startCase(user.rol) || "Error"}
+                </span>
+              </p>
+              <p className="font-semibold">
+                Correo: <span className="font-normal">{perfil.email}</span>
+              </p>
+            </div>
+            {/* Columna 4: Botón Editar */}
+            <div className="flex-shrink-0 w-full md:w-auto flex justify-center md:justify-end">
+              <button
+                className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded"
+                onClick={handleEditarPerfil}
+              >
+                <FaEdit className="inline mr-2" /> Editar perfil
+              </button>
             </div>
           </div>
-          <button
-            className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded"
-            onClick={handleEditarPerfil}
-          >
-            <FaEdit className="inline mr-2" /> Editar perfil
-          </button>
         </section>
         {/* Popup para editar perfil */}
         <Popup
