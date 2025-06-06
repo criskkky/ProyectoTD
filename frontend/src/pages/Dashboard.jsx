@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { FaUserCircle, FaClipboardList, FaPlusCircle, FaEnvelope, FaEdit, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import Popup from "../components/Popup"; // Asegúrate de que la ruta sea correcta
+import Popup from "../components/Popup";
+import useEditProfile from "../hooks/profile/useEditProfile";
 
 const servicios = [
   { id: 1, titulo: "Clases de Matemáticas", estado: "activo", fechapublicacion: "04-06-2025", categoria: "educación", modalidad: "mixto" },
@@ -11,13 +12,19 @@ const servicios = [
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState({});
-  const [showPopup, setShowPopup] = useState(false);
+  const {
+    showPopup,
+    setShowPopup,
+    user,
+    setUser,
+    openEditProfile,
+    handleEditProfile,
+  } = useEditProfile();
 
   useEffect(() => {
     const usuario = JSON.parse(sessionStorage.getItem('usuario')) || {};
     setUser(usuario);
-  }, []);
+  }, [setUser]);
 
   const publicaciones = servicios.length;
   const maxPublicaciones = user.rol === "premium" ? 6 : 3;
@@ -35,20 +42,13 @@ const Dashboard = () => {
 
   // Handlers simulados
   const handleEditarServicio = (id) => {
-    // Aquí iría la lógica real
     alert(`Editar servicio ${id}`);
   };
   const handleEliminarServicio = (id) => {
-    // Aquí iría la lógica real
     alert(`Eliminar servicio ${id}`);
   };
   const handleEditarPerfil = () => {
-    setShowPopup(true);
-  };
-
-  const handleEditarPerfilAction = (formData) => {
-    console.log("Datos enviados para editar perfil:", formData);
-    setShowPopup(false);
+    openEditProfile(user);
   };
 
   return (
@@ -149,7 +149,7 @@ const Dashboard = () => {
           show={showPopup}
           setShow={setShowPopup}
           data={[user]}
-          action={handleEditarPerfilAction}
+          action={handleEditProfile}
         />
       </div>
     </main>

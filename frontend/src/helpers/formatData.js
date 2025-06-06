@@ -24,11 +24,11 @@ export function convertirMinusculas(obj) {
 
 export function formatPostUpdate(user) { // Save
   return {
+    id: user.id,
     nombres: user.nombres,
     apellidos: user.apellidos,
     rol: user.rol,
     rut: formatRut(user.rut, { dots: false }),
     email: user.email,
-    createdAt: formatTempo(user.createdAt, "DD-MM-YYYY")
   };
 }

@@ -35,6 +35,13 @@ export default function Popup({ show, setShow, data, action }) {
                         title="Editar usuario"
                         fields={[
                             {
+                                // Campo oculto para el id (identificador principal)
+                                name: "id",
+                                fieldType: "input",
+                                type: "hidden",
+                                defaultValue: userData.id || "",
+                            },
+                            {
                                 label: "Nombres",
                                 name: "nombres",
                                 defaultValue: userData.nombres || "",
@@ -83,6 +90,7 @@ export default function Popup({ show, setShow, data, action }) {
                                 pattern: patternRut,
                                 patternMessage: "Debe ser xx.xxx.xxx-x o xxxxxxxx-x",
                                 required: true,
+                                disabled: true, // Solo lectura
                             },
                             {
                                 label: "Rol",
