@@ -24,6 +24,7 @@ const Dashboard = () => {
   const solicitudesRecibidas = 5;
 
   const perfil = {
+    id: user.id || "Error",
     nombre: user.nombres || "Error",
     apellidos: user.apellidos || "Error",
     email: user.email || "Error"
@@ -131,6 +132,7 @@ const Dashboard = () => {
             <FaUserCircle size={40} className="text-blue-500" />
             <div>
               <h2 className="text-xl font-bold text-gray-900">Mi perfil</h2>
+              <p className="text-gray-800">ID: {perfil.id}</p>
               <p className="text-gray-700">{perfil.nombre} {perfil.apellidos}</p>
               <p className="text-gray-500">{perfil.email}</p>
             </div>
