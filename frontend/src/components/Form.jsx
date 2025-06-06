@@ -28,7 +28,7 @@ const Form = ({ title, fields, buttonText, onSubmit, footerContent, backgroundCo
       onSubmit={handleSubmit(onFormSubmit)}
       autoComplete="off"
     >
-      <h1 className="text-2xl font-bold mb-4 text-center">{title}</h1>
+      <h1 className="text-2xl font-bold text-center">{title}</h1>
       {fields.map((field, index) => (
         <div className="flex flex-col gap-1 relative" key={index}>
           {field.label && <label htmlFor={field.name} className="font-medium">{field.label}</label>}

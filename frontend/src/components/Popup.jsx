@@ -28,11 +28,11 @@ export default function Popup({ show, setShow, data, action }) {
             { show && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
                 <div className="relative bg-white rounded-lg shadow-lg w-full max-w-lg">
-                    <button className='absolute top-2 right-2 text-gray-500 hover:text-gray-700' onClick={() => setShow(false)}>
+                    <button className='absolute top-2 right-2 text-red-500 hover:text-red-700' onClick={() => setShow(false)}>
                         <AiOutlineClose size={22} />
                     </button>
                     <Form
-                        title="Editar usuario"
+                        title="Editar perfil"
                         fields={[
                             {
                                 // Campo oculto para el id (identificador principal)
@@ -79,7 +79,7 @@ export default function Popup({ show, setShow, data, action }) {
                                 maxLength: 30,
                             },
                             {
-                                label: "Rut",
+                                label: "RUT",
                                 name: "rut",
                                 defaultValue: userData.rut || "",
                                 placeholder: '12.345.678-9',
@@ -88,7 +88,7 @@ export default function Popup({ show, setShow, data, action }) {
                                 minLength: 9,
                                 maxLength: 12,
                                 pattern: patternRut,
-                                patternMessage: "Debe ser xx.xxx.xxx-x o xxxxxxxx-x",
+                                patternMessage: "Debe ser XX.XXX.XXX-X o XXXXXXXX-X",
                                 required: true,
                                 disabled: true, // Solo lectura
                             },
@@ -105,11 +105,11 @@ export default function Popup({ show, setShow, data, action }) {
                             },
                             {
                                 label: (
-                                    <span>
+                                    <span className="flex items-center gap-1">
                                         Nueva contraseña
-                                        <span className='tooltip-icon'>
-                                            <BsQuestionCircle />
-                                            <span className='tooltip-text'>Este campo es opcional</span>
+                                        <span className="flex items-center gap-1 ml-auto text-sm text-blue-700">
+                                            <BsQuestionCircle size={12} />
+                                            <span className="tooltip-text ml-1">Este campo es opcional</span>
                                         </span>
                                     </span>
                                 ),
@@ -125,7 +125,7 @@ export default function Popup({ show, setShow, data, action }) {
                             }
                         ]}
                         onSubmit={handleSubmit}
-                        buttonText="Editar usuario"
+                        buttonText="Confirmar"
                         backgroundColor={'#fff'}
                         defaultValues={userData}
                     />
