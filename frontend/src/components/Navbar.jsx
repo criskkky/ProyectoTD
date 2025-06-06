@@ -146,9 +146,7 @@ const Navbar = () => {
                 logoutSubmit();
                 setMenuOpen(false);
               }}
-              className={({ isActive }) =>
-                `block px-4 py-2 rounded hover:bg-gray-100 transition-colors ${isActive ? 'text-blue-600 font-bold' : 'text-gray-700'}`
-              }
+              className="block px-4 py-2 rounded hover:bg-red-100 hover:text-red-600 transition-colors text-gray-700"
             >
               Cerrar sesión
             </NavLink>
@@ -156,9 +154,7 @@ const Navbar = () => {
             <NavLink
               to="/auth"
               onClick={() => setMenuOpen(false)}
-              className={({ isActive }) =>
-                `block px-4 py-2 rounded hover:bg-gray-100 transition-colors ${isActive ? 'text-blue-600 font-bold' : 'text-gray-700'}`
-              }
+              className="block px-4 py-2 rounded hover:bg-green-100 hover:text-green-600 transition-colors text-gray-700"
             >
               Iniciar sesión
             </NavLink>
