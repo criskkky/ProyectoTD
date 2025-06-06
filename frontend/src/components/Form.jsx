@@ -2,8 +2,10 @@ import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
-const Form = ({ title, fields, buttonText, onSubmit, footerContent, backgroundColor }) => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+const Form = ({ title, fields, buttonText, onSubmit, footerContent, backgroundColor, defaultValues }) => {
+  const { register, handleSubmit, formState: { errors }, setValue } = useForm({
+    defaultValues: defaultValues || {},
+  });
   const [showPassword, setShowPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
 
@@ -45,9 +47,11 @@ const Form = ({ title, fields, buttonText, onSubmit, footerContent, backgroundCo
                 type={field.type === 'password' && field.name === 'password' ? (showPassword ? 'text' : 'password') :
                   field.type === 'password' && field.name === 'newPassword' ? (showNewPassword ? 'text' : 'password') :
                     field.type}
-                defaultValue={field.defaultValue || ''}
                 disabled={field.disabled}
-                onChange={field.onChange}
+                onChange={(e) => {
+                  setValue(field.name, e.target.value, { shouldValidate: true });
+                  if (field.onChange) field.onChange(e);
+                }}
                 className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400 disabled:bg-gray-100"
               />
               {field.type === 'password' && field.name === 'password' && (
@@ -79,9 +83,11 @@ const Form = ({ title, fields, buttonText, onSubmit, footerContent, backgroundCo
               })}
               name={field.name}
               placeholder={field.placeholder}
-              defaultValue={field.defaultValue || ''}
               disabled={field.disabled}
-              onChange={field.onChange}
+              onChange={(e) => {
+                setValue(field.name, e.target.value, { shouldValidate: true });
+                if (field.onChange) field.onChange(e);
+              }}
               className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400 disabled:bg-gray-100"
             />
           )}
@@ -92,9 +98,11 @@ const Form = ({ title, fields, buttonText, onSubmit, footerContent, backgroundCo
                 validate: field.validate || {},
               })}
               name={field.name}
-              defaultValue={field.defaultValue || ''}
               disabled={field.disabled}
-              onChange={field.onChange}
+              onChange={(e) => {
+                setValue(field.name, e.target.value, { shouldValidate: true });
+                if (field.onChange) field.onChange(e);
+              }}
               className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400 disabled:bg-gray-100"
             >
               <option value="">Seleccionar opción</option>

@@ -28,6 +28,13 @@ const Login = () => {
   return (
     <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-800 via-blue-700 to-blue-600">
       <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8">
+        <button
+          className="mb-4 text-blue-600 hover:underline font-semibold"
+          onClick={() => navigate('/')}
+          type="button"
+        >
+          ← Volver
+        </button>
         <Form
           title="Iniciar sesión"
           fields={[
