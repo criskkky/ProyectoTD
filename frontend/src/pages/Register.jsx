@@ -4,6 +4,7 @@ import { register } from '@services/auth.service.js';
 import Form from "@components/Form";
 import useRegister from '@hooks/auth/useRegister.jsx';
 import { showErrorAlert, showSuccessAlert } from '@helpers/sweetAlert.js';
+import { formatPostUpdate } from '@helpers/formatData.js';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -25,14 +26,14 @@ const Register = () => {
   };
 
   const registerSubmit = async (data) => {
-    const finalData = { ...formData, ...data };
+    const finalData = formatPostUpdate({ ...formData, ...data }); // Formatea los datos antes de enviarlos
     try {
       const response = await register(finalData);
       if (response.status === 'Success') {
         showSuccessAlert('¡Registrado!', 'Usuario registrado exitosamente.');
         setTimeout(() => {
           navigate('/auth');
-        }, 3000)
+        }, 1000)
       } else if (response.status === 'Client error') {
         errorData(response.details);
       }
@@ -50,7 +51,7 @@ const Register = () => {
           onClick={() => navigate('/')}
           type="button"
         >
-          ← Volver
+          ← Inicio
         </button>
         {/* Stepper indicator */}
         <div className="flex justify-center mb-6">

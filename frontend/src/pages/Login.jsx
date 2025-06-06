@@ -33,7 +33,7 @@ const Login = () => {
           onClick={() => navigate('/')}
           type="button"
         >
-          ← Volver
+          ← Inicio
         </button>
         <Form
           title="Iniciar sesión"
