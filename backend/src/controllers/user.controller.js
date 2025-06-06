@@ -52,15 +52,11 @@ export async function getUsers(req, res) {
 
 export async function updateUser(req, res) {
   try {
-    const { rut, id, email } = req.query;
-    const { body } = req;
+    let { rut, email } = req.query;
+    let id = req.params.id || req.query.id; // Asegura que id sea tomado de params o query
 
-    const { error: queryError } = userQueryValidation.validate({
-      rut,
-      id,
-      email,
-    });
-
+    // Valida la consulta
+    const { error: queryError } = userQueryValidation.validate({ rut, id, email });
     if (queryError) {
       return handleErrorClient(
         res,
@@ -70,8 +66,8 @@ export async function updateUser(req, res) {
       );
     }
 
-    const { error: bodyError } = userBodyValidation.validate(body);
-
+    // Valida el body
+    const { error: bodyError } = userBodyValidation.validate(req.body);
     if (bodyError)
       return handleErrorClient(
         res,
@@ -80,7 +76,8 @@ export async function updateUser(req, res) {
         bodyError.message,
       );
 
-    const [user, userError] = await updateUserService({ rut, id, email }, body);
+    // Llama al servicio
+    const [user, userError] = await updateUserService({ rut, id, email }, req.body);
 
     if (userError) return handleErrorClient(res, 400, "Error modificando al usuario", userError);
 
