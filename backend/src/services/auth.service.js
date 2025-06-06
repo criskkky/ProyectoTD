@@ -31,6 +31,7 @@ export async function loginService(user) {
     }
 
     const payload = {
+      id: userFound.id,
       nombres: userFound.nombres,
       apellidos: userFound.apellidos,
       email: userFound.email,
