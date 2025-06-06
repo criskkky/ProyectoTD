@@ -1,10 +1,22 @@
+import React, { useEffect } from 'react';
 import Form from './Form';
-// import '@styles/popup.css';
 import { AiOutlineClose } from 'react-icons/ai';
 import { BsQuestionCircle } from 'react-icons/bs';
 
 export default function Popup({ show, setShow, data, action }) {
     const userData = data && data.length > 0 ? data[0] : {};
+
+    useEffect(() => {
+        if (show) {
+            document.body.classList.add('overflow-hidden');
+        } else {
+            document.body.classList.remove('overflow-hidden');
+        }
+        // Limpieza al desmontar
+        return () => {
+            document.body.classList.remove('overflow-hidden');
+        };
+    }, [show]);
 
     const handleSubmit = (formData) => {
         action(formData);
@@ -14,10 +26,10 @@ export default function Popup({ show, setShow, data, action }) {
     return (
         <div>
             { show && (
-            <div className="bg">
-                <div className="popup">
-                    <button className='close' onClick={() => setShow(false)}>
-                        <AiOutlineClose />
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+                <div className="relative bg-white rounded-lg shadow-lg w-full max-w-lg">
+                    <button className='absolute top-2 right-2 text-gray-500 hover:text-gray-700' onClick={() => setShow(false)}>
+                        <AiOutlineClose size={22} />
                     </button>
                     <Form
                         title="Editar usuario"
@@ -63,7 +75,7 @@ export default function Popup({ show, setShow, data, action }) {
                                 label: "Rut",
                                 name: "rut",
                                 defaultValue: userData.rut || "",
-                                placeholder: '21.308.770-3',
+                                placeholder: '12.345.678-9',
                                 fieldType: 'input',
                                 type: "text",
                                 minLength: 9,
@@ -77,8 +89,8 @@ export default function Popup({ show, setShow, data, action }) {
                                 name: "rol",
                                 fieldType: 'select',
                                 options: [
-                                    { value: 'administrador', label: 'Administrador' },
-                                    { value: 'usuario', label: 'Usuario' },
+                                    { value: 'admin', label: 'Administrador' },
+                                    { value: 'user', label: 'Usuario' },
                                 ],
                                 required: true,
                                 defaultValue: userData.rol || "",
@@ -107,6 +119,7 @@ export default function Popup({ show, setShow, data, action }) {
                         onSubmit={handleSubmit}
                         buttonText="Editar usuario"
                         backgroundColor={'#fff'}
+                        defaultValues={userData}
                     />
                 </div>
             </div>

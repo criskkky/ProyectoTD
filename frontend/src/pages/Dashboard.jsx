@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FaUserCircle, FaClipboardList, FaPlusCircle, FaEnvelope, FaEdit, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import Popup from "../components/Popup"; // Asegúrate de que la ruta sea correcta
 
 const servicios = [
   { id: 1, titulo: "Clases de Matemáticas", estado: "activo", fechapublicacion: "04-06-2025", categoria: "educación", modalidad: "mixto" },
@@ -11,6 +12,7 @@ const servicios = [
 const Dashboard = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState({});
+  const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
     const usuario = JSON.parse(sessionStorage.getItem('usuario')) || {};
@@ -40,7 +42,12 @@ const Dashboard = () => {
     alert(`Eliminar servicio ${id}`);
   };
   const handleEditarPerfil = () => {
-    navigate("/perfil");
+    setShowPopup(true);
+  };
+
+  const handleEditarPerfilAction = (formData) => {
+    console.log("Datos enviados para editar perfil:", formData);
+    setShowPopup(false);
   };
 
   return (
@@ -135,6 +142,13 @@ const Dashboard = () => {
             <FaEdit className="inline mr-2" /> Editar perfil
           </button>
         </section>
+        {/* Popup para editar perfil */}
+        <Popup
+          show={showPopup}
+          setShow={setShowPopup}
+          data={[user]}
+          action={handleEditarPerfilAction}
+        />
       </div>
     </main>
   );

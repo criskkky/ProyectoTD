@@ -23,7 +23,7 @@ const Form = ({ title, fields, buttonText, onSubmit, footerContent, backgroundCo
 
   return (
     <form
-      className="w-full max-w-md mx-auto p-8 rounded-lg shadow-md flex flex-col gap-2"
+      className="w-full max-w-md mx-auto p-8 rounded-lg flex flex-col gap-2"
       style={{ backgroundColor: backgroundColor }}
       onSubmit={handleSubmit(onFormSubmit)}
       autoComplete="off"
