@@ -24,9 +24,9 @@ export function convertirMinusculas(obj) {
 
 export function formatPostUpdate(user) { // Save
   return {
-    nombres: startCase(user.nombres),
-    apellidos: startCase(user.apellidos),
-    rol: startCase(user.rol),
+    nombres: user.nombres,
+    apellidos: user.apellidos,
+    rol: user.rol,
     rut: formatRut(user.rut, { dots: false }),
     email: user.email,
     createdAt: formatTempo(user.createdAt, "DD-MM-YYYY")
