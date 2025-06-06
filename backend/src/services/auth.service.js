@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import { AppDataSource } from "../config/configDb.js";
 import { comparePassword, encryptPassword } from "../helpers/bcrypt.helper.js";
 import { TOKEN_JWT } from "../config/configEnv.js";
+import { format as formatRut } from "rut.js";
 
 export async function loginService(user) {
   try {
@@ -48,7 +49,6 @@ export async function loginService(user) {
   }
 }
 
-
 export async function registerService(user) {
   try {
     const userRepository = AppDataSource.getRepository(User);
@@ -60,17 +60,19 @@ export async function registerService(user) {
       message
     });
 
+    const formattedRut = formatRut(rut, { dots: false });
+
     const existingEmailUser = await userRepository.findOne({
       where: {
         email,
       },
     });
 
-    if (existingEmailUser) return [null, createErrorMessage("email", "Correo electrónico en uso")];
+    if (existingEmailUser) return [null, createErrorMessage("email", "Este correo ya está asociado a una cuenta")];
 
     const existingRutUser = await userRepository.findOne({
       where: {
-        rut,
+        rut: formattedRut,
       },
     });
 
@@ -80,7 +82,7 @@ export async function registerService(user) {
       nombres,
       apellidos,
       email,
-      rut,
+      rut: formattedRut,
       password: await encryptPassword(user.password),
       rol: "user",
     });
