@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { updateUser } from '@services/user.service.js';
-import { showErrorAlert, showSuccessAlert } from '@helpers/sweetAlert.js';
-import { formatPostUpdate } from '@helpers/formatData.js';
+import { updateUser } from '@/services/user.service.js';
+import { showErrorAlert, showSuccessAlert } from '@/helpers/sweetAlert.js';
+import { formatPostUpdate } from '@/helpers/formatData.js';
 
 const useEditUser = (setUsers) => {
     const [isPopupOpen, setIsPopupOpen] = useState(false);

@@ -1,5 +1,5 @@
 import axios from './root.service.js';
-import { formatUserData } from '@helpers/formatData.js';
+import { formatUserData } from '@/helpers/formatData.js';
 
 export async function getUsers() {
     try {

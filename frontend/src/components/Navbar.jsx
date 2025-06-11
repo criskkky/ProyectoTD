@@ -1,5 +1,5 @@
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
-import { logout } from '@services/auth.service.js';
+import { logout } from '@/services/auth.service.js';
 import { useState } from "react";
 import { FaBars, FaReact } from "react-icons/fa";
 

@@ -6,9 +6,9 @@ import useEditProfile from "../hooks/profile/useEditProfile";
 import { startCase } from 'lodash';
 
 const servicios = [
-  { id: 1, titulo: "Clases de Matemáticas", estado: "activo", fechapublicacion: "04-06-2025", categoria: "educación", modalidad: "mixto" },
-  { id: 2, titulo: "Soporte Técnico PC", estado: "inactivo", fechapublicacion: "01-05-2025", categoria: "tecnología", modalidad: "presencial" },
-  { id: 3, titulo: "Traducción Inglés-Español", estado: "bloqueado", fechapublicacion: "15-04-2025", categoria: "idiomas", modalidad: "online" },
+  { id: 1, titulo: "Clases de Matemáticas", estado: "activo", createdAt: "04-06-2025", categoria: "educación", modalidad: "mixto" },
+  { id: 2, titulo: "Soporte Técnico PC", estado: "inactivo", createdAt: "01-05-2025", categoria: "tecnología", modalidad: "presencial" },
+  { id: 3, titulo: "Traducción Inglés-Español", estado: "bloqueado", createdAt: "15-04-2025", categoria: "idiomas", modalidad: "online" },
 ];
 
 const Dashboard = () => {
@@ -103,7 +103,7 @@ const Dashboard = () => {
                     <td className="py-2 px-2 hidden sm:table-cell">{servicio.categoria}</td>
                     <td className="py-2 px-2 hidden sm:table-cell">{servicio.modalidad}</td>
                     <td className="py-2 px-2">{servicio.estado}</td>
-                    <td className="py-2 px-2 hidden md:table-cell">{servicio.fechapublicacion}</td>
+                    <td className="py-2 px-2 hidden md:table-cell">{servicio.createdAt}</td>
                     <td className="py-2 px-2 flex gap-2">
                       <button
                         className="text-blue-600 hover:underline flex items-center gap-1"

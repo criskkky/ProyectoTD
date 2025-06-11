@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { register } from '@services/auth.service.js';
-import Form from "@components/Form";
-import useRegister from '@hooks/auth/useRegister.jsx';
-import { showErrorAlert, showSuccessAlert } from '@helpers/sweetAlert.js';
-import { formatPostUpdate } from '@helpers/formatData.js';
+import { register } from '@/services/auth.service.js';
+import Form from "@/components/Form";
+import useRegister from '@/hooks/auth/useRegister.jsx';
+import { showErrorAlert, showSuccessAlert } from '@/helpers/sweetAlert.js';
+import { formatPostUpdate } from '@/helpers/formatData.js';
 
 const Register = () => {
   const navigate = useNavigate();
