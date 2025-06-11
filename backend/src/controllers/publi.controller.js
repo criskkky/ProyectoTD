@@ -1,9 +1,9 @@
 "use strict";
 import {
-  getOfferService,
-  getOffersService,
-  updateOfferService,
-  deleteOfferService,
+  getPubliService,
+  getPublisService,
+  updatePubliService,
+  deletePubliService,
 } from "../services/publi.service.js";
 import {
   offerBodyValidation,
@@ -22,7 +22,7 @@ export async function getOffer(req, res) {
 
     if (error) return handleErrorClient(res, 400, error.message);
 
-    const [offer, errorOffer] = await getOfferService({ id });
+    const [offer, errorOffer] = await getPubliService({ id });
 
     if (errorOffer) return handleErrorClient(res, 404, errorOffer);
 
@@ -34,7 +34,7 @@ export async function getOffer(req, res) {
 
 export async function getOffers(req, res) {
   try {
-    const [offers, errorOffers] = await getOffersService();
+    const [offers, errorOffers] = await getPublisService();
 
     if (errorOffers) return handleErrorClient(res, 404, errorOffers);
 
@@ -72,7 +72,7 @@ export async function updateOffer(req, res) {
         bodyError.message,
       );
 
-    const [offer, offerError] = await updateOfferService({ id }, body);
+    const [offer, offerError] = await updatePubliService({ id }, body);
 
     if (offerError) return handleErrorClient(res, 400, "Error modificando la oferta", offerError);
 
@@ -97,7 +97,7 @@ export async function deleteOffer(req, res) {
       );
     }
 
-    const [offerDelete, errorOfferDelete] = await deleteOfferService({ id });
+    const [offerDelete, errorOfferDelete] = await deletePubliService({ id });
 
     if (errorOfferDelete) return handleErrorClient(res, 404, "Error eliminando la oferta", errorOfferDelete);
 

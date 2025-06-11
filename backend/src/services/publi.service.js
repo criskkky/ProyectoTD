@@ -2,7 +2,7 @@
 import Offer from "../entity/publi.entity.js";
 import { AppDataSource } from "../config/configDb.js";
 
-export async function getOfferService({ id }) {
+export async function getPubliService({ id }) {
   try {
     const offerRepository = AppDataSource.getRepository(Offer);
     const offer = await offerRepository.findOne({
@@ -16,7 +16,7 @@ export async function getOfferService({ id }) {
   }
 }
 
-export async function getOffersService() {
+export async function getPublisService() {
   try {
     const offerRepository = AppDataSource.getRepository(Offer);
     const offers = await offerRepository.find({
@@ -28,7 +28,7 @@ export async function getOffersService() {
   }
 }
 
-export async function updateOfferService({ id }, data) {
+export async function updatePubliService({ id }, data) {
   try {
     const offerRepository = AppDataSource.getRepository(Offer);
     const offer = await offerRepository.findOne({ where: { id: Number(id) } });
@@ -42,7 +42,7 @@ export async function updateOfferService({ id }, data) {
   }
 }
 
-export async function deleteOfferService({ id }) {
+export async function deletePubliService({ id }) {
   try {
     const offerRepository = AppDataSource.getRepository(Offer);
     const offer = await offerRepository.findOne({ where: { id: Number(id) } });
