@@ -1,5 +1,5 @@
 "use strict";
-import Offer from "../entity/offer.entity.js";
+import Offer from "../entity/publi.entity.js";
 import { AppDataSource } from "../config/configDb.js";
 
 export async function getOfferService({ id }) {

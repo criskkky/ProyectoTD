@@ -1,7 +1,7 @@
 "use strict";
 import { EntitySchema } from "typeorm";
 
-const OfferSchema = new EntitySchema({
+const PubliSchema = new EntitySchema({
   name: "Offer",
   tableName: "offers",
   columns: {
@@ -13,6 +13,12 @@ const OfferSchema = new EntitySchema({
     titulo: {
       type: "varchar",
       length: 255,
+      nullable: false,
+    },
+    estado: {
+      type: "enum",
+      enum: ["activo", "inactivo", "bloqueado"],
+      default: "activo",
       nullable: false,
     },
     descripcion: {
@@ -43,10 +49,10 @@ const OfferSchema = new EntitySchema({
     },
   },
   relations: {
-    profesional: {
+    createdBy: {
       type: "many-to-one",
       target: "User",
-      joinColumn: { name: "profesionalId" },
+      joinColumn: { name: "userId" },
       nullable: false,
     },
     /*
@@ -60,11 +66,11 @@ const OfferSchema = new EntitySchema({
   },
   indices: [
     {
-      name: "IDX_OFFER",
+      name: "IDX_PUBLI",
       columns: ["id"],
       unique: true,
     },
   ],
 });
 
-export default OfferSchema;
+export default PubliSchema;

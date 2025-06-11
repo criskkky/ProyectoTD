@@ -1,6 +1,6 @@
 "use strict";
 import User from "../entity/user.entity.js";
-import Offer from "../entity/offer.entity.js";
+import Offer from "../entity/publi.entity.js";
 import { AppDataSource } from "./configDb.js";
 import { encryptPassword } from "../helpers/bcrypt.helper.js";
 

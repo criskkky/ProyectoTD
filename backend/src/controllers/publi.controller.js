@@ -4,11 +4,11 @@ import {
   getOffersService,
   updateOfferService,
   deleteOfferService,
-} from "../services/offer.service.js";
+} from "../services/publi.service.js";
 import {
   offerBodyValidation,
   offerQueryValidation,
-} from "../validations/offer.validation.js";
+} from "../validations/publi.validation.js";
 import {
   handleErrorClient,
   handleErrorServer,

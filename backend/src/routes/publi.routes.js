@@ -7,7 +7,7 @@ import {
   getOffers,
   updateOffer,
   deleteOffer,
-} from "../controllers/offer.controller.js";
+} from "../controllers/publi.controller.js";
 
 const router = Router();
 
