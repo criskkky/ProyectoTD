@@ -7,7 +7,7 @@ export async function getPubliService({ id }) {
     const publiRepository = AppDataSource.getRepository(Publication);
     const publication = await publiRepository.findOne({
       where: { id: Number(id) },
-      relations: ["profesional", "categoria"],
+      relations: ["createdBy"], // Solo si necesitas traer el usuario creador
     });
     if (!publication) return [null, "Publicación no encontrada"];
     return [publication, null];
@@ -20,7 +20,7 @@ export async function getPublisService() {
   try {
     const publiRepository = AppDataSource.getRepository(Publication);
     const publications = await publiRepository.find({
-      relations: ["profesional", "categoria"],
+      relations: ["createdBy"], // Solo si necesitas traer el usuario creador
     });
     return [publications, null];
   } catch (error) {

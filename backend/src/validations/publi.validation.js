@@ -53,20 +53,17 @@ export const publiBodyValidation = Joi.object({
       "any.only": "La modalidad debe ser presencial, online o mixta.",
       "any.required": "La modalidad es requerida.",
     }),
-  profesional: Joi.number()
-    .integer()
-    .positive()
-    .required()
+  categoria: Joi.string()
+    .valid(
+      "arte",
+      "construcción",
+      "educacion",
+      "salud",
+      "servicios generales",
+      "tecnología"
+    )
+    .optional()
     .messages({
-      "number.base": "El profesional debe ser un id numérico.",
-      "any.required": "El profesional es requerido.",
-    }),
-  categoria: Joi.number()
-    .integer()
-    .positive()
-    .required()
-    .messages({
-      "number.base": "La categoría debe ser un id numérico.",
-      "any.required": "La categoría es requerida.",
+      "any.only": "La categoría debe ser una de las permitidas.",
     }),
 }).unknown(false);

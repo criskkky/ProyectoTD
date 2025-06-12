@@ -36,6 +36,18 @@ const PubliSchema = new EntitySchema({
       enum: ["presencial", "online", "mixta"],
       nullable: false,
     },
+    categoria: {
+      type: "enum",
+      enum: [
+        "arte",
+        "construcción",
+        "educacion",
+        "salud",
+        "servicios generales",
+        "tecnología"
+      ],
+      nullable: true,
+    },
     createdAt: {
       type: "timestamp",
       default: () => "CURRENT_TIMESTAMP",
@@ -55,12 +67,6 @@ const PubliSchema = new EntitySchema({
       joinColumn: { name: "userId" },
       nullable: false,
     },
-    categoria: {
-      type: "many-to-many",
-      target: "Category",
-      joinColumn: { name: "categoriaId" },
-      nullable: false,
-    }
   },
   indices: [
     {

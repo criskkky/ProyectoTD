@@ -16,9 +16,9 @@ router
   .use(isAdmin);
 
 router
-  .get("/", getPublications)
-  .get("/:id", getPublication)
-  .patch("/:id", updatePublication)
-  .delete("/:id", deletePublication);
+  .get("/posts", getPublications)
+  .get("/posts/:id", getPublication)
+  .patch("/posts/:id", updatePublication)
+  .delete("/posts/:id", deletePublication);
 
 export default router;
