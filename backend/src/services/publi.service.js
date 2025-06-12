@@ -1,16 +1,16 @@
 "use strict";
-import Offer from "../entity/publi.entity.js";
+import Publication from "../entity/publi.entity.js";
 import { AppDataSource } from "../config/configDb.js";
 
 export async function getPubliService({ id }) {
   try {
-    const offerRepository = AppDataSource.getRepository(Offer);
-    const offer = await offerRepository.findOne({
+    const publiRepository = AppDataSource.getRepository(Publication);
+    const publication = await publiRepository.findOne({
       where: { id: Number(id) },
       relations: ["profesional", "categoria"],
     });
-    if (!offer) return [null, "Oferta no encontrada"];
-    return [offer, null];
+    if (!publication) return [null, "Publicación no encontrada"];
+    return [publication, null];
   } catch (error) {
     return [null, error.message];
   }
@@ -18,11 +18,11 @@ export async function getPubliService({ id }) {
 
 export async function getPublisService() {
   try {
-    const offerRepository = AppDataSource.getRepository(Offer);
-    const offers = await offerRepository.find({
+    const publiRepository = AppDataSource.getRepository(Publication);
+    const publications = await publiRepository.find({
       relations: ["profesional", "categoria"],
     });
-    return [offers, null];
+    return [publications, null];
   } catch (error) {
     return [null, error.message];
   }
@@ -30,13 +30,13 @@ export async function getPublisService() {
 
 export async function updatePubliService({ id }, data) {
   try {
-    const offerRepository = AppDataSource.getRepository(Offer);
-    const offer = await offerRepository.findOne({ where: { id: Number(id) } });
-    if (!offer) return [null, "Oferta no encontrada"];
+    const publiRepository = AppDataSource.getRepository(Publication);
+    const publication = await publiRepository.findOne({ where: { id: Number(id) } });
+    if (!publication) return [null, "Publicación no encontrada"];
 
-    offerRepository.merge(offer, data);
-    const updatedOffer = await offerRepository.save(offer);
-    return [updatedOffer, null];
+    publiRepository.merge(publication, data);
+    const updatedPublication = await publiRepository.save(publication);
+    return [updatedPublication, null];
   } catch (error) {
     return [null, error.message];
   }
@@ -44,12 +44,12 @@ export async function updatePubliService({ id }, data) {
 
 export async function deletePubliService({ id }) {
   try {
-    const offerRepository = AppDataSource.getRepository(Offer);
-    const offer = await offerRepository.findOne({ where: { id: Number(id) } });
-    if (!offer) return [null, "Oferta no encontrada"];
+    const publiRepository = AppDataSource.getRepository(Publication);
+    const publication = await publiRepository.findOne({ where: { id: Number(id) } });
+    if (!publication) return [null, "Publicación no encontrada"];
 
-    await offerRepository.remove(offer);
-    return [offer, null];
+    await publiRepository.remove(publication);
+    return [publication, null];
   } catch (error) {
     return [null, error.message];
   }

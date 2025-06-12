@@ -1,7 +1,7 @@
 "use strict";
 import Joi from "joi";
 
-export const offerQueryValidation = Joi.object({
+export const publiQueryValidation = Joi.object({
   id: Joi.number()
     .integer()
     .positive()
@@ -14,7 +14,7 @@ export const offerQueryValidation = Joi.object({
     }),
 }).unknown(false);
 
-export const offerBodyValidation = Joi.object({
+export const publiBodyValidation = Joi.object({
   titulo: Joi.string()
     .min(3)
     .max(255)

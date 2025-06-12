@@ -6,8 +6,8 @@ import {
   deletePubliService,
 } from "../services/publi.service.js";
 import {
-  offerBodyValidation,
-  offerQueryValidation,
+  publiBodyValidation,
+  publiQueryValidation,
 } from "../validations/publi.validation.js";
 import {
   handleErrorClient,
@@ -15,43 +15,43 @@ import {
   handleSuccess,
 } from "../handlers/responseHandlers.js";
 
-export async function getOffer(req, res) {
+export async function getPublication(req, res) {
   try {
     const { id } = req.query;
-    const { error } = offerQueryValidation.validate({ id });
+    const { error } = publiQueryValidation.validate({ id });
 
     if (error) return handleErrorClient(res, 400, error.message);
 
-    const [offer, errorOffer] = await getPubliService({ id });
+    const [publication, errorPublication] = await getPubliService({ id });
 
-    if (errorOffer) return handleErrorClient(res, 404, errorOffer);
+    if (errorPublication) return handleErrorClient(res, 404, errorPublication);
 
-    handleSuccess(res, 200, "Oferta encontrada", offer);
+    handleSuccess(res, 200, "Publicación encontrada", publication);
   } catch (error) {
     handleErrorServer(res, 500, error.message);
   }
 }
 
-export async function getOffers(req, res) {
+export async function getPublications(req, res) {
   try {
-    const [offers, errorOffers] = await getPublisService();
+    const [publications, errorPublications] = await getPublisService();
 
-    if (errorOffers) return handleErrorClient(res, 404, errorOffers);
+    if (errorPublications) return handleErrorClient(res, 404, errorPublications);
 
-    offers.length === 0
+    publications.length === 0
       ? handleSuccess(res, 204)
-      : handleSuccess(res, 200, "Ofertas encontradas", offers);
+      : handleSuccess(res, 200, "Publicaciones encontradas", publications);
   } catch (error) {
     handleErrorServer(res, 500, error.message);
   }
 }
 
-export async function updateOffer(req, res) {
+export async function updatePublication(req, res) {
   try {
     const { id } = req.query;
     const { body } = req;
 
-    const { error: queryError } = offerQueryValidation.validate({ id });
+    const { error: queryError } = publiQueryValidation.validate({ id });
 
     if (queryError) {
       return handleErrorClient(
@@ -62,7 +62,7 @@ export async function updateOffer(req, res) {
       );
     }
 
-    const { error: bodyError } = offerBodyValidation.validate(body);
+    const { error: bodyError } = publiBodyValidation.validate(body);
 
     if (bodyError)
       return handleErrorClient(
@@ -72,21 +72,21 @@ export async function updateOffer(req, res) {
         bodyError.message,
       );
 
-    const [offer, offerError] = await updatePubliService({ id }, body);
+    const [publication, publicationError] = await updatePubliService({ id }, body);
 
-    if (offerError) return handleErrorClient(res, 400, "Error modificando la oferta", offerError);
+    if (publicationError) return handleErrorClient(res, 400, "Error modificando la publicación", publicationError);
 
-    handleSuccess(res, 200, "Oferta modificada correctamente", offer);
+    handleSuccess(res, 200, "Publicación modificada correctamente", publication);
   } catch (error) {
     handleErrorServer(res, 500, error.message);
   }
 }
 
-export async function deleteOffer(req, res) {
+export async function deletePublication(req, res) {
   try {
     const { id } = req.query;
 
-    const { error: queryError } = offerQueryValidation.validate({ id });
+    const { error: queryError } = publiQueryValidation.validate({ id });
 
     if (queryError) {
       return handleErrorClient(
@@ -97,11 +97,11 @@ export async function deleteOffer(req, res) {
       );
     }
 
-    const [offerDelete, errorOfferDelete] = await deletePubliService({ id });
+    const [publicationDelete, errorPublicationDelete] = await deletePubliService({ id });
 
-    if (errorOfferDelete) return handleErrorClient(res, 404, "Error eliminando la oferta", errorOfferDelete);
+    if (errorPublicationDelete) return handleErrorClient(res, 404, "Error eliminando la publicación", errorPublicationDelete);
 
-    handleSuccess(res, 200, "Oferta eliminada correctamente", offerDelete);
+    handleSuccess(res, 200, "Publicación eliminada correctamente", publicationDelete);
   } catch (error) {
     handleErrorServer(res, 500, error.message);
   }

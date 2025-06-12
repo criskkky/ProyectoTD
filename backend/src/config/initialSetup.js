@@ -1,13 +1,13 @@
 "use strict";
 import User from "../entity/user.entity.js";
-import Offer from "../entity/publi.entity.js";
+import Publication from "../entity/publi.entity.js";
 import { AppDataSource } from "./configDb.js";
 import { encryptPassword } from "../helpers/bcrypt.helper.js";
 
 async function createUsers() {
   try {
     const userRepository = AppDataSource.getRepository(User);
-    const offerRepository = AppDataSource.getRepository(Offer);
+    const publiRepository = AppDataSource.getRepository(Publication);
 
     const count = await userRepository.count();
     if (count > 0) return;
@@ -24,8 +24,8 @@ async function createUsers() {
     );
 
     // Crear una oferta para el usuario admin
-    await offerRepository.save(
-      offerRepository.create({
+    await publiRepository.save(
+      publiRepository.create({
         titulo: "Oferta de ejemplo",
         descripcion: "Esta es una oferta de ejemplo creada automáticamente.",
         precio: 100.00,

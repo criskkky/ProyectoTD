@@ -3,10 +3,10 @@ import { Router } from "express";
 import { authenticateJwt } from "../middlewares/authentication.middleware.js";
 import { isAdmin } from "../middlewares/authorization.middleware.js";
 import {
-  getOffer,
-  getOffers,
-  updateOffer,
-  deleteOffer,
+  getPublication,
+  getPublications,
+  updatePublication,
+  deletePublication,
 } from "../controllers/publi.controller.js";
 
 const router = Router();
@@ -16,9 +16,9 @@ router
   .use(isAdmin);
 
 router
-  .get("/", getOffers)
-  .get("/:id", getOffer)
-  .patch("/:id", updateOffer)
-  .delete("/:id", deleteOffer);
+  .get("/", getPublications)
+  .get("/:id", getPublication)
+  .patch("/:id", updatePublication)
+  .delete("/:id", deletePublication);
 
 export default router;

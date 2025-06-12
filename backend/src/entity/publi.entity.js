@@ -2,8 +2,8 @@
 import { EntitySchema } from "typeorm";
 
 const PubliSchema = new EntitySchema({
-  name: "Offer",
-  tableName: "offers",
+  name: "Publication",
+  tableName: "publication",
   columns: {
     id: {
       type: "int",
@@ -55,14 +55,12 @@ const PubliSchema = new EntitySchema({
       joinColumn: { name: "userId" },
       nullable: false,
     },
-    /*
     categoria: {
-      type: "many-to-one",
+      type: "many-to-many",
       target: "Category",
       joinColumn: { name: "categoriaId" },
       nullable: false,
-    },
-    */
+    }
   },
   indices: [
     {
