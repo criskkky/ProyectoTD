@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { FaUserCircle, FaClipboardList, FaPlusCircle, FaEnvelope, FaEdit, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import Popup from "../components/Popup";
+import ProfilePopup from "../components/ProfilePopup";
 import useEditProfile from "../hooks/profile/useEditProfile";
 import usePublications from "../hooks/publications/usePublications";
 import { startCase } from 'lodash';
@@ -178,7 +178,7 @@ const Dashboard = () => {
           </div>
         </section>
         {/* Popup para editar perfil */}
-        <Popup
+        <ProfilePopup
           show={showPopup}
           setShow={setShowPopup}
           data={[user]}

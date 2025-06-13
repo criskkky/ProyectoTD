@@ -3,7 +3,7 @@ import Form from './Form';
 import { AiOutlineClose } from 'react-icons/ai';
 import { BsQuestionCircle } from 'react-icons/bs';
 
-export default function Popup({ show, setShow, data, action }) {
+export default function ProfilePopup({ show, setShow, data, action }) {
     const userData = data && data.length > 0 ? data[0] : {};
 
     useEffect(() => {

@@ -1,7 +1,7 @@
 import Table from '@/components/Table';
 import useUsers from '@/hooks/users/useGetUsers.jsx';
 import Search from '../components/Search';
-import Popup from '../components/Popup';
+import ProfilePopup from '../components/ProfilePopup';
 import { MdDelete, MdEdit, MdEditOff, MdDeleteOutline } from 'react-icons/md';
 import { useCallback, useState } from 'react';
 // import '@styles/users.css';
@@ -72,7 +72,7 @@ const Users = () => {
           onSelectionChange={handleSelectionChange}
         />
       </div>
-      <Popup show={isPopupOpen} setShow={setIsPopupOpen} data={dataUser} action={handleUpdate} />
+      <ProfilePopup show={isPopupOpen} setShow={setIsPopupOpen} data={dataUser} action={handleUpdate} />
     </div>
   );
 };
