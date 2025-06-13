@@ -3,13 +3,8 @@ import { FaUserCircle, FaClipboardList, FaPlusCircle, FaEnvelope, FaEdit, FaTras
 import { useNavigate } from "react-router-dom";
 import Popup from "../components/Popup";
 import useEditProfile from "../hooks/profile/useEditProfile";
+import usePublications from "../hooks/publications/usePublications";
 import { startCase } from 'lodash';
-
-const servicios = [
-  { id: 1, titulo: "Clases de Matemáticas", estado: "activo", createdAt: "04-06-2025", categoria: "educación", modalidad: "mixto" },
-  { id: 2, titulo: "Soporte Técnico PC", estado: "inactivo", createdAt: "01-05-2025", categoria: "tecnología", modalidad: "presencial" },
-  { id: 3, titulo: "Traducción Inglés-Español", estado: "bloqueado", createdAt: "15-04-2025", categoria: "idiomas", modalidad: "online" },
-];
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -22,12 +17,18 @@ const Dashboard = () => {
     handleEditProfile,
   } = useEditProfile();
 
+  const {
+    publicaciones,
+    loading,
+    handleEditarPublicacion,
+    handleEliminarPublicacion,
+  } = usePublications();
+
   useEffect(() => {
     const usuario = JSON.parse(sessionStorage.getItem('usuario')) || {};
     setUser(usuario);
   }, [setUser]);
 
-  const publicaciones = servicios.length;
   const maxPublicaciones = user.rol === "premium" ? 6 : 3;
   const solicitudesRecibidas = 5;
 
@@ -42,11 +43,8 @@ const Dashboard = () => {
   console.log("User data:", user);
 
   // Handlers simulados
-  const handleEditarServicio = (id) => {
-    alert(`Editar servicio ${id}`);
-  };
-  const handleEliminarServicio = (id) => {
-    alert(`Eliminar servicio ${id}`);
+  const handleCrearPublicacion = () => {
+    navigate("/publicar-servicio");
   };
   const handleEditarPerfil = () => {
     openEditProfile(user);
@@ -61,7 +59,7 @@ const Dashboard = () => {
             <FaClipboardList size={36} className="text-blue-600" />
             <div>
               <h2 className="text-lg font-semibold">Publicaciones realizadas</h2>
-              <p className="text-2xl font-bold">{publicaciones}/{maxPublicaciones}</p>
+              <p className="text-2xl font-bold">{publicaciones.length}/{maxPublicaciones}</p>
             </div>
           </div>
           <div className="flex-1 flex items-center gap-4">
@@ -79,52 +77,56 @@ const Dashboard = () => {
             <h2 className="text-xl font-bold text-gray-900">Mis publicaciones</h2>
             <button
               className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded text-sm md:text-base"
-              onClick={() => navigate("/publicar-servicio")}
+              onClick={handleCrearPublicacion}
             >
               <FaPlusCircle /> Crear publicación
             </button>
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm md:text-base">
-              <thead>
-                <tr className="border-b">
-                  <th className="py-2 px-2">Título</th>
-                  <th className="py-2 px-2 hidden sm:table-cell">Categoría</th>
-                  <th className="py-2 px-2 hidden sm:table-cell">Modalidad</th>
-                  <th className="py-2 px-2">Estado</th>
-                  <th className="py-2 px-2 hidden md:table-cell">Fecha de publicación</th>
-                  <th className="py-2 px-2">Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                {servicios.map((servicio) => (
-                  <tr key={servicio.id} className="border-b hover:bg-gray-50">
-                    <td className="py-2 px-2">{servicio.titulo}</td>
-                    <td className="py-2 px-2 hidden sm:table-cell">{servicio.categoria}</td>
-                    <td className="py-2 px-2 hidden sm:table-cell">{servicio.modalidad}</td>
-                    <td className="py-2 px-2">{servicio.estado}</td>
-                    <td className="py-2 px-2 hidden md:table-cell">{servicio.createdAt}</td>
-                    <td className="py-2 px-2 flex gap-2">
-                      <button
-                        className="text-blue-600 hover:underline flex items-center gap-1"
-                        onClick={() => handleEditarServicio(servicio.id)}
-                      >
-                        <FaEdit />
-                        <span className="hidden md:inline">Editar</span>
-                      </button>
-                      <button
-                        className="text-red-600 hover:underline flex items-center gap-1"
-                        onClick={() => handleEliminarServicio(servicio.id)}
-                      >
-                        <FaTrash />
-                        <span className="hidden md:inline">Eliminar</span>
-                      </button>
-                    </td>
+          {loading ? (
+            <p>Cargando publicaciones...</p>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-sm md:text-base">
+                <thead>
+                  <tr className="border-b">
+                    <th className="py-2 px-2">Título</th>
+                    <th className="py-2 px-2 hidden sm:table-cell">Categoría</th>
+                    <th className="py-2 px-2 hidden sm:table-cell">Modalidad</th>
+                    <th className="py-2 px-2">Estado</th>
+                    <th className="py-2 px-2 hidden md:table-cell">Fecha de publicación</th>
+                    <th className="py-2 px-2">Acciones</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {publicaciones.map((servicio) => (
+                    <tr key={servicio.id} className="border-b hover:bg-gray-50">
+                      <td className="py-2 px-2">{servicio.titulo}</td>
+                      <td className="py-2 px-2 hidden sm:table-cell">{servicio.categoria}</td>
+                      <td className="py-2 px-2 hidden sm:table-cell">{servicio.modalidad}</td>
+                      <td className="py-2 px-2">{servicio.estado}</td>
+                      <td className="py-2 px-2 hidden md:table-cell">{servicio.createdAt}</td>
+                      <td className="py-2 px-2 flex gap-2">
+                        <button
+                          className="text-blue-600 hover:underline flex items-center gap-1"
+                          onClick={() => handleEditarPublicacion(servicio.id, { /* datos actualizados */ })}
+                        >
+                          <FaEdit />
+                          <span className="hidden md:inline">Editar</span>
+                        </button>
+                        <button
+                          className="text-red-600 hover:underline flex items-center gap-1"
+                          onClick={() => handleEliminarPublicacion(servicio.id)}
+                        >
+                          <FaTrash />
+                          <span className="hidden md:inline">Eliminar</span>
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </section>
 
         {/* Edición rápida de perfil */}

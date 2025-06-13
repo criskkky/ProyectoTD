@@ -32,3 +32,15 @@ export function formatPostUpdate(user) { // Save
     email: user.email,
   };
 }
+
+// Formatea los datos de una publicación
+export function formatPublicacionData(publicacion) {
+  return {
+    ...publicacion,
+    titulo: startCase(publicacion.titulo), // Capitaliza el título
+    categoria: startCase(publicacion.categoria), // Capitaliza la categoría
+    modalidad: startCase(publicacion.modalidad), // Capitaliza la modalidad
+    estado: startCase(publicacion.estado), // Capitaliza el estado
+    createdAt: formatTempo(publicacion.createdAt, "DD-MM-YYYY"), // Formatea la fecha
+  };
+}
