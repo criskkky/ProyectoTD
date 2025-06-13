@@ -36,6 +36,7 @@ const PubliSchema = new EntitySchema({
         "arte",
         "construcción",
         "educacion",
+        "idiomas",
         "salud",
         "servicios generales",
         "tecnología"
