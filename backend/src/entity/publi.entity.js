@@ -25,12 +25,6 @@ const PubliSchema = new EntitySchema({
       type: "text",
       nullable: false,
     },
-    precio: {
-      type: "decimal",
-      precision: 10,
-      scale: 2,
-      nullable: false,
-    },
     modalidad: {
       type: "enum",
       enum: ["presencial", "online", "mixta"],

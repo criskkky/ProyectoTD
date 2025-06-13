@@ -37,15 +37,6 @@ export const publiBodyValidation = Joi.object({
       "string.max": "La descripción debe tener como máximo 2000 caracteres.",
       "any.required": "La descripción es requerida.",
     }),
-  precio: Joi.number()
-    .precision(2)
-    .positive()
-    .required()
-    .messages({
-      "number.base": "El precio debe ser un número.",
-      "number.positive": "El precio debe ser positivo.",
-      "any.required": "El precio es requerido.",
-    }),
   modalidad: Joi.string()
     .valid("presencial", "online", "mixta")
     .required()

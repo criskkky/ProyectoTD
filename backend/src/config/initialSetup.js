@@ -28,9 +28,10 @@ async function createUsers() {
       publiRepository.create({
         titulo: "Oferta de ejemplo",
         descripcion: "Esta es una oferta de ejemplo creada automáticamente.",
-        precio: 100.00,
         modalidad: "online",
-        profesional: adminUser,
+        estado: "activo",
+        categoria: "tecnología",
+        createdBy: adminUser,
       })
     );
 

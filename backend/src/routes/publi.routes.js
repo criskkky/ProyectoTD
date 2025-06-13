@@ -13,12 +13,12 @@ const router = Router();
 
 router
   .use(authenticateJwt)
-  .use(isAdmin);
+  // .use(isAdmin);
 
 router
-  .get("/posts", getPublications)
-  .get("/posts/:id", getPublication)
-  .patch("/posts/:id", updatePublication)
-  .delete("/posts/:id", deletePublication);
+  .get("", getPublications)
+  .get("/:id", getPublication)
+  .patch("/:id", updatePublication)
+  .delete("/:id", deletePublication);
 
 export default router;
