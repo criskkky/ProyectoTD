@@ -20,6 +20,7 @@ const Dashboard = () => {
   const {
     publicaciones,
     loading,
+    fetchPublicaciones,
     handleEditarPublicacion,
     handleEliminarPublicacion,
   } = usePublications();
@@ -27,6 +28,10 @@ const Dashboard = () => {
   useEffect(() => {
     const usuario = JSON.parse(sessionStorage.getItem('usuario')) || {};
     setUser(usuario);
+
+    if (usuario.id) {
+      fetchPublicaciones(usuario.id);
+    }
   }, [setUser]);
 
   const maxPublicaciones = user.rol === "premium" ? 6 : 3;

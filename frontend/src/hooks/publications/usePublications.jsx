@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { getPublicaciones, updatePublicacion, deletePublicacion } from "@/services/publi.service.js";
 import { showErrorAlert, showSuccessAlert } from "@/helpers/sweetAlert";
 
@@ -6,10 +6,10 @@ const usePublications = () => {
   const [publicaciones, setPublicaciones] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const fetchPublicaciones = async () => {
+  const fetchPublicaciones = useCallback(async (userId = null) => {
     setLoading(true);
     try {
-      const data = await getPublicaciones();
+      const data = await getPublicaciones(userId);
       setPublicaciones(data);
     } catch (error) {
       console.error("Error al obtener publicaciones:", error);
@@ -17,7 +17,7 @@ const usePublications = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []); // <- Memoriza la función para evitar recrearla en cada renderizado
 
   const handleEditarPublicacion = async (id, updatedData) => {
     try {
@@ -44,12 +44,13 @@ const usePublications = () => {
   };
 
   useEffect(() => {
-    fetchPublicaciones();
-  }, []);
+    fetchPublicaciones(); // Llama a fetchPublicaciones sin userId por defecto
+  }, [fetchPublicaciones]);
 
   return {
     publicaciones,
     loading,
+    fetchPublicaciones,
     handleEditarPublicacion,
     handleEliminarPublicacion,
   };

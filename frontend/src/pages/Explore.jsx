@@ -1,4 +1,13 @@
+import React, { useEffect } from "react";
+import usePublications from "../hooks/publications/usePublications";
+
 function Explore() {
+  const { publicaciones, loading, fetchPublicaciones } = usePublications();
+
+  useEffect(() => {
+    fetchPublicaciones(); // Llama a fetchPublicaciones sin userId para obtener todas las publicaciones
+  }, [fetchPublicaciones]);
+
   return (
     <main className="min-h-screen py-10 px-4 md:px-0">
       <div className="max-w-5xl mx-auto space-y-8">
@@ -17,24 +26,24 @@ function Explore() {
           </div>
         </section>
 
-        {/* Obtener servicios de backend */}
+        {/* Mostrar servicios obtenidos del backend */}
         <section className="bg-white rounded-xl shadow-md p-6">
           <h2 className="text-xl font-bold mb-4">Publicaciones Disponibles</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Aquí se mostrarán los servicios */}
-            <div className="bg-gray-100 p-4 rounded-lg shadow hover:shadow-lg transition-shadow">
-              <h3 className="font-semibold text-lg">Servicio 1</h3>
-              <p className="text-gray-600">Descripción breve del servicio.</p>
+          {loading ? (
+            <p>Cargando publicaciones...</p>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {publicaciones.map((servicio) => (
+                <div
+                  key={servicio.id}
+                  className="bg-gray-100 p-4 rounded-lg shadow hover:shadow-lg transition-shadow"
+                >
+                  <h3 className="font-semibold text-lg">{servicio.titulo}</h3>
+                  <p className="text-gray-600">{servicio.descripcion}</p>
+                </div>
+              ))}
             </div>
-            <div className="bg-gray-100 p-4 rounded-lg shadow hover:shadow-lg transition-shadow">
-              <h3 className="font-semibold text-lg">Servicio 2</h3>
-              <p className="text-gray-600">Descripción breve del servicio.</p>
-            </div>
-            <div className="bg-gray-100 p-4 rounded-lg shadow hover:shadow-lg transition-shadow">
-              <h3 className="font-semibold text-lg">Servicio 3</h3>
-              <p className="text-gray-600">Descripción breve del servicio.</p>
-            </div>
-          </div>
+          )}
         </section>
       </div>
     </main>
