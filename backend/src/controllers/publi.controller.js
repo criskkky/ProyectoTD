@@ -84,7 +84,7 @@ export async function updatePublication(req, res) {
 
 export async function deletePublication(req, res) {
   try {
-    const { id } = req.query;
+    const { id } = req.params;
 
     const { error: queryError } = publiQueryValidation.validate({ id });
 
@@ -99,7 +99,9 @@ export async function deletePublication(req, res) {
 
     const [publicationDelete, errorPublicationDelete] = await deletePubliService({ id });
 
-    if (errorPublicationDelete) return handleErrorClient(res, 404, "Error eliminando la publicación", errorPublicationDelete);
+    if (errorPublicationDelete) {
+      return handleErrorClient(res, 404, "Error eliminando la publicación", errorPublicationDelete);
+    }
 
     handleSuccess(res, 200, "Publicación eliminada correctamente", publicationDelete);
   } catch (error) {
