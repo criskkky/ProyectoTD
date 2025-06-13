@@ -8,7 +8,7 @@ export async function getPublicaciones() {
         return formattedData;
     } catch (error) {
         console.error("Error al obtener publicaciones:", error);
-        return error.response?.data || { error: "Error desconocido" };
+        return [];
     }
 }
 

@@ -89,6 +89,8 @@ const Dashboard = () => {
           </div>
           {loading ? (
             <p>Cargando publicaciones...</p>
+          ) : publicaciones.length === 0 ? (
+            <p>No tienes publicaciones creadas. ¡Empieza a publicar!</p>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm md:text-base">

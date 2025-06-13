@@ -31,6 +31,8 @@ function Explore() {
           <h2 className="text-xl font-bold mb-4">Publicaciones Disponibles</h2>
           {loading ? (
             <p>Cargando publicaciones...</p>
+          ) : publicaciones.length === 0 ? (
+            <p>No hay publicaciones disponibles en este momento.</p>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {publicaciones.map((servicio) => (
