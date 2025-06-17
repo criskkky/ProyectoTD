@@ -38,10 +38,14 @@ function Explore() {
               {publicaciones.map((servicio) => (
                 <div
                   key={servicio.id}
-                  className="bg-gray-100 p-4 rounded-lg shadow hover:shadow-lg transition-shadow"
+                  className="bg-white p-6 rounded-xl shadow-md border border-blue-500"
                 >
-                  <h3 className="font-semibold text-lg">{servicio.titulo}</h3>
-                  <p className="text-gray-600">{servicio.descripcion}</p>
+                  <h3 className="font-bold text-xl mb-2">{servicio.titulo}</h3>
+                  <p className="text-gray-600 text-sm mb-2">
+                    {servicio.categoria} • {servicio.modalidad}
+                  </p>
+                  <p className="text-gray-700">{servicio.descripcion}</p>
+                  <p className="text-gray-500 text-xs mt-4">{servicio.createdAt}</p>
                 </div>
               ))}
             </div>
