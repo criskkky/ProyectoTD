@@ -18,7 +18,7 @@ async function createUsers() {
         apellidos: "Tadmin Cadmin",
         rut: "12345678-1",
         email: "admin@sistema.com",
-        password: await encryptPassword("admin123"),
+        password: await encryptPassword("admin1234"),
         rol: "admin",
       })
     );
@@ -26,7 +26,7 @@ async function createUsers() {
     // Crear una oferta para el usuario admin
     await publiRepository.save(
       publiRepository.create({
-        titulo: "Oferta de ejemplo",
+        titulo: "Oferta del admin",
         descripcion: "Esta es una oferta de ejemplo creada automáticamente.",
         modalidad: "online",
         estado: "activo",
@@ -35,7 +35,31 @@ async function createUsers() {
       })
     );
 
-    console.log("* => Usuarios y oferta creados exitosamente");
+    // Agregar un usuario adicional
+    const regularUser = await userRepository.save(
+      userRepository.create({
+        nombres: "Usuario Regular",
+        apellidos: "Apellido Regular",
+        rut: "12345678-2",
+        email: "user@sistema.com",
+        password: await encryptPassword("user1234"),
+        rol: "user",
+      })
+    );
+
+    // Crear una oferta para el usuario regular
+    await publiRepository.save(
+      publiRepository.create({
+        titulo: "Oferta del usuario",
+        descripcion: "Esta es una oferta de ejemplo creada automáticamente.",
+        modalidad: "online",
+        estado: "activo",
+        categoria: "tecnología",
+        createdBy: regularUser,
+      })
+    );
+
+    console.log("* => Usuarios y ofertas creados exitosamente");
   } catch (error) {
     console.error("Error al crear usuarios:", error);
   }
