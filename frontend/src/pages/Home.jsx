@@ -9,23 +9,23 @@ const Home = () => {
       {/* Home */}
       <div className="home flex flex-col xl:flex-row md:justify-center md:items-start mt-10 gap-8 px-4">
         {/* Columna izquierda: Bienvenida y descripción */}
-        <div className="md:w-1/2 max-w-2xl mx-auto md:mx-0 py-6 px-2 md:px-0">
-          <h1 className="text-4xl font-bold text-left text-gray-900">¡Bienvenid@!</h1>
-          <h3 className="text-xl font-semibold text-left mt-4 text-blue-600">
+        <div className="xl:w-1/2 max-w-2xl mx-auto xl:mx-0 py-6 px-2 xl:px-0 text-left">
+          <h1 className="text-4xl font-bold text-gray-900">¡Bienvenid@!</h1>
+          <h3 className="text-xl font-semibold mt-4 text-blue-600">
             ¡Nos alegra tenerte por aquí!
           </h3>
-          <p className="text-left mt-1 text-lg text-gray-700">
+          <p className="mt-1 text-lg text-gray-700">
             Te presentamos <b>ProyectoTD</b>, la plataforma de autopromoción laboral que conecta a personas en Chile con trabajadores de distintas áreas, ya sea de forma presencial, online o mixta.
           </p>
-          <h3 className="text-xl font-semibold text-left mt-1 text-blue-600">
+          <h3 className="text-xl font-semibold mt-1 text-blue-600">
             ¿Qué encontrarás en nuestra plataforma?
           </h3>
-          <p className="text-left mt-1 text-lg text-gray-700">
+          <p className="mt-1 text-lg text-gray-700">
             Ofrecemos una interfaz intuitiva y amigable que te permitirá navegar fácilmente por los servicios publicados por nuestros usuarios. Desde profesionales de la salud, educación, tecnología y mucho más.
           </p>
         </div>
         {/* Columna derecha: ¿Cómo empezar? */}
-        <div className="md:w-[50rem] max-w-lg mx-auto md:mx-0 px-2 md:px-0">
+        <div className="md:w-[50rem] max-w-lg mx-auto xl:mx-0 px-2 xl:px-0">
           <div className="bg-white rounded-xl shadow-lg p-6 border border-blue-100">
             <h2 className="text-xl font-bold text-blue-700 mb-4 flex items-center gap-2">
               <FaQuestionCircle className="inline-block text-blue-500" size={24} />
