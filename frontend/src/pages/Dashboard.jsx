@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { FaUserCircle, FaClipboardList, FaPlusCircle, FaEnvelope, FaEdit, FaTrash } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
 import ProfilePopup from "../components/ProfilePopup";
 import PubliPopup from "../components/PubliPopup"; // Importamos el componente PubliPopup
 import useEditProfile from "../hooks/profile/useEditProfile";
@@ -8,7 +7,6 @@ import usePublications from "../hooks/publications/usePublications";
 import { startCase } from 'lodash';
 
 const Dashboard = () => {
-  const navigate = useNavigate();
   const {
     showPopup,
     setShowPopup,
