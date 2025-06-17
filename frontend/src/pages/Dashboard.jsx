@@ -97,8 +97,11 @@ const Dashboard = () => {
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-bold text-gray-900">Mis publicaciones</h2>
             <button
-              className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded text-sm md:text-base"
               onClick={openCrearPublicacionPopup}
+              disabled={publicaciones.length >= maxPublicaciones}
+              className={`flex items-center gap-2 bg-blue-500 text-white font-semibold py-2 px-4 rounded text-sm md:text-base ${
+                publicaciones.length >= maxPublicaciones ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-600"
+              }`}
             >
               <FaPlusCircle /> Crear publicación
             </button>
@@ -131,7 +134,7 @@ const Dashboard = () => {
                       <td className="py-2 px-2 flex gap-2">
                         <button
                           className="text-blue-600 hover:underline flex items-center gap-1"
-                          onClick={() => handleEditarPublicacionPopup(servicio)} // Cambia a pasar el objeto completo
+                          onClick={() => handleEditarPublicacionPopup(servicio)}
                         >
                           <FaEdit />
                           <span className="hidden md:inline">Editar</span>
