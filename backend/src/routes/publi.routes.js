@@ -7,6 +7,7 @@ import {
   getPublications,
   updatePublication,
   deletePublication,
+  createPublication
 } from "../controllers/publi.controller.js";
 
 const router = Router();
@@ -21,6 +22,7 @@ router
 router
   .get("/:id", getPublication)
   .patch("/:id", updatePublication)
-  .delete("/:id", deletePublication);
+  .delete("/:id", deletePublication)
+  .post("/", createPublication);
 
 export default router;

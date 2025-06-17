@@ -54,3 +54,14 @@ export async function deletePubliService({ id }) {
     return [null, error.message];
   }
 }
+
+export async function createPubliService(data) {
+  try {
+    const publiRepository = AppDataSource.getRepository(Publication);
+    const newPublication = publiRepository.create(data);
+    const savedPublication = await publiRepository.save(newPublication);
+    return [savedPublication, null];
+  } catch (error) {
+    return [null, error.message];
+  }
+}

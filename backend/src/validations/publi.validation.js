@@ -57,4 +57,8 @@ export const publiBodyValidation = Joi.object({
     .messages({
       "any.only": "La categoría debe ser una de las permitidas.",
     }),
+  createdBy: Joi.number()
+    .integer()
+    .positive()
+    .optional(),
 }).unknown(false);

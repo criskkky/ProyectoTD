@@ -1,5 +1,6 @@
 "use strict";
 import {
+  createPubliService,
   getPubliService,
   getPublisService,
   updatePubliService,
@@ -104,6 +105,42 @@ export async function deletePublication(req, res) {
     }
 
     handleSuccess(res, 200, "Publicación eliminada correctamente", publicationDelete);
+  } catch (error) {
+    handleErrorServer(res, 500, error.message);
+  }
+}
+
+export async function createPublication(req, res) {
+  try {
+    const userId = req.user.id; // Obtener el ID del usuario autenticado desde el token
+    const { titulo, descripcion, modalidad, categoria } = req.body;
+
+    // Agregar automáticamente el campo createdBy al cuerpo de la solicitud
+    const bodyWithCreatedBy = {
+      titulo,
+      descripcion,
+      modalidad,
+      categoria,
+      createdBy: userId,
+    };
+
+    const { error: bodyError } = publiBodyValidation.validate(bodyWithCreatedBy);
+
+    if (bodyError) {
+      return handleErrorClient(
+        res,
+        400,
+        "Error de validación en los datos enviados",
+        bodyError.message,
+      );
+    }
+
+    const [publication, publicationError] = await createPubliService(bodyWithCreatedBy);
+
+    if (publicationError)
+      return handleErrorClient(res, 400, "Error creando la publicación", publicationError);
+
+    handleSuccess(res, 201, "Publicación creada correctamente", publication);
   } catch (error) {
     handleErrorServer(res, 500, error.message);
   }
