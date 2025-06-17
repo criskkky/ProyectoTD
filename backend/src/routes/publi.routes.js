@@ -12,11 +12,13 @@ import {
 const router = Router();
 
 router
+  .get("/", getPublications)
+
+router
   .use(authenticateJwt)
   // .use(isAdmin);
 
 router
-  .get("", getPublications)
   .get("/:id", getPublication)
   .patch("/:id", updatePublication)
   .delete("/:id", deletePublication);
