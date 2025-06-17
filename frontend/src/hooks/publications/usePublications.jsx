@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { getPublicaciones, updatePublicacion, deletePublicacion } from "@/services/publi.service.js";
+import { getPublicaciones, updatePublicacion, deletePublicacion, createPublicacion } from "@/services/publi.service.js";
 import { showErrorAlert, showSuccessAlert } from "@/helpers/sweetAlert";
 
 const usePublications = () => {
@@ -17,7 +17,18 @@ const usePublications = () => {
     } finally {
       setLoading(false);
     }
-  }, []); // <- Memoriza la función para evitar recrearla en cada renderizado
+  }, []);
+
+  const handleCrearPublicacion = async (newData) => {
+    try {
+      const nuevaPublicacion = await createPublicacion(newData);
+      setPublicaciones((prev) => [...prev, nuevaPublicacion]);
+      showSuccessAlert("¡Creado!", "La publicación ha sido creada exitosamente.");
+    } catch (error) {
+      console.error("Error al crear publicación:", error);
+      showErrorAlert("Error", "No se pudo crear la publicación.");
+    }
+  };
 
   const handleEditarPublicacion = async (id, updatedData) => {
     try {
@@ -44,13 +55,14 @@ const usePublications = () => {
   };
 
   useEffect(() => {
-    fetchPublicaciones(); // Llama a fetchPublicaciones sin userId por defecto
+    fetchPublicaciones();
   }, [fetchPublicaciones]);
 
   return {
     publicaciones,
     loading,
     fetchPublicaciones,
+    handleCrearPublicacion,
     handleEditarPublicacion,
     handleEliminarPublicacion,
   };

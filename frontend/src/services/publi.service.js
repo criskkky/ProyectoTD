@@ -33,3 +33,13 @@ export async function deletePublicacion(id) {
         return error.response?.data || { error: "Error desconocido" };
     }
 }
+
+export async function createPublicacion(data) {
+    try {
+        const response = await axios.post('/posts/', data);
+        return response.data.data;
+    } catch (error) {
+        console.error("Error al crear publicación:", error);
+        return error.response?.data || { error: "Error desconocido" };
+    }
+}
