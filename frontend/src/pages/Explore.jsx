@@ -1,12 +1,22 @@
 import React, { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import usePublications from "../hooks/publications/usePublications";
 
 function Explore() {
+  const navigate = useNavigate();
   const { publicaciones, loading, fetchPublicaciones } = usePublications();
 
   useEffect(() => {
-    fetchPublicaciones(); // Llama a fetchPublicaciones sin userId para obtener todas las publicaciones
+    fetchPublicaciones();
   }, [fetchPublicaciones]);
+
+  const handleServicioClick = (e, id) => {
+    const usuario = JSON.parse(sessionStorage.getItem("usuario"));
+    if (!usuario) {
+      e.preventDefault();
+      navigate("/auth");
+    }
+  };
 
   return (
     <main className="min-h-screen py-10 px-4 md:px-0">
@@ -36,9 +46,11 @@ function Explore() {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {publicaciones.map((servicio) => (
-                <div
+                <Link
                   key={servicio.id}
-                  className="bg-white p-6 rounded-xl shadow-md border border-blue-500"
+                  to={`/servicio/${servicio.id}`}
+                  className="bg-white p-6 rounded-xl shadow-md border border-blue-500 block hover:shadow-lg transition"
+                  onClick={(e) => handleServicioClick(e, servicio.id)}
                 >
                   <h3 className="font-bold text-xl mb-2">{servicio.titulo}</h3>
                   <p className="text-gray-600 text-sm mb-2">
@@ -46,7 +58,7 @@ function Explore() {
                   </p>
                   <p className="text-gray-700">{servicio.descripcion}</p>
                   <p className="text-gray-500 text-xs mt-4">{servicio.createdAt}</p>
-                </div>
+                </Link>
               ))}
             </div>
           )}

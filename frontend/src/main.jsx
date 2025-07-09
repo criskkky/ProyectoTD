@@ -10,6 +10,7 @@ import ProtectedRoute from '@/components/ProtectedRoute';
 import '@/styles/styles.css';
 import Dashboard from '@/pages/Dashboard';
 import Explore from '@/pages/Explore';
+import ServicioDetalle from '@/pages/ServicioDetalle';
 
 const router = createBrowserRouter([
   {
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
         element: (
             <Explore />
         ),
+      },
+      {
+        path: '/servicio/:id',
+        element: <ServicioDetalle />
       }
     ],
   },

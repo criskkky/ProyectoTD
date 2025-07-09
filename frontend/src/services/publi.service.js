@@ -43,3 +43,13 @@ export async function createPublicacion(data) {
         return error.response?.data || { error: "Error desconocido" };
     }
 }
+
+export async function getPublicacionById(id) {
+    try {
+        const { data } = await axios.get(`/posts/${id}`);
+        return formatPublicacionData(data.data);
+    } catch (error) {
+        console.error("Error al obtener publicación:", error);
+        return null;
+    }
+}

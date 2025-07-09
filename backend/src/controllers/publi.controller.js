@@ -18,7 +18,7 @@ import {
 
 export async function getPublication(req, res) {
   try {
-    const { id } = req.query;
+    const { id } = req.params; // Cambia de req.query a req.params
     const { error } = publiQueryValidation.validate({ id });
 
     if (error) return handleErrorClient(res, 400, error.message);
