@@ -67,8 +67,7 @@ const Dashboard = () => {
   };
 
   const handleEditarPerfil = () => {
-    setShowPopup(true);
-    openEditProfile();
+    openEditProfile(user); // Pasa el usuario actual aquí
   }
 
   return (
@@ -198,7 +197,7 @@ const Dashboard = () => {
         <ProfilePopup
           show={showPopup}
           setShow={setShowPopup}
-          data={[user]}
+          data={[user]} // <-- así
           action={handleEditProfile}
         />
 

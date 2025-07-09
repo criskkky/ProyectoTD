@@ -15,8 +15,8 @@ const useEditProfile = () => {
   const handleEditProfile = async (formData) => {
     if (!formData) return;
 
-    // Elimina id y newPassword vacío del body
-    const { id, newPassword, ...rest } = formData;
+    // Elimina id, rol y newPassword vacío del body
+    const { id, rol, newPassword, ...rest } = formData;
     const dataToSend = { ...rest };
     if (newPassword && newPassword.trim() !== "") {
       dataToSend.newPassword = newPassword;
