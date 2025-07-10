@@ -18,7 +18,7 @@ import {
 
 export async function getPublication(req, res) {
   try {
-    const { id } = req.params; // Cambia de req.query a req.params
+    const { id } = req.params;
     const { error } = publiQueryValidation.validate({ id });
 
     if (error) return handleErrorClient(res, 400, error.message);
@@ -27,6 +27,20 @@ export async function getPublication(req, res) {
 
     if (errorPublication) return handleErrorClient(res, 404, errorPublication);
 
+    // Si el usuario NO está autenticado, solo devuelve campos públicos
+    if (!req.user) {
+      const publicFields = {
+        id: publication.id,
+        titulo: publication.titulo,
+        categoria: publication.categoria,
+        modalidad: publication.modalidad,
+        descripcion: publication.descripcion,
+        createdAt: publication.createdAt,
+      };
+      return handleSuccess(res, 200, "Publicación encontrada", publicFields);
+    }
+
+    // Si está autenticado, devuelve todo
     handleSuccess(res, 200, "Publicación encontrada", publication);
   } catch (error) {
     handleErrorServer(res, 500, error.message);

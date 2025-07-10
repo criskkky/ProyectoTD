@@ -14,13 +14,13 @@ const router = Router();
 
 router
   .get("/", getPublications)
+  .get("/:id", getPublication)
 
 router
   .use(authenticateJwt)
   // .use(isAdmin);
 
 router
-  .get("/:id", getPublication)
   .patch("/:id", updatePublication)
   .delete("/:id", deletePublication)
   .post("/", createPublication);
