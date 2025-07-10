@@ -89,7 +89,7 @@ export async function updateUser(req, res) {
 
 export async function deleteUser(req, res) {
   try {
-    const { rut, id, email } = req.query;
+    const { rut, id, email } = req.params;
 
     const { error: queryError } = userQueryValidation.validate({
       rut,
