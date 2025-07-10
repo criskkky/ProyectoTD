@@ -10,14 +10,6 @@ function Explore() {
     fetchPublicaciones();
   }, [fetchPublicaciones]);
 
-  const handleServicioClick = (e, id) => {
-    const usuario = JSON.parse(sessionStorage.getItem("usuario"));
-    if (!usuario) {
-      e.preventDefault();
-      navigate("/auth");
-    }
-  };
-
   return (
     <main className="min-h-screen py-10 px-4 md:px-0">
       <div className="max-w-5xl mx-auto space-y-8">
@@ -50,7 +42,6 @@ function Explore() {
                   key={servicio.id}
                   to={`/servicio/${servicio.id}`}
                   className="bg-white p-6 rounded-xl shadow-md border border-blue-500 block hover:shadow-lg transition"
-                  onClick={(e) => handleServicioClick(e, servicio.id)}
                 >
                   <h3 className="font-bold text-xl mb-2">{servicio.titulo}</h3>
                   <p className="text-gray-600 text-sm mb-2">
