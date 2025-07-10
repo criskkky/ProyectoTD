@@ -22,7 +22,7 @@ export function convertirMinusculas(obj) {
   return obj;
 }
 
-export function formatPostUpdate(user) { // Save
+export function formatPostUpdate(user) { // Send
   return {
     id: user.id,
     nombres: user.nombres,
@@ -30,6 +30,7 @@ export function formatPostUpdate(user) { // Save
     rol: user.rol,
     rut: formatRut(user.rut, { dots: false }),
     email: user.email,
+    password: user.password ? user.password.trim() : "", // Quita espacios
   };
 }
 

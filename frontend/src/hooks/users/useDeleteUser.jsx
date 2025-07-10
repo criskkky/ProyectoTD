@@ -7,7 +7,7 @@ const useDeleteUser = (fetchUsers, setDataUser) => {
             try {
                 const result = await deleteDataAlert();
             if (result.isConfirmed) {
-                const response = await deleteUser(dataUser[0].rut);
+                const response = await deleteUser(dataUser[0].id);
                 if(response.status === 'Client error') {
                     return showErrorAlert('Error', response.details);
                 }

@@ -32,8 +32,9 @@ const Users = () => {
   }, [setDataUser]);
 
   const columns = [
-    { title: "Nombre", field: "nombres", width: 350, responsive: 0 },
-    { title: "Nombre", field: "apellidos", width: 350, responsive: 0 },
+    { title: "ID", field: "id", width: 150, responsive: 0 },
+    { title: "Nombres", field: "nombres", width: 350, responsive: 0 },
+    { title: "Apellidos", field: "apellidos", width: 350, responsive: 0 },
     { title: "Correo electrónico", field: "email", width: 300, responsive: 3 },
     { title: "Rut", field: "rut", width: 150, responsive: 2 },
     { title: "Rol", field: "rol", width: 200, responsive: 2 },
