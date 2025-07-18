@@ -31,6 +31,16 @@ async function createUsers() {
         modalidad: "online",
         estado: "activo",
         categoria: "tecnología",
+        imagenes: ["https://via.placeholder.com/150"],
+        direccion: "Calle Falsa 123",
+        ciudad: "Santiago",
+        pais: "Chile",
+        coordenadas: "-33.4489,-70.6693",
+        etiquetas: ["admin", "ejemplo", "tecnología"],
+        contacto_email: "admin@sistema.com",
+        contacto_whatsapp: "+56912345678",
+        contacto_telefono: "+56987654321",
+        enlace_externo: "https://sistema.com/oferta-admin",
         createdBy: adminUser,
       })
     );
@@ -52,9 +62,19 @@ async function createUsers() {
       publiRepository.create({
         titulo: "Oferta del usuario",
         descripcion: "Esta es una oferta de ejemplo creada automáticamente.",
-        modalidad: "online",
+        modalidad: "presencial",
         estado: "activo",
         categoria: "tecnología",
+        imagenes: ["https://via.placeholder.com/150", "https://via.placeholder.com/200"],
+        direccion: "Av. Principal 456",
+        ciudad: "Valparaíso",
+        pais: "Chile",
+        coordenadas: "-33.0472,-71.6127",
+        etiquetas: ["usuario", "ejemplo", "presencial"],
+        contacto_email: "user@sistema.com",
+        contacto_whatsapp: "+56911223344",
+        contacto_telefono: "+56944332211",
+        enlace_externo: "https://sistema.com/oferta-usuario",
         createdBy: regularUser,
       })
     );
