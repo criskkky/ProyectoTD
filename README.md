@@ -123,3 +123,38 @@ A continuación se presenta la estructura esquemática del proyecto (podría cam
         </tr>
     </tbody>
 </table>
+
+---
+## Setup automatizado con Docker
+
+Este proyecto incluye un entorno automatizado con Docker y Docker Compose para levantar la base de datos MySQL, el backend y el frontend de forma secuencial y sin configuración manual de variables.
+
+### Requisitos previos
+- Tener instalado Docker y Docker Compose.
+
+### Pasos para levantar el entorno completo
+
+1. Clona el repositorio:
+   ```sh
+   git clone https://github.com/criskkky/ProyectoTD.git
+   cd ProyectoTD
+   ```
+2. Ejecuta el siguiente comando para construir y levantar todos los servicios:
+   ```sh
+   docker-compose up --build
+   ```
+   Esto hará lo siguiente automáticamente:
+   - Levanta MySQL y crea la base de datos con las credenciales definidas en el compose.
+   - Construye las imágenes de backend y frontend, copiando sus respectivos `.env.example` a `.env`.
+   - Utiliza la herramienta `wait-port` para asegurar que cada servicio espere a que el anterior esté listo antes de iniciar (backend espera a MySQL, frontend espera a backend).
+
+3. Accede a la aplicación:
+   - **Frontend:** [http://localhost:5173](http://localhost:5173)
+   - **Backend:** [http://localhost:3000](http://localhost:3000)
+   - **MySQL:** Puerto 3306 en tu máquina local
+
+### Notas importantes
+- Las variables de entorno para backend y frontend se gestionan en sus propios archivos `.env.example` y `.env`, no es necesario definirlas en el `docker-compose.yml`.
+- Si necesitas cambiar credenciales o rutas, edita los archivos `.env.example` y reconstruye los contenedores.
+- El frontend se expone en tu máquina usando la opción `--host` en Vite para acceso externo.
+---
