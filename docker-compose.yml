@@ -22,6 +22,7 @@ services:
     command: sh -c "npx wait-port mysql:3306 && npm run dev"
     volumes:
       - ./backend:/usr/src/app
+      - /usr/src/app/node_modules
     restart: unless-stopped
   frontend:
     build: ./frontend
@@ -33,4 +34,5 @@ services:
     command: sh -c "npx wait-port backend:3000 && npm run dev -- --host"
     volumes:
       - ./frontend:/usr/src/app
+      - /usr/src/app/node_modules
     restart: unless-stopped
