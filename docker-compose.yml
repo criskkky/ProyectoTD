@@ -12,3 +12,21 @@ services:
     volumes:
       - ./mysql_data:/var/lib/mysql
     restart: unless-stopped
+  backend:
+    build: ./backend
+    container_name: backend
+    depends_on:
+      - mysql
+    ports:
+      - "3000:3000"
+    command: sh -c "npx wait-port mysql:3306 && npm run dev"
+    restart: unless-stopped
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    depends_on:
+      - backend
+    ports:
+      - "5173:5173"
+    command: sh -c "npx wait-port backend:3000 && npm run dev -- --host"
+    restart: unless-stopped
