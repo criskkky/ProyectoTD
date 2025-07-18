@@ -1,0 +1,4 @@
+# Ignorar archivos y carpetas sensibles y pesadas
+.env
+**/.env
+node_modules/
