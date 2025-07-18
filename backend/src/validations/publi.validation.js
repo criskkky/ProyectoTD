@@ -37,6 +37,40 @@ export const publiBodyValidation = Joi.object({
       "string.max": "La descripción debe tener como máximo 2000 caracteres.",
       "any.required": "La descripción es requerida.",
     }),
+  imagenes: Joi.array().items(Joi.string().uri()).max(10).optional().messages({
+    "array.base": "Las imágenes deben ser un arreglo de URLs.",
+    "string.uri": "Cada imagen debe ser una URL válida.",
+    "array.max": "Máximo 10 imágenes permitidas."
+  }),
+  direccion: Joi.string().max(255).optional().messages({
+    "string.max": "La dirección debe tener como máximo 255 caracteres."
+  }),
+  ciudad: Joi.string().max(100).optional().messages({
+    "string.max": "La ciudad debe tener como máximo 100 caracteres."
+  }),
+  pais: Joi.string().max(100).optional().messages({
+    "string.max": "El país debe tener como máximo 100 caracteres."
+  }),
+  coordenadas: Joi.string().pattern(/^[-+]?\d{1,2}\.\d+\s*,\s*[-+]?\d{1,3}\.\d+$/).optional().messages({
+    "string.pattern.base": "Las coordenadas deben estar en formato lat,lng."
+  }),
+  etiquetas: Joi.array().items(Joi.string().max(30)).max(10).optional().messages({
+    "array.base": "Las etiquetas deben ser un arreglo de palabras clave.",
+    "string.max": "Cada etiqueta debe tener como máximo 30 caracteres.",
+    "array.max": "Máximo 10 etiquetas permitidas."
+  }),
+  contacto_email: Joi.string().email().optional().messages({
+    "string.email": "El email de contacto debe ser válido."
+  }),
+  contacto_whatsapp: Joi.string().max(30).optional().messages({
+    "string.max": "El WhatsApp debe tener como máximo 30 caracteres."
+  }),
+  contacto_telefono: Joi.string().max(30).optional().messages({
+    "string.max": "El teléfono debe tener como máximo 30 caracteres."
+  }),
+  enlace_externo: Joi.string().uri().optional().messages({
+    "string.uri": "El enlace externo debe ser una URL válida."
+  }),
   modalidad: Joi.string()
     .valid("presencial", "online", "mixta")
     .required()

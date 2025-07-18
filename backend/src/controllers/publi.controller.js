@@ -131,10 +131,7 @@ export async function createPublication(req, res) {
 
     // Agregar automáticamente el campo createdBy al cuerpo de la solicitud
     const bodyWithCreatedBy = {
-      titulo,
-      descripcion,
-      modalidad,
-      categoria,
+      ...req.body,
       createdBy: userId,
     };
 

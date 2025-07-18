@@ -25,6 +25,55 @@ const PubliSchema = new EntitySchema({
       type: "text",
       nullable: false,
     },
+    imagenes: {
+      type: "simple-array", // URLs separadas por coma
+      nullable: true,
+    },
+    direccion: {
+      type: "varchar",
+      length: 255,
+      nullable: true,
+    },
+    ciudad: {
+      type: "varchar",
+      length: 100,
+      nullable: true,
+    },
+    pais: {
+      type: "varchar",
+      length: 100,
+      nullable: true,
+    },
+    coordenadas: {
+      type: "varchar",
+      length: 100,
+      nullable: true,
+      comment: "Formato: lat,lng"
+    },
+    etiquetas: {
+      type: "simple-array", // palabras clave separadas por coma
+      nullable: true,
+    },
+    contacto_email: {
+      type: "varchar",
+      length: 100,
+      nullable: true,
+    },
+    contacto_whatsapp: {
+      type: "varchar",
+      length: 30,
+      nullable: true,
+    },
+    contacto_telefono: {
+      type: "varchar",
+      length: 30,
+      nullable: true,
+    },
+    enlace_externo: {
+      type: "varchar",
+      length: 255,
+      nullable: true,
+    },
     modalidad: {
       type: "enum",
       enum: ["presencial", "online", "mixta"],
