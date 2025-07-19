@@ -5,6 +5,14 @@ import {
   handleErrorServer,
   } from "../handlers/responseHandlers.js";
 
+export function flexAuthJwt(req, res, next) {
+  passport.authenticate("jwt", { session: false }, (err, user, info) => {
+    if (err) return next();
+    if (user) req.user = user;
+    next();
+  })(req, res, next);
+}
+
 export function authenticateJwt(req, res, next) {
   passport.authenticate("jwt", { session: false }, (err, user, info) => {
     if (err) {

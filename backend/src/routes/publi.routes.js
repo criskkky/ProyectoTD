@@ -1,6 +1,6 @@
 "use strict";
 import { Router } from "express";
-import { authenticateJwt } from "../middlewares/authentication.middleware.js";
+import { authenticateJwt, flexAuthJwt } from "../middlewares/authentication.middleware.js";
 import { isAdmin } from "../middlewares/authorization.middleware.js";
 import {
   getPublication,
@@ -14,7 +14,7 @@ const router = Router();
 
 router
   .get("/", getPublications)
-  .get("/:id", getPublication)
+  .get("/:id", flexAuthJwt, getPublication)
 
 router
   .use(authenticateJwt)

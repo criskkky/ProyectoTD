@@ -28,6 +28,8 @@ export async function getPublication(req, res) {
     if (errorPublication) return handleErrorClient(res, 404, errorPublication);
 
     // Si el usuario NO está autenticado, solo devuelve campos públicos
+    console.log("Usuario autenticado:", req.user ? true : false);
+
     if (!req.user) {
       const publicFields = {
         id: publication.id,
@@ -36,7 +38,7 @@ export async function getPublication(req, res) {
         modalidad: publication.modalidad,
         descripcion: publication.descripcion,
         createdAt: publication.createdAt,
-      };
+      }
       return handleSuccess(res, 200, "Publicación encontrada", publicFields);
     }
 

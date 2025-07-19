@@ -37,11 +37,32 @@ export function formatPostUpdate(user) { // Send
 // Formatea los datos de una publicación
 export function formatPublicacionData(publicacion) {
   return {
-    ...publicacion,
-    titulo: startCase(publicacion.titulo), // Capitaliza el título
-    categoria: startCase(publicacion.categoria), // Capitaliza la categoría
-    modalidad: startCase(publicacion.modalidad), // Capitaliza la modalidad
-    estado: startCase(publicacion.estado), // Capitaliza el estado
-    createdAt: formatTempo(publicacion.createdAt, "DD-MM-YYYY"), // Formatea la fecha
+    id: publicacion.id ?? null,
+    titulo: startCase(publicacion.titulo ?? ""),
+    estado: startCase(publicacion.estado ?? ""),
+    descripcion: publicacion.descripcion ?? "No disponible",
+    imagenes: Array.isArray(publicacion.imagenes)
+      ? publicacion.imagenes
+      : (typeof publicacion.imagenes === "string" && publicacion.imagenes)
+        ? publicacion.imagenes.split(",")
+        : [],
+    direccion: publicacion.direccion ?? "No disponible",
+    ciudad: publicacion.ciudad ?? "No disponible",
+    pais: publicacion.pais ?? "No disponible",
+    coordenadas: publicacion.coordenadas ?? "No disponible",
+    etiquetas: Array.isArray(publicacion.etiquetas)
+      ? publicacion.etiquetas
+      : (typeof publicacion.etiquetas === "string" && publicacion.etiquetas)
+        ? publicacion.etiquetas.split(",")
+        : [],
+    contacto_email: publicacion.contacto_email ?? "No disponible",
+    contacto_whatsapp: publicacion.contacto_whatsapp ?? "No disponible",
+    contacto_telefono: publicacion.contacto_telefono ?? "No disponible",
+    enlace_externo: publicacion.enlace_externo ?? "No disponible",
+    modalidad: startCase(publicacion.modalidad ?? ""),
+    categoria: startCase(publicacion.categoria ?? ""),
+    createdAt: publicacion.createdAt ? formatTempo(publicacion.createdAt, "DD-MM-YYYY") : "No disponible",
+    updatedAt: publicacion.updatedAt ? formatTempo(publicacion.updatedAt, "DD-MM-YYYY") : "No disponible",
+    createdBy: publicacion.createdBy ?? null,
   };
 }
