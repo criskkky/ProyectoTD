@@ -37,7 +37,6 @@ function ServicioDetalle() {
     { key: "direccion", label: "Dirección" },
     { key: "ciudad", label: "Ciudad" },
     { key: "pais", label: "País" },
-    // { key: "coordenadas", label: "Coordenadas" },
     { key: "etiquetas", label: "Etiquetas", render: v => v && v.length ? v.join(", ") : "No disponible" },
     { key: "contacto_email", label: "Email de contacto" },
     { key: "contacto_whatsapp", label: "WhatsApp" },
