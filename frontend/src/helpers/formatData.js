@@ -49,7 +49,7 @@ export function formatPublicacionData(publicacion) {
     direccion: publicacion.direccion ?? "No disponible",
     ciudad: publicacion.ciudad ?? "No disponible",
     pais: publicacion.pais ?? "No disponible",
-    coordenadas: publicacion.coordenadas ?? "No disponible",
+    // coordenadas: publicacion.coordenadas ?? "No disponible",
     etiquetas: Array.isArray(publicacion.etiquetas)
       ? publicacion.etiquetas
       : (typeof publicacion.etiquetas === "string" && publicacion.etiquetas)

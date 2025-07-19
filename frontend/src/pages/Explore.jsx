@@ -1,61 +1,168 @@
-import React, { useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { FaChevronDown, FaSearch } from "react-icons/fa";
 import usePublications from "../hooks/publications/usePublications";
+import Footer from "@/components/Footer.jsx";
 
 function Explore() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { publicaciones, loading, fetchPublicaciones } = usePublications();
 
+  // Leer parámetros de la URL al cargar
+  const getQueryParams = () => {
+    const params = new URLSearchParams(location.search);
+    return {
+      search: params.get("search") || "",
+      categoria: params.get("categoria") || "",
+      modalidad: params.get("modalidad") || ""
+    };
+  };
+
+  const [search, setSearch] = useState(getQueryParams().search);
+  const [categoria, setCategoria] = useState(getQueryParams().categoria);
+  const [modalidad, setModalidad] = useState(getQueryParams().modalidad);
+
+  // Estado para disparar la búsqueda solo al presionar el botón
+  const [pendingSearch, setPendingSearch] = useState({
+    search: getQueryParams().search,
+    categoria: getQueryParams().categoria,
+    modalidad: getQueryParams().modalidad
+  });
+
+  // Actualizar los inputs sin disparar búsqueda
+  const handleInputChange = (e) => {
+    setPendingSearch({ ...pendingSearch, search: e.target.value });
+  };
+  const handleCategoriaChange = (e) => {
+    setPendingSearch({ ...pendingSearch, categoria: e.target.value });
+  };
+  const handleModalidadChange = (e) => {
+    setPendingSearch({ ...pendingSearch, modalidad: e.target.value });
+  };
+
+  // Buscar y actualizar estados/URL solo al enviar el formulario
+  const handleBuscar = (e) => {
+    e.preventDefault();
+    setSearch(pendingSearch.search);
+    setCategoria(pendingSearch.categoria);
+    setModalidad(pendingSearch.modalidad);
+    const params = new URLSearchParams();
+    if (pendingSearch.search) params.set("search", pendingSearch.search);
+    if (pendingSearch.categoria) params.set("categoria", pendingSearch.categoria);
+    if (pendingSearch.modalidad) params.set("modalidad", pendingSearch.modalidad);
+    navigate({ search: params.toString() }, { replace: true });
+  };
+
+  // Disparar búsqueda solo cuando cambian los estados principales
   useEffect(() => {
-    fetchPublicaciones();
-  }, [fetchPublicaciones]);
+    fetchPublicaciones({ search, categoria, modalidad });
+    // eslint-disable-next-line
+  }, [search, categoria, modalidad]);
+
+  // Categorías y modalidades posibles
+  const categorias = [
+    "arte",
+    "construcción",
+    "educacion",
+    "idiomas",
+    "salud",
+    "servicios generales",
+    "tecnología"
+  ];
+  const modalidades = ["presencial", "online", "mixta"];
 
   return (
-    <main className="min-h-screen py-10 px-4 md:px-0">
-      <div className="max-w-5xl mx-auto space-y-8">
-        {/* Search Bar */}
-        <section className="bg-white rounded-xl shadow-md p-6">
-          <h1 className="text-2xl font-bold mb-4">Explorar Servicios</h1>
-          <div className="flex items-center gap-4">
-            <input
-              type="text"
-              placeholder="Buscar servicios..."
-              className="flex-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-              Buscar
-            </button>
-          </div>
-        </section>
+    <>
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-10">
+        <div className="max-w-7xl mx-auto px-4">
+          {/* Hero título */}
+          <section className="mb-10 text-center">
+            <span className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-semibold mb-4">
+              <FaSearch className="text-blue-500" size={20} />
+              Explora servicios
+            </span>
+            <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">Encuentra el servicio que necesitas</h1>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Navega por cientos de publicaciones y conecta con trabajadores de distintas áreas en Chile.
+            </p>
+          </section>
 
-        {/* Mostrar servicios obtenidos del backend */}
-        <section className="bg-white rounded-xl shadow-md p-6">
-          <h2 className="text-xl font-bold mb-4">Publicaciones Disponibles</h2>
-          {loading ? (
-            <p>Cargando publicaciones...</p>
-          ) : publicaciones.length === 0 ? (
-            <p>No hay publicaciones disponibles en este momento.</p>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {publicaciones.map((servicio) => (
-                <Link
-                  key={servicio.id}
-                  to={`/servicio/${servicio.id}`}
-                  className="bg-white p-6 rounded-xl shadow-md border border-blue-500 block hover:shadow-lg transition"
+          {/* Search Bar mejorada */}
+          <section className="bg-white rounded-xl shadow-lg p-8 mb-10">
+            <form className="flex flex-col sm:flex-row items-center gap-4" onSubmit={handleBuscar}>
+              <input
+                type="text"
+                value={pendingSearch.search}
+                onChange={handleInputChange}
+                placeholder="Buscar por palabra clave, título o descripción..."
+                className="flex-[2] min-w-0 p-3 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
+              />
+              <div className="relative w-full sm:w-auto flex-1 min-w-[160px] max-w-xs">
+                <select
+                  value={pendingSearch.categoria}
+                  onChange={handleCategoriaChange}
+                  className="appearance-none p-3 pr-10 border border-blue-200 rounded-lg text-lg bg-white w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  <h3 className="font-bold text-xl mb-2">{servicio.titulo}</h3>
-                  <p className="text-gray-600 text-sm mb-2">
-                    {servicio.categoria} • {servicio.modalidad}
-                  </p>
-                  <p className="text-gray-700">{servicio.descripcion}</p>
-                  <p className="text-gray-500 text-xs mt-4">{servicio.createdAt}</p>
-                </Link>
-              ))}
-            </div>
-          )}
-        </section>
+                  <option value="">Todas las categorías</option>
+                  {categorias.map(cat => (
+                    <option key={cat} value={cat}>{cat.charAt(0).toUpperCase() + cat.slice(1)}</option>
+                  ))}
+                </select>
+                <FaChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-blue-400 pointer-events-none" size={18} />
+              </div>
+              <div className="relative w-full sm:w-auto flex-1 min-w-[160px] max-w-xs">
+                <select
+                  value={pendingSearch.modalidad}
+                  onChange={handleModalidadChange}
+                  className="appearance-none p-3 pr-10 border border-blue-200 rounded-lg text-lg bg-white w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">Todas las modalidades</option>
+                  {modalidades.map(mod => (
+                    <option key={mod} value={mod}>{mod.charAt(0).toUpperCase() + mod.slice(1)}</option>
+                  ))}
+                </select>
+                <FaChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-blue-400 pointer-events-none" size={18} />
+              </div>
+              <button
+                type="submit"
+                className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold shadow hover:bg-blue-700 transition-all"
+              >
+                Buscar
+              </button>
+            </form>
+          </section>
+
+          {/* Mostrar servicios obtenidos del backend */}
+          <section>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Publicaciones Disponibles</h2>
+            {loading ? (
+              <div className="text-center py-10 text-blue-600 font-semibold text-xl">Cargando publicaciones...</div>
+            ) : (publicaciones.length === 0 ? (
+              <div className="text-center py-10 text-gray-500 text-lg">No hay publicaciones disponibles en este momento.</div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                {publicaciones.map((servicio) => (
+                  <Link
+                    key={servicio.id}
+                    to={`/servicio/${servicio.id}`}
+                    className="bg-white p-8 rounded-xl shadow-lg border border-blue-100 block hover:shadow-xl hover:border-blue-500 transition-all"
+                  >
+                    <h3 className="font-bold text-2xl mb-2 text-blue-700 truncate">{servicio.titulo}</h3>
+                    <p className="text-gray-600 text-base mb-2">
+                      <span className="font-semibold">{servicio.categoria}</span> • {servicio.modalidad}
+                    </p>
+                    <p className="text-gray-700 mb-2 line-clamp-3">{servicio.descripcion}</p>
+                    <p className="text-gray-500 text-xs mt-4">{servicio.createdAt}</p>
+                  </Link>
+                ))}
+              </div>
+            ))}
+          </section>
+        </div>
       </div>
-    </main>
+      <Footer />
+    </>
   );
 }
 

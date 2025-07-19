@@ -71,137 +71,236 @@ const Dashboard = () => {
   }
 
   return (
-    <main className="min-h-screen py-10 px-4 md:px-0">
-      <div className="max-w-5xl mx-auto space-y-8">
-        {/* Panel de estadísticas */}
-        <section className="bg-white rounded-xl shadow-md p-6 flex flex-col md:flex-row gap-6">
-          <div className="flex-1 flex items-center gap-4">
-            <FaClipboardList size={36} className="text-blue-600" />
-            <div>
-              <h2 className="text-lg font-semibold">Publicaciones realizadas</h2>
-              <p className="text-2xl font-bold">{publicaciones.length}/{maxPublicaciones}</p>
-            </div>
-          </div>
-          <div className="flex-1 flex items-center gap-4">
-            <FaEnvelope size={36} className="text-green-600" />
-            <div>
-              <h2 className="text-lg font-semibold">Solicitudes recibidas</h2>
-              <p className="text-2xl font-bold">{solicitudesRecibidas}</p>
-            </div>
-          </div>
-        </section>
+    <div className="bg-gray-50 min-h-screen py-10 px-4 md:px-0">
+      <div className="max-w-6xl mx-auto px-2 md:px-0 py-8">
+        {/* Bienvenida */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">¡Bienvenido de vuelta!</h1>
+          <p className="text-gray-600">Gestiona tus publicaciones y revisa tus solicitudes desde aquí.</p>
+        </div>
 
-        {/* Gestión de publicaciones */}
-        <section className="bg-white rounded-xl shadow-md p-6">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold text-gray-900">Mis publicaciones</h2>
-            <button
-              onClick={openCrearPublicacionPopup}
-              disabled={publicaciones.length >= maxPublicaciones}
-              className={`flex items-center gap-2 bg-blue-500 text-white font-semibold py-2 px-4 rounded text-sm md:text-base ${
-                publicaciones.length >= maxPublicaciones ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-600"
-              }`}
-            >
-              <FaPlusCircle /> Crear publicación
-            </button>
+        {/* Tarjetas de estadísticas */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div className="bg-white rounded-xl shadow-md p-6 flex flex-col justify-between hover:shadow-lg transition-shadow">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600 mb-1">Publicaciones realizadas</p>
+                <div className="flex items-baseline space-x-2">
+                  <span className="text-3xl font-bold text-gray-900">{publicaciones.length}</span>
+                  <span className="text-sm text-gray-500">/{maxPublicaciones}</span>
+                </div>
+              </div>
+              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                <FaClipboardList className="w-6 h-6 text-blue-600" />
+              </div>
+            </div>
+            <div className="mt-4">
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div className="bg-blue-600 h-2 rounded-full" style={{ width: `${(publicaciones.length / maxPublicaciones) * 100}%` }}></div>
+              </div>
+              <p className="text-xs text-gray-500 mt-1">{Math.round((publicaciones.length / maxPublicaciones) * 100)}% del límite utilizado</p>
+            </div>
           </div>
-          {loading ? (
-            <p>Cargando publicaciones...</p>
-          ) : publicaciones.length === 0 ? (
-            <p>No tienes publicaciones creadas. ¡Empieza a publicar!</p>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-sm md:text-base">
-                <thead>
-                  <tr className="border-b">
-                    <th className="py-2 px-2">Título</th>
-                    <th className="py-2 px-2 hidden sm:table-cell">Categoría</th>
-                    <th className="py-2 px-2 hidden sm:table-cell">Modalidad</th>
-                    <th className="py-2 px-2">Estado</th>
-                    <th className="py-2 px-2 hidden md:table-cell">Fecha de publicación</th>
-                    <th className="py-2 px-2">Acciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {publicaciones.map((servicio) => (
-                    <tr key={servicio.id} className="border-b hover:bg-gray-50">
-                      <td className="py-2 px-2">{servicio.titulo}</td>
-                      <td className="py-2 px-2 hidden sm:table-cell">{servicio.categoria}</td>
-                      <td className="py-2 px-2 hidden sm:table-cell">{servicio.modalidad}</td>
-                      <td className="py-2 px-2">{servicio.estado}</td>
-                      <td className="py-2 px-2 hidden md:table-cell">{servicio.createdAt}</td>
-                      <td className="py-2 px-2 flex gap-2">
-                        <button
-                          className="text-blue-600 hover:underline flex items-center gap-1"
-                          onClick={() => handleEditarPublicacionPopup(servicio)}
-                        >
-                          <FaEdit />
-                          <span className="hidden md:inline">Editar</span>
-                        </button>
-                        <button
-                          className="text-red-600 hover:underline flex items-center gap-1"
-                          onClick={() => handleEliminarPublicacion(servicio.id)}
-                        >
-                          <FaTrash />
-                          <span className="hidden md:inline">Eliminar</span>
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </section>
 
-        {/* Edición rápida de perfil */}
-        <section className="bg-white rounded-xl shadow-md p-6">
-          <div className="flex flex-col md:flex-row items-center gap-6 mb-4">
-            <FaUserCircle size={50} className="text-blue-500" />
-            <div className="flex-1 w-full">
-              <p className="font-semibold">
-                ID: <span className="font-normal">{perfil.id}</span>
-              </p>
-              <p className="font-semibold">
-                Nombre: <span className="font-normal">{startCase(perfil.nombre)} {startCase(perfil.apellidos)}</span>
-              </p>
+          <div className="bg-white rounded-xl shadow-md p-6 flex flex-col justify-between hover:shadow-lg transition-shadow">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600 mb-1">Solicitudes recibidas</p>
+                <span className="text-3xl font-bold text-gray-900">{solicitudesRecibidas}</span>
+              </div>
+              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                <FaEnvelope className="w-6 h-6 text-green-600" />
+              </div>
             </div>
-            <div className="flex-1 w-full">
-              <p className="font-semibold flex items-center gap-2">
-                Rol:
-                <span
-                  className={`font-normal px-2 rounded 
-                    ${user.rol === "admin" ? "bg-red-600 text-white" : 
-                      user.rol === "user" ? "bg-blue-600 text-white" : 
-                      "bg-gray-200 text-gray-800"}`}
+            <div className="mt-4 flex items-center text-sm text-green-600">
+              <span className="mr-1">+2 esta semana</span>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-xl shadow-md p-6 flex flex-col justify-between hover:shadow-lg transition-shadow">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600 mb-1">Vistas del perfil</p>
+                <span className="text-3xl font-bold text-gray-900">24</span>
+              </div>
+              <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                <FaUserCircle className="w-6 h-6 text-purple-600" />
+              </div>
+            </div>
+            <div className="mt-4 flex items-center text-sm text-purple-600">
+              <span className="mr-1">Últimas 24h</span>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-xl shadow-md p-6 flex flex-col justify-between hover:shadow-lg transition-shadow">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600 mb-1">Calificación promedio</p>
+                <div className="flex items-center space-x-1">
+                  <span className="text-3xl font-bold text-gray-900">4.8</span>
+                  <div className="flex text-yellow-400">{"★".repeat(5)}</div>
+                </div>
+              </div>
+              <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
+                <span className="text-2xl">⭐</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid lg:grid-cols-3 gap-8">
+          {/* Publicaciones */}
+          <div className="lg:col-span-2">
+            <div className="bg-white rounded-xl shadow-md">
+              <div className="pb-4 px-6 pt-6 flex items-center justify-between">
+                <h2 className="text-xl font-semibold text-gray-900">Mis publicaciones</h2>
+                <button
+                  onClick={openCrearPublicacionPopup}
+                  disabled={publicaciones.length >= maxPublicaciones}
+                  className={`flex items-center gap-2 bg-blue-600 text-white font-semibold py-2 px-4 rounded text-sm md:text-base ${
+                    publicaciones.length >= maxPublicaciones ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-700"
+                  }`}
                 >
-                  {startCase(user.rol) || "Error"}
-                </span>
-              </p>
-              <p className="font-semibold">
-                Correo: <span className="font-normal">{perfil.email}</span>
-              </p>
-            </div>
-            <div className="flex-shrink-0 w-full md:w-auto flex justify-center md:justify-end">
-              <button
-                className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded"
-                onClick={handleEditarPerfil}
-              >
-                <FaEdit className="inline mr-2" /> Editar perfil
-              </button>
+                  <FaPlusCircle className="mr-1" /> Crear publicación
+                </button>
+              </div>
+              <div className="px-6 pb-6">
+                {loading ? (
+                  <p>Cargando publicaciones...</p>
+                ) : publicaciones.length === 0 ? (
+                  <div className="text-center py-8 border-t border-gray-100 mt-4">
+                    <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <FaClipboardList className="w-8 h-8 text-gray-400" />
+                    </div>
+                    <p className="text-gray-500 mb-4">¿Listo para crear más publicaciones?</p>
+                    <button
+                      onClick={openCrearPublicacionPopup}
+                      className="flex items-center gap-2 border border-blue-200 text-blue-600 hover:bg-blue-50 bg-transparent font-semibold py-2 px-4 rounded"
+                    >
+                      <FaPlusCircle className="mr-1" /> Crear nueva publicación
+                    </button>
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left text-sm md:text-base border-separate border-spacing-y-2">
+                      <thead>
+                        <tr className="border-b bg-gray-50">
+                          <th className="py-3 px-2 font-semibold text-gray-700">Título</th>
+                          <th className="py-3 px-2 font-semibold text-gray-700">Categoría</th>
+                          <th className="py-3 px-2 font-semibold text-gray-700">Modalidad</th>
+                          <th className="py-3 px-2 font-semibold text-gray-700">Estado</th>
+                          <th className="py-3 px-2 font-semibold text-gray-700">Fecha</th>
+                          <th className="py-3 px-2 font-semibold text-gray-700">Acciones</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {publicaciones.map((servicio) => (
+                          <tr key={servicio.id} className="border rounded-xl shadow hover:shadow-lg transition bg-white">
+                            <td className="py-3 px-2 font-medium text-gray-900">{servicio.titulo}</td>
+                            <td className="py-3 px-2">
+                              <span className="inline-block bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs font-semibold">{servicio.categoria}</span>
+                            </td>
+                            <td className="py-3 px-2">
+                              <span className="inline-block border border-green-200 text-green-700 px-2 py-1 rounded-full text-xs font-semibold">{servicio.modalidad}</span>
+                            </td>
+                            <td className="py-3 px-2">
+                              <span className={`inline-block px-2 py-1 rounded-full text-xs font-semibold ${servicio.estado === "Activo" ? "bg-green-100 text-green-700" : "bg-gray-200 text-gray-800"}`}>{servicio.estado}</span>
+                            </td>
+                            <td className="py-3 px-2 text-gray-600">{servicio.createdAt}</td>
+                            <td className="py-3 px-2 flex gap-2">
+                              <button
+                                className="flex items-center gap-1 px-2 py-1 rounded hover:bg-blue-50 text-blue-600 hover:text-blue-800 font-semibold transition"
+                                onClick={() => handleEditarPublicacionPopup(servicio)}
+                                title="Editar"
+                              >
+                                <FaEdit className="w-4 h-4" />
+                              </button>
+                              <button
+                                className="flex items-center gap-1 px-2 py-1 rounded hover:bg-red-50 text-red-600 hover:text-red-800 font-semibold transition"
+                                onClick={() => handleEliminarPublicacion(servicio.id)}
+                                title="Eliminar"
+                              >
+                                <FaTrash className="w-4 h-4" />
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-        </section>
 
-        {/* Popup para editar perfil */}
+          {/* Perfil y acciones rápidas */}
+          <div className="space-y-6">
+            {/* Perfil */}
+            <div className="bg-white rounded-xl shadow-md">
+              <div className="pb-4 px-6 pt-6">
+                <h2 className="text-xl font-semibold text-gray-900">Mi perfil</h2>
+              </div>
+              <div className="px-6 pb-6 space-y-6">
+                <div className="flex items-center space-x-4">
+                  <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-2xl font-semibold">
+                    <FaUserCircle />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-gray-900">{startCase(perfil.nombre)} {startCase(perfil.apellidos)}</h3>
+                    <p className="text-sm text-gray-600">{perfil.email}</p>
+                    <span className={`inline-block px-2 py-1 rounded text-xs mt-1 ${user.rol === "admin" ? "bg-red-100 text-red-700" : user.rol === "user" ? "bg-blue-100 text-blue-700" : "bg-gray-200 text-gray-800"}`}>{startCase(user.rol) || "Error"}</span>
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-gray-600">ID de usuario:</span>
+                    <span className="font-medium text-gray-900">{perfil.id}</span>
+                  </div>
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-gray-600">Miembro desde:</span>
+                    <span className="font-medium text-gray-900">Enero 2024</span>
+                  </div>
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-gray-600">Última actividad:</span>
+                    <span className="font-medium text-gray-900">Hace 2 horas</span>
+                  </div>
+                </div>
+                <button
+                  className="w-full bg-gray-900 hover:bg-gray-800 text-white font-semibold py-2 px-4 rounded flex items-center justify-center"
+                  onClick={handleEditarPerfil}
+                >
+                  <FaEdit className="w-4 h-4 mr-2" /> Editar perfil
+                </button>
+              </div>
+            </div>
+
+            {/* Acciones rápidas */}
+            <div className="bg-white rounded-xl shadow-md">
+              <div className="pb-4 px-6 pt-6">
+                <h2 className="text-lg font-semibold text-gray-900">Acciones rápidas</h2>
+              </div>
+              <div className="px-6 pb-6 space-y-3">
+                <button className="w-full justify-start bg-transparent border border-gray-200 text-gray-700 hover:bg-gray-50 font-semibold py-2 px-4 rounded flex items-center">
+                  <FaEnvelope className="w-4 h-4 mr-2" /> Ver solicitudes ({solicitudesRecibidas})
+                </button>
+                <button className="w-full justify-start bg-transparent border border-gray-200 text-gray-700 hover:bg-gray-50 font-semibold py-2 px-4 rounded flex items-center">
+                  <FaClipboardList className="w-4 h-4 mr-2" /> Programar cita
+                </button>
+                <button className="w-full justify-start bg-transparent border border-gray-200 text-gray-700 hover:bg-gray-50 font-semibold py-2 px-4 rounded flex items-center">
+                  <FaUserCircle className="w-4 h-4 mr-2" /> Ver mi perfil público
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Popups */}
         <ProfilePopup
           show={showPopup}
           setShow={setShowPopup}
-          data={[user]} // <-- así
+          data={[user]}
           action={handleEditProfile}
         />
-
-        {/* Popup para editar publicación */}
         <PubliPopup
           show={showPubliPopup}
           setShow={setShowPubliPopup}
@@ -209,7 +308,7 @@ const Dashboard = () => {
           action={handleSubmitPubliPopup}
         />
       </div>
-    </main>
+    </div>
   );
 };
 

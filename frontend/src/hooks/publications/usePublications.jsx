@@ -6,10 +6,10 @@ const usePublications = () => {
   const [publicaciones, setPublicaciones] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const fetchPublicaciones = useCallback(async (userId = null) => {
+  const fetchPublicaciones = useCallback(async (filtros = {}) => {
     setLoading(true);
     try {
-      const data = await getPublicaciones(userId);
+      const data = await getPublicaciones(filtros);
       setPublicaciones(data);
     } catch (error) {
       console.error("Error al obtener publicaciones:", error);

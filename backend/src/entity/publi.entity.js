@@ -44,12 +44,6 @@ const PubliSchema = new EntitySchema({
       length: 100,
       nullable: true,
     },
-    coordenadas: {
-      type: "varchar",
-      length: 100,
-      nullable: true,
-      comment: "Formato: lat,lng"
-    },
     etiquetas: {
       type: "simple-array", // palabras clave separadas por coma
       nullable: true,

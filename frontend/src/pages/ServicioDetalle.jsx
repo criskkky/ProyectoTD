@@ -10,22 +10,23 @@ function ServicioDetalle() {
   const { isAuthenticated } = useAuth();
 
   useEffect(() => {
+    setLoading(true);
     getPublicacionById(id)
       .then((data) => {
         setServicio(data);
         setLoading(false);
       })
       .catch(() => setLoading(false));
-  }, [id]);
+  }, [id, isAuthenticated]);
 
   if (loading) return <p>Cargando servicio...</p>;
   if (!servicio) return <p>No se encontró el servicio.</p>;
 
   // Helper para mostrar blur si no está logueado
-  const BlurInfo = ({ value, label }) => (
+  const BlurInfo = ({ label }) => (
     <div className="mb-2">
       <span className="font-semibold">{label}: </span>
-      <span className="blur-sm bg-gray-100 px-2 rounded text-gray-400">{value ? value : "No disponible"}</span>
+      <span className="blur-sm bg-gray-100 px-2 rounded text-gray-400">No disponible</span>
       <span className="ml-2 text-xs text-blue-500">(Inicia sesión para ver)</span>
     </div>
   );
@@ -36,7 +37,7 @@ function ServicioDetalle() {
     { key: "direccion", label: "Dirección" },
     { key: "ciudad", label: "Ciudad" },
     { key: "pais", label: "País" },
-    { key: "coordenadas", label: "Coordenadas" },
+    // { key: "coordenadas", label: "Coordenadas" },
     { key: "etiquetas", label: "Etiquetas", render: v => v && v.length ? v.join(", ") : "No disponible" },
     { key: "contacto_email", label: "Email de contacto" },
     { key: "contacto_whatsapp", label: "WhatsApp" },
@@ -61,7 +62,7 @@ function ServicioDetalle() {
             <span>{render ? render(servicio[key]) : servicio[key] || "No disponible"}</span>
           </div>
         ) : (
-          <BlurInfo key={key} value={render ? render(servicio[key]) : servicio[key]} label={label} />
+          <BlurInfo key={key} label={label} />
         )
       ))}
     </main>

@@ -1,10 +1,13 @@
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { login } from '@/services/auth.service.js';
 import Form from '@/components/Form';
 import useLogin from '@/hooks/auth/useLogin.jsx';
+import { MdErrorOutline } from 'react-icons/md';
 
 const Login = () => {
   const navigate = useNavigate();
+  const [errorMsg, setErrorMsg] = useState("");
   const {
     errorEmail,
     errorPassword,
@@ -16,12 +19,16 @@ const Login = () => {
     try {
       const response = await login(data);
       if (response.status === 'Success') {
+        setErrorMsg("");
         navigate('/home');
       } else if (response.status === 'Client error') {
         errorData(response.details);
+        setErrorMsg("Correo o contraseña incorrectos.");
+      } else {
+        setErrorMsg("Error al iniciar sesión. Intenta nuevamente.");
       }
     } catch (error) {
-      console.log(error);
+      setErrorMsg("Error de conexión. Intenta nuevamente.");
     }
   };
 
@@ -35,6 +42,14 @@ const Login = () => {
         >
           ← Inicio
         </button>
+        {errorMsg && (
+          <div className="px-8">
+          <div className="flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-red-300 bg-red-50 shadow animate-pulse">
+            <MdErrorOutline size={22} className="inline-block text-red-500" />
+            <span className="text-center text-red-700 font-medium">{errorMsg}</span>
+          </div>
+          </div>
+        )}
         <Form
           title="Iniciar sesión"
           fields={[

@@ -35,7 +35,7 @@ async function createUsers() {
         direccion: "Calle Falsa 123",
         ciudad: "Santiago",
         pais: "Chile",
-        coordenadas: "-33.4489,-70.6693",
+        
         etiquetas: ["admin", "ejemplo", "tecnología"],
         contacto_email: "admin@sistema.com",
         contacto_whatsapp: "+56912345678",
@@ -69,7 +69,7 @@ async function createUsers() {
         direccion: "Av. Principal 456",
         ciudad: "Valparaíso",
         pais: "Chile",
-        coordenadas: "-33.0472,-71.6127",
+        
         etiquetas: ["usuario", "ejemplo", "presencial"],
         contacto_email: "user@sistema.com",
         contacto_whatsapp: "+56911223344",

@@ -51,9 +51,9 @@ export const publiBodyValidation = Joi.object({
   pais: Joi.string().max(100).optional().messages({
     "string.max": "El país debe tener como máximo 100 caracteres."
   }),
-  coordenadas: Joi.string().pattern(/^[-+]?\d{1,2}\.\d+\s*,\s*[-+]?\d{1,3}\.\d+$/).optional().messages({
-    "string.pattern.base": "Las coordenadas deben estar en formato lat,lng."
-  }),
+  // coordenadas: Joi.string().pattern(/^[-+]?\d{1,2}\.\d+\s*,\s*[-+]?\d{1,3}\.\d+$/).optional().messages({
+  //   "string.pattern.base": "Las coordenadas deben estar en formato lat,lng."
+  // }),
   etiquetas: Joi.array().items(Joi.string().max(30)).max(10).optional().messages({
     "array.base": "Las etiquetas deben ser un arreglo de palabras clave.",
     "string.max": "Cada etiqueta debe tener como máximo 30 caracteres.",

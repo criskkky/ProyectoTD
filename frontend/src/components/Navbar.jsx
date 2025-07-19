@@ -1,7 +1,7 @@
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { logout } from '@/services/auth.service.js';
 import { useState } from "react";
-import { FaBars, FaReact } from "react-icons/fa";
+import { FaBars, FaBriefcase } from "react-icons/fa";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -43,134 +43,132 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="navbar bg-white shadow-md px-4 py-2 flex items-center justify-between">
-      {/* Logo */}
-      <div className="flex items-center flex-shrink-0 mr-4">
-        <FaReact size={32} className="text-blue-500" />
-        <span className="ml-2 font-bold text-xl text-blue-600 hidden sm:inline">ProyectoTD</span>
-      </div>
-      {/* Menú central */}
-      <div className="flex-1 flex justify-center">
-        <div className={`nav-menu ${menuOpen ? 'block' : 'hidden'} absolute top-16 left-0 w-full bg-white z-10 md:static md:block md:w-auto md:bg-transparent`}>
-          <ul className="flex flex-col md:flex-row md:space-x-6 items-center">
-            <li>
-              <NavLink
-                to="/home"
-                onClick={() => {
-                  setMenuOpen(false);
-                  addActiveClass();
-                }}
-                className={() =>
-                  `block px-4 py-2 rounded hover:bg-gray-100 transition-colors ${
-                    (location.pathname === "/home" || location.pathname === "/")
-                      ? 'text-blue-600 font-bold'
-                      : 'text-gray-700'
-                  }`
-                }
-              >
-                Inicio
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/explore"
-                onClick={() => {
-                  setMenuOpen(false);
-                  addActiveClass();
-                }}
-                className={() =>
-                  `block px-4 py-2 rounded hover:bg-gray-100 transition-colors ${
-                    location.pathname === "/explore"
-                      ? 'text-blue-600 font-bold'
-                      : 'text-gray-700'
-                  }`
-                }
-              >
-                Explorar
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/dashboard"
-                onClick={() => {
-                  setMenuOpen(false);
-                  addActiveClass();
-                }}
-                className={() =>
-                  `block px-4 py-2 rounded hover:bg-gray-100 transition-colors ${
-                    location.pathname === "/dashboard"
-                      ? 'text-blue-600 font-bold'
-                      : 'text-gray-700'
-                  }`
-                }
-              >
-                Dashboard
-              </NavLink>
-            </li>
-            <li className="md:hidden w-full">
-              {user ? (
-                <NavLink
-                  to="/auth"
-                  onClick={() => {
-                    logoutSubmit();
-                    setMenuOpen(false);
-                  }}
-                  className={({ isActive }) =>
-                    `block px-4 py-2 rounded hover:bg-gray-100 transition-colors w-full text-center ${isActive ? 'text-blue-600 font-bold' : 'text-gray-700'}`
-                  }
-                >
-                  Cerrar sesión
-                </NavLink>
-              ) : (
-                <NavLink
-                  to="/auth"
-                  onClick={() => setMenuOpen(false)}
-                  className={({ isActive }) =>
-                    `block px-4 py-2 rounded hover:bg-gray-100 transition-colors w-full text-center ${isActive ? 'text-blue-600 font-bold' : 'text-gray-700'}`
-                  }
-                >
-                  Iniciar sesión
-                </NavLink>
-              )}
-            </li>
-          </ul>
+    <header className="border-b bg-white/80 backdrop-blur-md sticky top-0 z-50">
+      <nav className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+        {/* Logo */}
+        <div className="flex items-center space-x-2">
+          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+            <FaBriefcase className="w-5 h-5 text-white" />
+          </div>
+          <span className="text-xl font-bold text-gray-900">ProyectoTD</span>
         </div>
-      </div>
-      {/* Botones de sesión y menú hamburguesa */}
-      <div className="flex items-center space-x-4">
-        <div className="hidden md:block">
-          {user ? (
-            <NavLink
-              to="/auth"
-              onClick={() => {
-                logoutSubmit();
-                setMenuOpen(false);
-              }}
-              className="block px-4 py-2 rounded hover:bg-red-100 hover:text-red-600 transition-colors text-gray-700"
-            >
-              Cerrar sesión
-            </NavLink>
-          ) : (
-            <NavLink
-              to="/auth"
-              onClick={() => setMenuOpen(false)}
-              className="block px-4 py-2 rounded hover:bg-green-100 hover:text-green-600 transition-colors text-gray-700"
-            >
-              Iniciar sesión
-            </NavLink>
-          )}
-        </div>
-        <div className="md:hidden">
-          <button
-            className="hamburger p-2 rounded hover:bg-gray-200 transition-colors"
-            onClick={toggleMenu}
-            aria-label="Abrir menú"
+        {/* Menú central */}
+        <div className="hidden md:flex items-center space-x-8">
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              `text-gray-600 hover:text-blue-600 transition-colors text-lg font-semibold ${isActive ? 'text-blue-600 font-bold' : ''}`
+            }
           >
-            <FaBars size={24} />
-          </button>
+            Inicio
+          </NavLink>
+          <NavLink
+            to="/explore"
+            className={({ isActive }) =>
+              `text-gray-600 hover:text-blue-600 transition-colors text-lg font-semibold ${isActive ? 'text-blue-600 font-bold' : ''}`
+            }
+          >
+            Explorar
+          </NavLink>
+          <NavLink
+            to="/dashboard"
+            className={({ isActive }) =>
+              `text-gray-600 hover:text-blue-600 transition-colors text-lg font-semibold ${isActive ? 'text-blue-600 font-bold' : ''}`
+            }
+          >
+            Dashboard
+          </NavLink>
         </div>
+        {/* Botón sesión y hamburguesa */}
+        <div className="flex items-center space-x-4">
+          <div className="hidden md:block">
+            {user ? (
+              <button
+                onClick={logoutSubmit}
+                className="border border-blue-200 text-blue-600 hover:bg-blue-50 bg-transparent px-4 py-2 rounded-lg font-semibold"
+              >
+                Cerrar sesión
+              </button>
+            ) : (
+              <NavLink
+                to="/auth"
+                className="border border-blue-200 text-blue-600 hover:bg-blue-50 bg-transparent px-4 py-2 rounded-lg font-semibold"
+              >
+                Iniciar sesión
+              </NavLink>
+            )}
+          </div>
+          <div className="md:hidden">
+            <button
+              className="hamburger p-2 rounded hover:bg-gray-200 transition-colors"
+              onClick={toggleMenu}
+              aria-label="Abrir menú"
+            >
+              <FaBars size={24} />
+            </button>
+          </div>
+        </div>
+      </nav>
+      {/* Menú móvil */}
+      <div className={`nav-menu ${menuOpen ? 'block' : 'hidden'} absolute top-16 left-0 w-full bg-white/90 z-50 md:hidden`}>
+        <ul className="flex flex-col items-center py-4 space-y-2">
+          <li>
+            <NavLink
+              to="/"
+              onClick={() => setMenuOpen(false)}
+              className={({ isActive }) =>
+                `block px-4 py-2 rounded hover:bg-blue-50 transition-colors text-lg font-semibold w-full text-center ${isActive ? 'text-blue-600 font-bold' : 'text-gray-700'}`
+              }
+            >
+              Inicio
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/explore"
+              onClick={() => setMenuOpen(false)}
+              className={({ isActive }) =>
+                `block px-4 py-2 rounded hover:bg-blue-50 transition-colors text-lg font-semibold w-full text-center ${isActive ? 'text-blue-600 font-bold' : 'text-gray-700'}`
+              }
+            >
+              Explorar
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/dashboard"
+              onClick={() => setMenuOpen(false)}
+              className={({ isActive }) =>
+                `block px-4 py-2 rounded hover:bg-blue-50 transition-colors text-lg font-semibold w-full text-center ${isActive ? 'text-blue-600 font-bold' : 'text-gray-700'}`
+              }
+            >
+              Dashboard
+            </NavLink>
+          </li>
+          <li>
+            {user ? (
+              <button
+                onClick={() => {
+                  logoutSubmit();
+                  setMenuOpen(false);
+                }}
+                className="block px-4 py-2 rounded border border-blue-200 text-blue-600 bg-transparent hover:bg-blue-50 font-semibold w-full text-center"
+              >
+                Cerrar sesión
+              </button>
+            ) : (
+              <NavLink
+                to="/auth"
+                onClick={() => setMenuOpen(false)}
+                className="block px-4 py-2 rounded border border-blue-200 text-blue-600 bg-transparent hover:bg-blue-50 font-semibold w-full text-center"
+              >
+                Iniciar sesión
+              </NavLink>
+            )}
+          </li>
+        </ul>
       </div>
-    </nav>
+    </header>
   );
 };
 
