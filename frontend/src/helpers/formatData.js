@@ -41,11 +41,6 @@ export function formatPublicacionData(publicacion) {
     titulo: startCase(publicacion.titulo ?? ""),
     estado: startCase(publicacion.estado ?? ""),
     descripcion: publicacion.descripcion ?? "No disponible",
-    imagenes: Array.isArray(publicacion.imagenes)
-      ? publicacion.imagenes
-      : (typeof publicacion.imagenes === "string" && publicacion.imagenes)
-        ? publicacion.imagenes.split(",")
-        : [],
     direccion: publicacion.direccion ?? "No disponible",
     city: publicacion.city?.name ?? "No disponible",
     region: publicacion.city?.region?.name ?? "No disponible",

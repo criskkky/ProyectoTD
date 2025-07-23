@@ -25,10 +25,6 @@ const PubliSchema = new EntitySchema({
       type: "text",
       nullable: false,
     },
-    imagenes: {
-      type: "simple-array", // URLs separadas por coma
-      nullable: true,
-    },
     direccion: {
       type: "varchar",
       length: 255,

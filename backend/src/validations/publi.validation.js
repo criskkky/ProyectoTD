@@ -37,11 +37,6 @@ export const publiBodyValidation = Joi.object({
       "string.max": "La descripción debe tener como máximo 2000 caracteres.",
       "any.required": "La descripción es requerida.",
     }),
-  imagenes: Joi.array().items(Joi.string().uri()).max(10).optional().messages({
-    "array.base": "Las imágenes deben ser un arreglo de URLs.",
-    "string.uri": "Cada imagen debe ser una URL válida.",
-    "array.max": "Máximo 10 imágenes permitidas."
-  }),
   direccion: Joi.string().max(255).optional().messages({
     "string.max": "La dirección debe tener como máximo 255 caracteres."
   }),

@@ -35,13 +35,6 @@ function ServicioDetalle() {
   const camposExtra = [
     // 'render' permite personalizar cómo se muestra el valor del campo en el detalle.
     // Recibe el valor (v) y retorna el string a mostrar.
-    { key: "imagenes", label: "Imágenes", render: v => v && v.length ? (
-      <div className="flex flex-wrap gap-2">
-        {v.map((url, idx) => (
-          <img key={idx} src={url} alt={`Imagen ${idx + 1}`} className="w-24 h-24 object-cover rounded shadow" />
-        ))}
-      </div>
-    ) : "No disponible" }, // Renderiza una galería de imágenes
     { key: "direccion", label: "Dirección" }, // Muestra el string tal cual
     { key: "city", label: "Ciudad" }, // Muestra el string tal cual
     { key: "region", label: "Región" }, // Muestra el string tal cual
