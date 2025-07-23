@@ -43,8 +43,8 @@ function ServicioDetalle() {
       </div>
     ) : "No disponible" }, // Renderiza una galería de imágenes
     { key: "direccion", label: "Dirección" }, // Muestra el string tal cual
-    { key: "city", label: "Ciudad", render: v => v?.name ?? "No disponible" }, // Muestra el nombre de la ciudad
-    { key: "region", label: "Región", render: v => v?.region?.name ?? (v?.city?.region?.name ?? "No disponible") }, // Muestra el nombre de la región asociada
+    { key: "city", label: "Ciudad" }, // Muestra el string tal cual
+    { key: "region", label: "Región" }, // Muestra el string tal cual
     { key: "etiquetas", label: "Etiquetas", render: v => v && v.length ? v.join(", ") : "No disponible" }, // Muestra etiquetas separadas por coma
     { key: "contacto_email", label: "Email de contacto" },
     { key: "contacto_whatsapp", label: "WhatsApp" },

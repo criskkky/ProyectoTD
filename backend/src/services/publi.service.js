@@ -1,5 +1,7 @@
 "use strict";
 import Publication from "../entity/publi.entity.js";
+import CitySchema from "../entity/city.entity.js";
+import RegionSchema from "../entity/region.entity.js";
 import { AppDataSource } from "../config/configDb.js";
 
 export async function getPubliService({ id }) {
@@ -7,7 +9,7 @@ export async function getPubliService({ id }) {
     const publiRepository = AppDataSource.getRepository(Publication);
     const publication = await publiRepository.findOne({
       where: { id: Number(id) },
-      relations: ["createdBy"], // Solo si necesitas traer el usuario creador
+      relations: ["createdBy", "city", "city.region"], // Trae usuario, ciudad y región
     });
     if (!publication) return [null, "Publicación no encontrada"];
     return [publication, null];
@@ -27,6 +29,8 @@ export async function getPublisService({ search = "", categoria = "", modalidad 
     // Consulta base
     let query = publiRepository.createQueryBuilder("publication");
     query.leftJoinAndSelect("publication.createdBy", "createdBy");
+    query.leftJoinAndSelect("publication.city", "city");
+    query.leftJoinAndSelect("city.region", "region");
 
     // Filtros por categoría y modalidad
     if (categoria) query.andWhere("publication.categoria = :categoria", { categoria });
@@ -78,7 +82,17 @@ export async function deletePubliService({ id }) {
 export async function createPubliService(data) {
   try {
     const publiRepository = AppDataSource.getRepository(Publication);
-    const newPublication = publiRepository.create(data);
+    const cityRepository = AppDataSource.getRepository(CitySchema);
+    // Validar que la ciudad existe
+    if (!data.city) {
+      return [null, "Debe especificar una ciudad válida (city)"];
+    }
+    const city = await cityRepository.findOne({ where: { id: Number(data.city) }, relations: ["region"] });
+    if (!city) {
+      return [null, "La ciudad especificada no existe"];
+    }
+    // Asignar la relación city correctamente
+    const newPublication = publiRepository.create({ ...data, city });
     const savedPublication = await publiRepository.save(newPublication);
     return [savedPublication, null];
   } catch (error) {

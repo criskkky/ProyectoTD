@@ -31,6 +31,7 @@ export async function getPublication(req, res) {
     console.log("Usuario autenticado:", req.user ? true : false);
 
     if (!req.user) {
+      // Campos públicos + ciudad y región
       const publicFields = {
         id: publication.id,
         titulo: publication.titulo,
@@ -38,12 +39,31 @@ export async function getPublication(req, res) {
         modalidad: publication.modalidad,
         descripcion: publication.descripcion,
         createdAt: publication.createdAt,
-      }
+        ciudad: publication.city ? {
+          id: publication.city.id,
+          name: publication.city.name,
+          region: publication.city.region ? {
+            id: publication.city.region.id,
+            name: publication.city.region.name
+          } : null
+        } : null,
+      };
       return handleSuccess(res, 200, "Publicación encontrada", publicFields);
     }
 
-    // Si está autenticado, devuelve todo
-    handleSuccess(res, 200, "Publicación encontrada", publication);
+    // Si está autenticado, devuelve todo incluyendo ciudad y región
+    const fullFields = {
+      ...publication,
+      ciudad: publication.city ? {
+        id: publication.city.id,
+        name: publication.city.name,
+        region: publication.city.region ? {
+          id: publication.city.region.id,
+          name: publication.city.region.name
+        } : null
+      } : null,
+    };
+    handleSuccess(res, 200, "Publicación encontrada", fullFields);
   } catch (error) {
     handleErrorServer(res, 500, error.message);
   }
@@ -59,9 +79,23 @@ export async function getPublications(req, res) {
 
     if (errorPublications) return handleErrorClient(res, 404, errorPublications);
 
-    publications.length === 0
-      ? handleSuccess(res, 204)
-      : handleSuccess(res, 200, "Publicaciones encontradas", publications);
+    if (publications.length === 0) {
+      handleSuccess(res, 204);
+    } else {
+      // Mapear cada publicación para incluir ciudad y región
+      const mapped = publications.map(pub => ({
+        ...pub,
+        ciudad: pub.city ? {
+          id: pub.city.id,
+          name: pub.city.name,
+          region: pub.city.region ? {
+            id: pub.city.region.id,
+            name: pub.city.region.name
+          } : null
+        } : null,
+      }));
+      handleSuccess(res, 200, "Publicaciones encontradas", mapped);
+    }
   } catch (error) {
     handleErrorServer(res, 500, error.message);
   }
