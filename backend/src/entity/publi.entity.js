@@ -34,15 +34,10 @@ const PubliSchema = new EntitySchema({
       length: 255,
       nullable: true,
     },
-    ciudad: {
-      type: "varchar",
-      length: 100,
-      nullable: true,
-    },
-    pais: {
-      type: "varchar",
-      length: 100,
-      nullable: true,
+    // Relación con City
+    city: {
+      type: "int",
+      nullable: false,
     },
     etiquetas: {
       type: "simple-array", // palabras clave separadas por coma
@@ -103,6 +98,12 @@ const PubliSchema = new EntitySchema({
       type: "many-to-one",
       target: "User",
       joinColumn: { name: "userId" },
+      nullable: false,
+    },
+    city: {
+      type: "many-to-one",
+      target: "City",
+      joinColumn: { name: "city_id" },
       nullable: false,
     },
   },

@@ -47,8 +47,8 @@ export function formatPublicacionData(publicacion) {
         ? publicacion.imagenes.split(",")
         : [],
     direccion: publicacion.direccion ?? "No disponible",
-    ciudad: publicacion.ciudad ?? "No disponible",
-    pais: publicacion.pais ?? "No disponible",
+    city: publicacion.city?.name ?? "No disponible",
+    region: publicacion.city?.region?.name ?? "No disponible",
     etiquetas: Array.isArray(publicacion.etiquetas)
       ? publicacion.etiquetas
       : (typeof publicacion.etiquetas === "string" && publicacion.etiquetas)
