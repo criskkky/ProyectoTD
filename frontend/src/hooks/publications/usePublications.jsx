@@ -32,9 +32,17 @@ const usePublications = () => {
 
   const handleEditarPublicacion = async (id, updatedData) => {
     try {
-      const updatedPublicacion = await updatePublicacion(id, updatedData);
+      const response = await updatePublicacion(id, updatedData);
+      if (
+        response?.status?.toLowerCase() === "client error" &&
+        response?.statusCode === 403 &&
+        response?.message?.toLowerCase().includes("permisos")
+      ) {
+        showErrorAlert("Error", response?.message || "No tienes permisos para editar esta publicación.");
+        return;
+      }
       setPublicaciones((prev) =>
-        prev.map((publi) => (publi.id === id ? updatedPublicacion : publi))
+        prev.map((publi) => (publi.id === id ? response : publi))
       );
       showSuccessAlert("¡Actualizado!", "La publicación ha sido actualizada.");
     } catch (error) {
@@ -48,7 +56,7 @@ const usePublications = () => {
       const response = await deletePublicacion(id);
       if (
         response?.status?.toLowerCase() === "client error" &&
-        response?.code === 403 &&
+        response?.statusCode === 403 &&
         response?.message?.toLowerCase().includes("permisos")
       ) {
         showErrorAlert("Error", response?.message || "No tienes permisos para eliminar esta publicación.");
