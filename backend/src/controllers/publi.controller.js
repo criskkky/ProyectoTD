@@ -127,10 +127,22 @@ export async function updatePublication(req, res) {
         bodyError.message,
       );
 
+    // Obtener publicación actual para verificar permisos
+    const [currentPublication, errorCurrent] = await getPubliService({ id });
+    if (errorCurrent) return handleErrorClient(res, 404, errorCurrent);
+
+    // Permitir solo si es el creador o admin
+    if (req.user.rol !== "admin" && currentPublication.createdBy.id !== req.user.id) {
+      return handleErrorClient(res, 403, "No tienes permisos para editar esta publicación");
+    }
+
+    // Si el admin quiere bloquear, puede cambiar el estado
+    if (req.user.rol === "admin" && body.estado === "bloqueado") {
+      body.estado = "bloqueado";
+    }
+
     const [publication, publicationError] = await updatePubliService({ id }, body);
-
     if (publicationError) return handleErrorClient(res, 400, "Error modificando la publicación", publicationError);
-
     handleSuccess(res, 200, "Publicación modificada correctamente", publication);
   } catch (error) {
     handleErrorServer(res, 500, error.message);
@@ -152,12 +164,19 @@ export async function deletePublication(req, res) {
       );
     }
 
-    const [publicationDelete, errorPublicationDelete] = await deletePubliService({ id });
+    // Obtener publicación actual para verificar permisos
+    const [currentPublication, errorCurrent] = await getPubliService({ id });
+    if (errorCurrent) return handleErrorClient(res, 404, errorCurrent);
 
+    // Permitir solo si es el creador o admin
+    if (req.user.rol !== "admin" && currentPublication.createdBy.id !== req.user.id) {
+      return handleErrorClient(res, 403, "No tienes permisos para eliminar esta publicación");
+    }
+
+    const [publicationDelete, errorPublicationDelete] = await deletePubliService({ id });
     if (errorPublicationDelete) {
       return handleErrorClient(res, 404, "Error eliminando la publicación", errorPublicationDelete);
     }
-
     handleSuccess(res, 200, "Publicación eliminada correctamente", publicationDelete);
   } catch (error) {
     handleErrorServer(res, 500, error.message);

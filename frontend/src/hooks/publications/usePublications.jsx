@@ -45,7 +45,15 @@ const usePublications = () => {
 
   const handleEliminarPublicacion = async (id) => {
     try {
-      await deletePublicacion(id);
+      const response = await deletePublicacion(id);
+      if (
+        response?.status?.toLowerCase() === "client error" &&
+        response?.code === 403 &&
+        response?.message?.toLowerCase().includes("permisos")
+      ) {
+        showErrorAlert("Error", response?.message || "No tienes permisos para eliminar esta publicación.");
+        return;
+      }
       setPublicaciones((prev) => prev.filter((publi) => publi.id !== id));
       showSuccessAlert("¡Eliminado!", "La publicación ha sido eliminada.");
     } catch (error) {
