@@ -22,8 +22,6 @@ const useEditProfile = () => {
       dataToSend.newPassword = newPassword;
     }
 
-    console.log("Payload FINAL enviado al backend:", dataToSend);
-
     try {
       const updatedUser = await updateUser(dataToSend, user.id);
       showSuccessAlert('¡Actualizado!', 'Tu perfil ha sido actualizado correctamente.');

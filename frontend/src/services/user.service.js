@@ -13,12 +13,9 @@ export async function getUsers() {
 
 export async function updateUser(data, id) {
     try {
-        console.log("Payload enviado:", data, "ID:", id);
         const response = await axios.patch(`/user/${id}`, data);
-        console.log(response);
         return response.data.data;
     } catch (error) {
-        console.log(error);
         return error.response.data;
     }
 }

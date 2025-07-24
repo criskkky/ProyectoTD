@@ -18,9 +18,7 @@ export async function getPublicaciones({ search = "", categoria = "", modalidad 
 
 export async function updatePublicacion(id, data) {
     try {
-        console.log("Payload enviado:", data, "ID:", id);
         const response = await axios.patch(`/posts/${id}`, data);
-        console.log(response);
         return response.data.data;
     } catch (error) {
         console.error("Error al actualizar publicación:", error);

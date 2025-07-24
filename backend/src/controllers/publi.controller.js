@@ -27,9 +27,6 @@ export async function getPublication(req, res) {
 
     if (errorPublication) return handleErrorClient(res, 404, errorPublication);
 
-    // Si el usuario NO está autenticado, solo devuelve campos públicos
-    console.log("Usuario autenticado:", req.user ? true : false);
-
     if (!req.user) {
       // Campos públicos + ciudad y región
       const publicFields = {

@@ -23,6 +23,14 @@ function ServicioDetalle() {
       .catch(() => setLoading(false));
   }, [id, isAuthenticated]);
 
+  useEffect(() => {
+    if (showExternalModal) {
+      document.body.classList.add("overflow-hidden")
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+  }, [showExternalModal]);
+
   if (loading) return <p>Cargando servicio...</p>;
   if (!servicio) return <p>No se encontró el servicio.</p>;
 
@@ -34,7 +42,6 @@ function ServicioDetalle() {
     </div>
   );
 
-  // Campos que no están en el render actual
   const handleExternalClick = (url) => {
     setExternalUrl(url);
     setShowExternalModal(true);
@@ -61,7 +68,6 @@ function ServicioDetalle() {
       ) : "No disponible"
     },
   ];
-  // ...existing code...
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-10">
@@ -102,7 +108,7 @@ function ServicioDetalle() {
           </div>
           {/* Modal de advertencia para enlaces externos */}
           {showExternalModal && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+            <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-white/10">
               <div className="bg-white rounded-xl shadow-lg p-8 max-w-md w-full text-center">
                 <FaExclamationTriangle className="mx-auto text-yellow-500 mb-4" size={40} />
                 <h2 className="text-xl font-bold mb-2 text-gray-900">Vas a salir de la plataforma</h2>

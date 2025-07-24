@@ -18,9 +18,6 @@ export default function ProfilePopup({ show, setShow, data, action }) {
         };
     }, [show]);
 
-    // Mejor para depuración: muestra el objeto como string legible
-    console.log("userData en ProfilePopup:", JSON.stringify(userData, null, 2));
-
     const handleSubmit = (formData) => {
         action(formData);
     };

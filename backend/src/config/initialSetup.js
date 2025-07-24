@@ -31,11 +31,11 @@ async function createUsers() {
       })
     );
 
-    // Crear una oferta para el usuario admin
+    // Crear una publicación para el usuario admin
     await publiRepository.save(
       publiRepository.create({
-        titulo: "Oferta del admin",
-        descripcion: "Esta es una oferta de ejemplo creada automáticamente.",
+        titulo: "Publicación del admin",
+        descripcion: "Esta es una publicación de ejemplo creada automáticamente.",
         modalidad: "online",
         estado: "activo",
         categoria: "tecnología",
@@ -62,11 +62,11 @@ async function createUsers() {
       })
     );
 
-    // Crear una oferta para el usuario regular
+    // Crear publi para el usuario regular
     await publiRepository.save(
       publiRepository.create({
-        titulo: "Oferta del usuario",
-        descripcion: "Esta es una oferta de ejemplo creada automáticamente.",
+        titulo: "Publicación del usuario",
+        descripcion: "Esta es una publicación de ejemplo creada automáticamente.",
         modalidad: "presencial",
         estado: "activo",
         categoria: "tecnología",
@@ -81,7 +81,7 @@ async function createUsers() {
       })
     );
 
-    console.log("* => Usuarios y ofertas creados exitosamente");
+    console.log("* => Usuarios y publicaciones creados exitosamente");
   } catch (error) {
     console.error("Error al crear usuarios:", error);
   }
