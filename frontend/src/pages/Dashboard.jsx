@@ -5,6 +5,7 @@ import PubliPopup from "../components/PubliPopup"; // Importamos el componente P
 import useEditProfile from "../hooks/profile/useEditProfile";
 import usePublications from "../hooks/publications/usePublications";
 import { startCase } from 'lodash';
+import { formatUserData } from '../helpers/formatData';
 
 const Dashboard = () => {
   const {
@@ -45,12 +46,15 @@ const Dashboard = () => {
   const maxPublicaciones = user.rol === "premium" ? 6 : 3;
   const solicitudesRecibidas = 5;
 
-  const perfil = {
-    id: user.id || "Error",
-    nombre: user.nombres || "Error",
-    apellidos: user.apellidos || "Error",
-    email: user.email || "Error"
-  };
+  // Formatear fecha de creación
+  function formatFecha(fecha) {
+    if (!fecha) return "-";
+    const date = new Date(fecha);
+    return date.toLocaleDateString("es-CL", { year: "numeric", month: "long" });
+  }
+
+  // Formatear datos de usuario para vista
+  const perfil = formatUserData(user);
 
   const openCrearPublicacionPopup = () => {
     setSelectedPublication(null); // Reseteamos la publicación seleccionada
@@ -263,11 +267,7 @@ const Dashboard = () => {
                   </div>
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-gray-600">Miembro desde:</span>
-                    <span className="font-medium text-gray-900">Enero 2024</span>
-                  </div>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-600">Última actividad:</span>
-                    <span className="font-medium text-gray-900">Hace 2 horas</span>
+                    <span className="font-medium text-gray-900">{perfil.createdAt}</span>
                   </div>
                 </div>
                 <button
