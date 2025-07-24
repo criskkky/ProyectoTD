@@ -182,9 +182,8 @@ export async function deletePublication(req, res) {
 
 export async function createPublication(req, res) {
   try {
-    const userId = req.user.id; // Obtener el ID del usuario autenticado desde el token
-    const { titulo, descripcion, modalidad, categoria } = req.body;
-
+    const userId = req.user.id;
+    const userRol = req.user.rol;
     // Agregar automáticamente el campo createdBy al cuerpo de la solicitud
     const bodyWithCreatedBy = {
       ...req.body,
@@ -192,7 +191,6 @@ export async function createPublication(req, res) {
     };
 
     const { error: bodyError } = publiBodyValidation.validate(bodyWithCreatedBy);
-
     if (bodyError) {
       return handleErrorClient(
         res,
@@ -202,8 +200,12 @@ export async function createPublication(req, res) {
       );
     }
 
-    const [publication, publicationError] = await createPubliService(bodyWithCreatedBy);
+    // Validación de límite de publicaciones en el service
+    const [publication, publicationError] = await createPubliService(bodyWithCreatedBy, userRol, userId);
 
+    if (publicationError && publicationError.startsWith("Límite de publicaciones")) {
+      return handleErrorClient(res, 403, publicationError);
+    }
     if (publicationError)
       return handleErrorClient(res, 400, "Error creando la publicación", publicationError);
 

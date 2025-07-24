@@ -79,10 +79,24 @@ export async function deletePubliService({ id }) {
   }
 }
 
-export async function createPubliService(data) {
+export async function createPubliService(data, userRol, userId) {
   try {
     const publiRepository = AppDataSource.getRepository(Publication);
     const cityRepository = AppDataSource.getRepository(CitySchema);
+
+    // Validar límite de publicaciones por rol
+    const rolLimits = {
+      user: 2,
+      premium: 4,
+      premium2: 6,
+      admin: 6,
+    };
+    const maxPosts = rolLimits[userRol] || 2;
+    const userPostsCount = await publiRepository.count({ where: { createdBy: { id: userId } } });
+    if (userPostsCount >= maxPosts) {
+      return [null, `Límite de publicaciones alcanzado para el rol '${userRol}'. Máximo permitido: ${maxPosts}`];
+    }
+
     // Validar que la ciudad existe
     if (!data.city) {
       return [null, "Debe especificar una ciudad válida (city)"];

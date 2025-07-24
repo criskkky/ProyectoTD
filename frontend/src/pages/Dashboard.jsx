@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { FaUserCircle, FaClipboardList, FaPlusCircle, FaEnvelope, FaEdit, FaTrash } from "react-icons/fa";
+import { FaUserCircle, FaClipboardList, FaPlusCircle, FaEdit, FaTrash } from "react-icons/fa";
 import ProfilePopup from "../components/ProfilePopup";
-import PubliPopup from "../components/PubliPopup"; // Importamos el componente PubliPopup
+import PubliPopup from "../components/PubliPopup";
 import useEditProfile from "../hooks/profile/useEditProfile";
 import usePublications from "../hooks/publications/usePublications";
 import { startCase } from 'lodash';
@@ -26,13 +26,12 @@ const Dashboard = () => {
     handleCrearPublicacion,
   } = usePublications();
 
-  // Solo mostrar publicaciones creadas por el usuario actual
   const publicacionesPropias = publicaciones.filter(
     (publi) => publi.createdBy?.id === user.id
   );
 
-  const [showPubliPopup, setShowPubliPopup] = useState(false); // Estado para controlar el PubliPopup
-  const [selectedPublication, setSelectedPublication] = useState(null); // Publicación seleccionada para editar
+  const [showPubliPopup, setShowPubliPopup] = useState(false);
+  const [selectedPublication, setSelectedPublication] = useState(null);
 
   useEffect(() => {
     const usuario = JSON.parse(sessionStorage.getItem('usuario')) || {};
@@ -41,24 +40,21 @@ const Dashboard = () => {
     if (usuario.id) {
       fetchPublicaciones(usuario.id);
     }
-  }, [setUser]);
+  }, [setUser, fetchPublicaciones]); // Dependencias actualizadas para evitar bucles infinitos
 
-  const maxPublicaciones = user.rol === "premium" ? 6 : 3;
-  const solicitudesRecibidas = 5;
+  const rolLimits = {
+    user: 2,
+    premium: 4,
+    premium2: 6,
+    admin: 6,
+  };
+  const maxPublicaciones = rolLimits[user.rol] || 2;
 
-  // Formatear fecha de creación
-  function formatFecha(fecha) {
-    if (!fecha) return "-";
-    const date = new Date(fecha);
-    return date.toLocaleDateString("es-CL", { year: "numeric", month: "long" });
-  }
-
-  // Formatear datos de usuario para vista
   const perfil = formatUserData(user);
 
   const openCrearPublicacionPopup = () => {
-    setSelectedPublication(null); // Reseteamos la publicación seleccionada
-    setShowPubliPopup(true); // Mostramos el PubliPopup para crear una nueva publicación
+    setSelectedPublication(null);
+    setShowPubliPopup(true);
   };
 
   const handleEditarPublicacionPopup = (publication) => {
@@ -70,14 +66,14 @@ const Dashboard = () => {
     if (selectedPublication) {
       handleEditarPublicacion(selectedPublication.id, formData);
     } else {
-      handleCrearPublicacion(formData); // Crear nueva publicación
+      handleCrearPublicacion(formData);
     }
     setShowPubliPopup(false);
   };
 
   const handleEditarPerfil = () => {
-    openEditProfile(user); // Pasa el usuario actual aquí
-  }
+    openEditProfile(user);
+  };
 
   return (
     <div className="bg-gray-50 min-h-screen py-10 px-4 md:px-0">
@@ -88,78 +84,36 @@ const Dashboard = () => {
           <p className="text-gray-600">Gestiona tus publicaciones y revisa tus solicitudes desde aquí.</p>
         </div>
 
-        {/* Tarjetas de estadísticas */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-xl shadow-md p-6 flex flex-col justify-between hover:shadow-lg transition-shadow">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600 mb-1">Publicaciones realizadas</p>
-                <div className="flex items-baseline space-x-2">
-          <span className="text-3xl font-bold text-gray-900">{publicacionesPropias.length}</span>
-          <span className="text-sm text-gray-500">/{maxPublicaciones}</span>
-                </div>
-              </div>
-              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                <FaClipboardList className="w-6 h-6 text-blue-600" />
-              </div>
-            </div>
-            <div className="mt-4">
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div className="bg-blue-600 h-2 rounded-full" style={{ width: `${(publicacionesPropias.length / maxPublicaciones) * 100}%` }}></div>
-              </div>
-              <p className="text-xs text-gray-500 mt-1">{Math.round((publicacionesPropias.length / maxPublicaciones) * 100)}% del límite utilizado</p>
-            </div>
-          </div>
-
-
-          <div className="bg-white rounded-xl shadow-md p-6 flex flex-col justify-between hover:shadow-lg transition-shadow">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600 mb-1">Vistas del perfil</p>
-                <span className="text-3xl font-bold text-gray-900">24</span>
-              </div>
-              <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-                <FaUserCircle className="w-6 h-6 text-purple-600" />
-              </div>
-            </div>
-            <div className="mt-4 flex items-center text-sm text-purple-600">
-              <span className="mr-1">Últimas 24h</span>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-md p-6 flex flex-col justify-between hover:shadow-lg transition-shadow">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600 mb-1">Calificación promedio</p>
-                <div className="flex items-center space-x-1">
-                  <span className="text-3xl font-bold text-gray-900">4.8</span>
-                  <div className="flex text-yellow-400">{"★".repeat(5)}</div>
-                </div>
-              </div>
-              <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
-                <span className="text-2xl">⭐</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
         <div className="grid lg:grid-cols-3 gap-8">
-          {/* Publicaciones */}
+          {/* Publicaciones realizadas */}
           <div className="lg:col-span-2">
             <div className="bg-white rounded-xl shadow-md">
               <div className="pb-4 px-6 pt-6 flex items-center justify-between">
-                <h2 className="text-xl font-semibold text-gray-900">Mis publicaciones</h2>
+                <h2 className="text-xl font-semibold text-gray-900">Publicaciones realizadas</h2>
                 <button
                   onClick={openCrearPublicacionPopup}
-                  disabled={publicaciones.length >= maxPublicaciones}
+                  disabled={publicacionesPropias.length >= maxPublicaciones}
                   className={`flex items-center gap-2 bg-blue-600 text-white font-semibold py-2 px-4 rounded text-sm md:text-base ${
-                    publicaciones.length >= maxPublicaciones ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-700"
+                    publicacionesPropias.length >= maxPublicaciones ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-700"
                   }`}
                 >
                   <FaPlusCircle className="mr-1" /> Crear publicación
                 </button>
               </div>
               <div className="px-6 pb-6">
+                <div className="flex items-baseline space-x-2 mb-4">
+                  <span className="text-3xl font-bold text-gray-900">{publicacionesPropias.length}</span>
+                  <span className="text-sm text-gray-500">/{maxPublicaciones}</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
+                  <div
+                    className="bg-blue-600 h-2 rounded-full"
+                    style={{ width: `${(publicacionesPropias.length / maxPublicaciones) * 100}%` }}
+                  ></div>
+                </div>
+                <p className="text-xs text-gray-500 mb-4">
+                  {Math.round((publicacionesPropias.length / maxPublicaciones) * 100)}% del límite utilizado
+                </p>
                 {loading ? (
                   <p>Cargando publicaciones...</p>
                 ) : publicacionesPropias.length === 0 ? (
