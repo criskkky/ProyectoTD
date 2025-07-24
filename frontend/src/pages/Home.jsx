@@ -79,7 +79,7 @@ const Home = () => {
                     <FaCog className="w-5 h-5 text-orange-600" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-1">Gestiona tus contrataciones</h4>
+                    <h4 className="font-semibold text-gray-900 mb-1">Gestiona tus publicaciones</h4>
                     <p className="text-gray-600 text-sm">Desde el Dashboard puedes ver tus servicios publicados, solicitudes y mensajes.</p>
                   </div>
                 </div>
