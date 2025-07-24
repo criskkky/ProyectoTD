@@ -95,6 +95,7 @@ const PubliSchema = new EntitySchema({
       target: "User",
       joinColumn: { name: "userId" },
       nullable: false,
+      onDelete: "CASCADE",
     },
     city: {
       type: "many-to-one",

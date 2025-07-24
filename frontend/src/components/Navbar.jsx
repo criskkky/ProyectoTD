@@ -78,6 +78,16 @@ const Navbar = () => {
           >
             Dashboard
           </NavLink>
+          {user && user.rol === 'admin' && (
+            <NavLink
+              to="/admin"
+              className={({ isActive }) =>
+                `text-gray-600 hover:text-red-600 transition-colors text-lg font-semibold ${isActive ? 'text-red-600 font-bold' : ''}`
+              }
+            >
+              Admin
+            </NavLink>
+          )}
         </div>
         {/* Botón sesión y hamburguesa */}
         <div className="flex items-center space-x-4">
@@ -145,6 +155,19 @@ const Navbar = () => {
               Dashboard
             </NavLink>
           </li>
+          {user && user.rol === 'admin' && (
+            <li>
+              <NavLink
+                to="/admin"
+                onClick={() => setMenuOpen(false)}
+                className={({ isActive }) =>
+                  `block px-4 py-2 rounded hover:bg-red-50 transition-colors text-lg font-semibold w-full text-center ${isActive ? 'text-red-600 font-bold' : 'text-gray-700'}`
+                }
+              >
+                Admin
+              </NavLink>
+            </li>
+          )}
           <li>
             {user ? (
               <button

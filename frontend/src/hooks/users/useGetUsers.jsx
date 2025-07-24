@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { getUsers } from '@/services/user.service.js';
 
 const useUsers = () => {
     const [users, setUsers] = useState([]);
 
-    const fetchUsers = async () => {
+    const fetchUsers = React.useCallback(async () => {
         try {
             const response = await getUsers();
             const formattedData = response.map(user => ({
@@ -21,11 +21,11 @@ const useUsers = () => {
         } catch (error) {
             console.error("Error: ", error);
         }
-    };
+    }, []);
 
     useEffect(() => {
         fetchUsers();
-    }, []);
+    }, [fetchUsers]);
 
     const dataLogged = (formattedData) => {
         try {

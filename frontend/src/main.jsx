@@ -11,6 +11,7 @@ import '@/styles/styles.css';
 import Dashboard from '@/pages/Dashboard';
 import Explore from '@/pages/Explore';
 import ServicioDetalle from '@/pages/ServicioDetalle';
+import AdminPanel from '@/pages/AdminPanel';
 
 const router = createBrowserRouter([
   {
@@ -51,6 +52,14 @@ const router = createBrowserRouter([
       {
         path: '/servicio/:id',
         element: <ServicioDetalle />
+      },
+      {
+        path: '/admin',
+        element: (
+          <ProtectedRoute allowedRoles={['admin']}>
+            <AdminPanel />
+          </ProtectedRoute>
+        ),
       }
     ],
   },
