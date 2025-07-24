@@ -1,4 +1,6 @@
-import { FaBriefcase, FaUserPlus, FaSearch, FaCog, FaArrowRight, FaCheckCircle, FaUsers } from "react-icons/fa";
+import { FaBriefcase, FaUserPlus, FaSearch, FaCog, FaArrowRight, FaCheckCircle, FaUsers, FaBook, FaRegHospital } from "react-icons/fa";
+// import { MdHealthAndSafety } from "react-icons/md";
+import { GiPaintBrush } from "react-icons/gi";
 import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
 
@@ -99,19 +101,43 @@ const Home = () => {
 
           <div className="grid md:grid-cols-3 gap-8">
             <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-8 text-center">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <FaUsers className="w-8 h-8 text-blue-600" />
+              <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <FaRegHospital className="w-10 h-10 text-red-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">Profesionales de la Salud</h3>
-              <p className="text-gray-600">Encuentra médicos, enfermeros, terapeutas y otros profesionales de la salud.</p>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Área de la Salud</h3>
+              <p className="text-gray-600">Personal capacitado y disponible para consultas presenciales o virtuales.</p>
             </div>
 
             <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-8 text-center">
               <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <FaBriefcase className="w-8 h-8 text-green-600" />
+                <FaBook className="w-8 h-8 text-green-600" />
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-3">Educación</h3>
               <p className="text-gray-600">Profesores, tutores y especialistas en educación para todos los niveles.</p>
+            </div>
+
+            <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-8 text-center">
+              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <FaCheckCircle className="w-8 h-8 text-gray-600" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Servicios generales</h3>
+              <p className="text-gray-600">Personal para tus necesidades cotidianas (cuidados del hogar, peluquería, limpieza de vehículos y más).</p>
+            </div>
+
+            <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-8 text-center">
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <FaBriefcase className="w-8 h-8 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Construcción</h3>
+              <p className="text-gray-600">Deja en manos de expertos tus proyectos de construcción y remodelación.</p>
+            </div>
+
+            <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-8 text-center">
+              <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <GiPaintBrush className="w-9 h-9 text-pink-600" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Arte</h3>
+              <p className="text-gray-600">Encuentra los mejores artistas, músicos, fotógrafos y diseñadores para tus proyectos personales o eventos.</p>
             </div>
 
             <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-8 text-center">
@@ -119,7 +145,7 @@ const Home = () => {
                 <FaCog className="w-8 h-8 text-purple-600" />
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-3">Tecnología</h3>
-              <p className="text-gray-600">Desarrolladores, diseñadores y expertos en tecnología y mucho más.</p>
+              <p className="text-gray-600">Expertos en desarrollo web, aplicaciones móviles, soporte técnico y más servicios tecnológicos.</p>
             </div>
           </div>
         </div>
