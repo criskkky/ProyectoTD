@@ -7,7 +7,6 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-
       {/* Hero Section */}
       <section className="max-w-7xl mx-auto px-4 py-16 lg:py-20">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -138,9 +137,6 @@ const Home = () => {
           </button>
         </div>
       </section>
-
-      {/* Footer global */}
-      <Footer />
     </div>
   );
 }

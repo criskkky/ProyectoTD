@@ -73,7 +73,6 @@ function Explore() {
   const modalidades = ["presencial", "online", "mixta"];
 
   return (
-    <>
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-10">
         <div className="max-w-7xl mx-auto px-4">
           {/* Hero título */}
@@ -161,8 +160,6 @@ function Explore() {
           </section>
         </div>
       </div>
-      <Footer />
-    </>
   );
 }
 

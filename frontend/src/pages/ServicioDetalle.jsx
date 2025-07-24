@@ -1,3 +1,4 @@
+import React from "react";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getPublicacionById } from "@/services/publi.service.js";
@@ -5,6 +6,8 @@ import { FaExclamationTriangle, FaClipboardList } from "react-icons/fa";
 import { useAuth } from "@/context/AuthContext.jsx";
 
 function ServicioDetalle() {
+  const [showExternalModal, setShowExternalModal] = useState(false);
+  const [externalUrl, setExternalUrl] = useState("");
   const { id } = useParams();
   const [servicio, setServicio] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -32,18 +35,33 @@ function ServicioDetalle() {
   );
 
   // Campos que no están en el render actual
+  const handleExternalClick = (url) => {
+    setExternalUrl(url);
+    setShowExternalModal(true);
+  };
+
   const camposExtra = [
-    // 'render' permite personalizar cómo se muestra el valor del campo en el detalle.
-    // Recibe el valor (v) y retorna el string a mostrar.
-    { key: "direccion", label: "Dirección" }, // Muestra el string tal cual
-    { key: "city", label: "Ciudad" }, // Muestra el string tal cual
-    { key: "region", label: "Región" }, // Muestra el string tal cual
-    { key: "etiquetas", label: "Etiquetas", render: v => v && v.length ? v.join(", ") : "No disponible" }, // Muestra etiquetas separadas por coma
+    { key: "direccion", label: "Dirección" },
+    { key: "city", label: "Ciudad" },
+    { key: "region", label: "Región" },
+    { key: "etiquetas", label: "Etiquetas", render: v => v && v.length ? v.join(", ") : "No disponible" },
     { key: "contacto_email", label: "Email de contacto" },
     { key: "contacto_whatsapp", label: "WhatsApp" },
     { key: "contacto_telefono", label: "Teléfono" },
-    { key: "enlace_externo", label: "Enlace externo" },
+    {
+      key: "enlace_externo",
+      label: "Enlace externo",
+      render: v => v && v !== "No disponible" ? (
+        <button
+          className="text-blue-600 underline hover:text-blue-800 font-semibold"
+          onClick={() => handleExternalClick(v)}
+        >
+          {v}
+        </button>
+      ) : "No disponible"
+    },
   ];
+  // ...existing code...
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-10">
@@ -82,6 +100,29 @@ function ServicioDetalle() {
               )
             ))}
           </div>
+          {/* Modal de advertencia para enlaces externos */}
+          {showExternalModal && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+              <div className="bg-white rounded-xl shadow-lg p-8 max-w-md w-full text-center">
+                <FaExclamationTriangle className="mx-auto text-yellow-500 mb-4" size={40} />
+                <h2 className="text-xl font-bold mb-2 text-gray-900">Vas a salir de la plataforma</h2>
+                <p className="text-gray-700 mb-6">Estás a punto de abrir un enlace externo:<br /><span className="break-all text-blue-600">{externalUrl}</span><br />¿Deseas continuar?</p>
+                <div className="flex justify-center gap-4">
+                  <button
+                    className="px-4 py-2 rounded bg-gray-200 text-gray-800 font-semibold hover:bg-gray-300"
+                    onClick={() => setShowExternalModal(false)}
+                  >Cancelar</button>
+                  <a
+                    href={externalUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-4 py-2 rounded bg-blue-600 text-white font-semibold hover:bg-blue-700"
+                    onClick={() => setShowExternalModal(false)}
+                  >Abrir enlace</a>
+                </div>
+              </div>
+            </div>
+          )}
         </section>
       </div>
     </div>
