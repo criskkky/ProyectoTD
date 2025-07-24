@@ -25,6 +25,11 @@ const Dashboard = () => {
     handleCrearPublicacion,
   } = usePublications();
 
+  // Solo mostrar publicaciones creadas por el usuario actual
+  const publicacionesPropias = publicaciones.filter(
+    (publi) => publi.createdBy?.id === user.id
+  );
+
   const [showPubliPopup, setShowPubliPopup] = useState(false); // Estado para controlar el PubliPopup
   const [selectedPublication, setSelectedPublication] = useState(null); // Publicación seleccionada para editar
 
@@ -86,8 +91,8 @@ const Dashboard = () => {
               <div>
                 <p className="text-sm font-medium text-gray-600 mb-1">Publicaciones realizadas</p>
                 <div className="flex items-baseline space-x-2">
-                  <span className="text-3xl font-bold text-gray-900">{publicaciones.length}</span>
-                  <span className="text-sm text-gray-500">/{maxPublicaciones}</span>
+          <span className="text-3xl font-bold text-gray-900">{publicacionesPropias.length}</span>
+          <span className="text-sm text-gray-500">/{maxPublicaciones}</span>
                 </div>
               </div>
               <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
@@ -96,9 +101,9 @@ const Dashboard = () => {
             </div>
             <div className="mt-4">
               <div className="w-full bg-gray-200 rounded-full h-2">
-                <div className="bg-blue-600 h-2 rounded-full" style={{ width: `${(publicaciones.length / maxPublicaciones) * 100}%` }}></div>
+                <div className="bg-blue-600 h-2 rounded-full" style={{ width: `${(publicacionesPropias.length / maxPublicaciones) * 100}%` }}></div>
               </div>
-              <p className="text-xs text-gray-500 mt-1">{Math.round((publicaciones.length / maxPublicaciones) * 100)}% del límite utilizado</p>
+              <p className="text-xs text-gray-500 mt-1">{Math.round((publicacionesPropias.length / maxPublicaciones) * 100)}% del límite utilizado</p>
             </div>
           </div>
 
@@ -167,7 +172,7 @@ const Dashboard = () => {
               <div className="px-6 pb-6">
                 {loading ? (
                   <p>Cargando publicaciones...</p>
-                ) : publicaciones.length === 0 ? (
+                ) : publicacionesPropias.length === 0 ? (
                   <div className="text-center py-8 border-t border-gray-100 mt-4">
                     <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                       <FaClipboardList className="w-8 h-8 text-gray-400" />
@@ -194,7 +199,7 @@ const Dashboard = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {publicaciones.map((servicio) => (
+                        {publicacionesPropias.map((servicio) => (
                           <tr key={servicio.id} className="border rounded-xl shadow hover:shadow-lg transition bg-white">
                             <td className="py-3 px-2 font-medium text-gray-900">{servicio.titulo}</td>
                             <td className="py-3 px-2">
