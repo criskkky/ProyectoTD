@@ -111,20 +111,6 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow-md p-6 flex flex-col justify-between hover:shadow-lg transition-shadow">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600 mb-1">Solicitudes recibidas</p>
-                <span className="text-3xl font-bold text-gray-900">{solicitudesRecibidas}</span>
-              </div>
-              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                <FaEnvelope className="w-6 h-6 text-green-600" />
-              </div>
-            </div>
-            <div className="mt-4 flex items-center text-sm text-green-600">
-              <span className="mr-1">+2 esta semana</span>
-            </div>
-          </div>
 
           <div className="bg-white rounded-xl shadow-md p-6 flex flex-col justify-between hover:shadow-lg transition-shadow">
             <div className="flex items-center justify-between">
@@ -285,12 +271,6 @@ const Dashboard = () => {
                 <h2 className="text-lg font-semibold text-gray-900">Acciones rápidas</h2>
               </div>
               <div className="px-6 pb-6 space-y-3">
-                <button className="w-full justify-start bg-transparent border border-gray-200 text-gray-700 hover:bg-gray-50 font-semibold py-2 px-4 rounded flex items-center">
-                  <FaEnvelope className="w-4 h-4 mr-2" /> Ver solicitudes ({solicitudesRecibidas})
-                </button>
-                <button className="w-full justify-start bg-transparent border border-gray-200 text-gray-700 hover:bg-gray-50 font-semibold py-2 px-4 rounded flex items-center">
-                  <FaClipboardList className="w-4 h-4 mr-2" /> Programar cita
-                </button>
                 <button className="w-full justify-start bg-transparent border border-gray-200 text-gray-700 hover:bg-gray-50 font-semibold py-2 px-4 rounded flex items-center">
                   <FaUserCircle className="w-4 h-4 mr-2" /> Ver mi perfil público
                 </button>

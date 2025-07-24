@@ -93,17 +93,6 @@ export default function ProfilePopup({ show, setShow, data, action }) {
                                 disabled: true, // Solo lectura
                             },
                             {
-                                label: "Rol",
-                                name: "rol",
-                                fieldType: 'select',
-                                options: [
-                                    { value: 'admin', label: 'Administrador' },
-                                    { value: 'user', label: 'Usuario' },
-                                ],
-                                required: true,
-                                defaultValue: userData.rol || "",
-                            },
-                            {
                                 label: (
                                     <span className="flex items-center gap-1">
                                         Nueva contraseña
