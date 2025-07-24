@@ -1,7 +1,6 @@
 import { FaBriefcase, FaUserPlus, FaSearch, FaCog, FaArrowRight, FaCheckCircle, FaUsers, FaBook, FaRegHospital } from "react-icons/fa";
 // import { MdHealthAndSafety } from "react-icons/md";
 import { GiPaintBrush } from "react-icons/gi";
-import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
 
 const Home = () => {

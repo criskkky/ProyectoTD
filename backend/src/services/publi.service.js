@@ -18,14 +18,9 @@ export async function getPubliService({ id }) {
   }
 }
 
-export async function getPublisService({ search = "", categoria = "", modalidad = "" } = {}) {
+export async function getPublisService({ search = "", categoria = "", modalidad = "", ciudad = "" } = {}) {
   try {
     const publiRepository = AppDataSource.getRepository(Publication);
-    // Construir filtros dinámicos
-    let where = {};
-    if (categoria) where.categoria = categoria;
-    if (modalidad) where.modalidad = modalidad;
-
     // Consulta base
     let query = publiRepository.createQueryBuilder("publication");
     query.leftJoinAndSelect("publication.createdBy", "createdBy");
@@ -35,6 +30,11 @@ export async function getPublisService({ search = "", categoria = "", modalidad 
     // Filtros por categoría y modalidad
     if (categoria) query.andWhere("publication.categoria = :categoria", { categoria });
     if (modalidad) query.andWhere("publication.modalidad = :modalidad", { modalidad });
+
+    // Filtro por ciudad (por nombre, case-insensitive)
+    if (ciudad && ciudad.trim()) {
+      query.andWhere("LOWER(city.name) = :ciudad", { ciudad: ciudad.trim().toLowerCase() });
+    }
 
     // Filtro por texto (título, descripción, etiquetas)
     if (search.trim()) {

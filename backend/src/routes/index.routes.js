@@ -6,9 +6,12 @@ import publiRoutes from "./publi.routes.js";
 
 const router = Router();
 
+import cityRoutes from "./city.routes.js";
+
 router
     .use("/auth", authRoutes)
     .use("/user", userRoutes)
-    .use("/posts", publiRoutes);
+    .use("/posts", publiRoutes)
+    .use("/cities", cityRoutes);
 
 export default router;

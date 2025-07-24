@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { FaChevronDown, FaSearch } from "react-icons/fa";
 import usePublications from "../hooks/publications/usePublications";
-import Footer from "@/components/Footer.jsx";
+import { fetchCiudades } from "../services/city.service";
 
 function Explore() {
   const navigate = useNavigate();
@@ -15,20 +15,23 @@ function Explore() {
     return {
       search: params.get("search") || "",
       categoria: params.get("categoria") || "",
-      modalidad: params.get("modalidad") || ""
+      modalidad: params.get("modalidad") || "",
+      ciudad: params.get("ciudad") || ""
     };
   };
 
   const [search, setSearch] = useState(getQueryParams().search);
   const [categoria, setCategoria] = useState(getQueryParams().categoria);
   const [modalidad, setModalidad] = useState(getQueryParams().modalidad);
-
-  // Estado para disparar la búsqueda solo al presionar el botón
+  const [ciudad, setCiudad] = useState("");
   const [pendingSearch, setPendingSearch] = useState({
     search: getQueryParams().search,
     categoria: getQueryParams().categoria,
-    modalidad: getQueryParams().modalidad
+    modalidad: getQueryParams().modalidad,
+    ciudad: ""
   });
+  const [ciudadesTodas, setCiudadesTodas] = useState([]);
+  const [ciudadSugerencias, setCiudadSugerencias] = useState([]);
 
   // Actualizar los inputs sin disparar búsqueda
   const handleInputChange = (e) => {
@@ -40,6 +43,27 @@ function Explore() {
   const handleModalidadChange = (e) => {
     setPendingSearch({ ...pendingSearch, modalidad: e.target.value });
   };
+  const handleCiudadChange = (e) => {
+    const value = e.target.value;
+    setPendingSearch({ ...pendingSearch, ciudad: value });
+    if (value.length > 1 && ciudadesTodas.length > 0) {
+      const sugerencias = ciudadesTodas.filter(c => c.toLowerCase().includes(value.toLowerCase()));
+      setCiudadSugerencias(sugerencias);
+    } else {
+      setCiudadSugerencias([]);
+    }
+  };
+  const handleCiudadSelect = (ciudadSeleccionada) => {
+    setPendingSearch({ ...pendingSearch, ciudad: ciudadSeleccionada });
+    setCiudadSugerencias([]);
+  };
+  const handleCiudadBlur = () => {
+    const value = pendingSearch.ciudad;
+    if (value.length > 1 && ciudadSugerencias.length > 0) {
+      setPendingSearch({ ...pendingSearch, ciudad: ciudadSugerencias[0] });
+      setCiudadSugerencias([]);
+    }
+  };
 
   // Buscar y actualizar estados/URL solo al enviar el formulario
   const handleBuscar = (e) => {
@@ -47,18 +71,30 @@ function Explore() {
     setSearch(pendingSearch.search);
     setCategoria(pendingSearch.categoria);
     setModalidad(pendingSearch.modalidad);
+    setCiudad(pendingSearch.ciudad);
     const params = new URLSearchParams();
     if (pendingSearch.search) params.set("search", pendingSearch.search);
     if (pendingSearch.categoria) params.set("categoria", pendingSearch.categoria);
     if (pendingSearch.modalidad) params.set("modalidad", pendingSearch.modalidad);
+    if (pendingSearch.ciudad) params.set("ciudad", pendingSearch.ciudad);
     navigate({ search: params.toString() }, { replace: true });
   };
 
   // Disparar búsqueda solo cuando cambian los estados principales
   useEffect(() => {
-    fetchPublicaciones({ search, categoria, modalidad });
+    fetchPublicaciones({ search, categoria, modalidad, ciudad });
     // eslint-disable-next-line
-  }, [search, categoria, modalidad]);
+  }, [search, categoria, modalidad, ciudad]);
+
+  // Obtener todas las ciudades al montar la página
+  useEffect(() => {
+    async function cargarCiudades() {
+      const todas = await fetchCiudades("");
+      console.log("[FRONT] Ciudades recibidas:", todas);
+      setCiudadesTodas(todas);
+    }
+    cargarCiudades();
+  }, []);
 
   // Categorías y modalidades posibles
   const categorias = [
@@ -97,6 +133,30 @@ function Explore() {
                 placeholder="Buscar por palabra clave, título o descripción..."
                 className="flex-[2] min-w-0 p-3 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
               />
+              <div className="relative w-full sm:w-auto flex-1 min-w-[160px] max-w-xs">
+                <input
+                  type="text"
+                  value={pendingSearch.ciudad}
+                  onChange={handleCiudadChange}
+                  onBlur={handleCiudadBlur}
+                  placeholder="Ciudad..."
+                  className="p-3 border border-blue-200 rounded-lg text-lg bg-white w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  autoComplete="off"
+                />
+                {ciudadSugerencias.length > 0 && (
+                  <ul className="absolute z-10 left-0 right-0 bg-white border border-blue-200 rounded-lg mt-1 shadow-lg max-h-40 overflow-y-auto">
+                    {ciudadSugerencias.map((c) => (
+                      <li
+                        key={c}
+                        className="px-4 py-2 cursor-pointer hover:bg-blue-50"
+                        onClick={() => handleCiudadSelect(c)}
+                      >
+                        {c}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
               <div className="relative w-full sm:w-auto flex-1 min-w-[160px] max-w-xs">
                 <select
                   value={pendingSearch.categoria}

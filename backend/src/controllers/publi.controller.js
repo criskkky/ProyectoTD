@@ -69,10 +69,10 @@ export async function getPublication(req, res) {
 export async function getPublications(req, res) {
   try {
     // Leer filtros desde query params
-    const { search = "", categoria = "", modalidad = "" } = req.query;
+    const { search = "", categoria = "", modalidad = "", ciudad = "" } = req.query;
 
     // Pasar los filtros al service
-    const [publications, errorPublications] = await getPublisService({ search, categoria, modalidad });
+    const [publications, errorPublications] = await getPublisService({ search, categoria, modalidad, ciudad });
 
     if (errorPublications) return handleErrorClient(res, 404, errorPublications);
 

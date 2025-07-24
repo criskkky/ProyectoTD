@@ -1,12 +1,13 @@
 import axios from './root.service.js';
 import { formatPublicacionData } from '@/helpers/formatData.js';
 
-export async function getPublicaciones({ search = "", categoria = "", modalidad = "" } = {}) {
+export async function getPublicaciones({ search = "", categoria = "", modalidad = "", ciudad = "" } = {}) {
     try {
         const params = {};
         if (search) params.search = search;
         if (categoria) params.categoria = categoria;
         if (modalidad) params.modalidad = modalidad;
+        if (ciudad && ciudad.trim() !== "") params.ciudad = ciudad;
         const { data } = await axios.get('/posts/', { params });
         const formattedData = data.data.map(formatPublicacionData);
         return formattedData;
