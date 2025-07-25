@@ -5,7 +5,7 @@ import PubliPopup from "../components/PubliPopup";
 import useEditProfile from "../hooks/profile/useEditProfile";
 import usePublications from "../hooks/publications/usePublications";
 import { startCase } from 'lodash';
-import { formatUserData } from '../helpers/formatData';
+import { formatUserData, getFirstNameLastName } from '../helpers/formatData';
 
 const Dashboard = () => {
   const {
@@ -195,7 +195,7 @@ const Dashboard = () => {
                     <FaUserCircle />
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-semibold text-gray-900">{startCase(perfil.nombre)} {startCase(perfil.apellidos)}</h3>
+                    <h3 className="font-semibold text-gray-900">{getFirstNameLastName(perfil)}</h3>
                     <p className="text-sm text-gray-600">{perfil.email}</p>
                     <span className={`inline-block px-2 py-1 rounded text-xs mt-1 ${user.rol === "admin" ? "bg-red-100 text-red-700" : user.rol === "user" ? "bg-blue-100 text-blue-700" : "bg-gray-200 text-gray-800"}`}>{startCase(user.rol) || "Error"}</span>
                   </div>

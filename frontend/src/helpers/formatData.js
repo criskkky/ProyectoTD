@@ -1,3 +1,9 @@
+// Devuelve primer nombre y primer apellido
+export function getFirstNameLastName(user) {
+  const nombre = user.nombres ? user.nombres.split(' ')[0] : '';
+  const apellido = user.apellidos ? user.apellidos.split(' ')[0] : '';
+  return `${startCase(nombre)} ${startCase(apellido)}`.trim();
+}
 import { startCase } from 'lodash';
 import { format as formatRut } from 'rut.js';
 import { format as formatTempo } from "@formkit/tempo";
@@ -22,16 +28,21 @@ export function convertirMinusculas(obj) {
   return obj;
 }
 
-export function formatPostUpdate(user) { // Send
-  return {
+export function formatPostUpdate(user) {
+  const formatted = {
     id: user.id,
     nombres: user.nombres,
     apellidos: user.apellidos,
     rol: user.rol,
     rut: formatRut(user.rut, { dots: false }),
     email: user.email,
-    password: user.password ? user.password.trim() : "", // Quita espacios
   };
+
+  if (user.newPassword && user.newPassword.trim() !== "") {
+    formatted.password = user.newPassword.trim(); // 👈 Usa newPassword
+  }
+
+  return formatted;
 }
 
 // Formatea los datos de una publicación
