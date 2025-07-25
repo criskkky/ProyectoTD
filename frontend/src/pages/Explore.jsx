@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { FaChevronDown, FaSearch } from "react-icons/fa";
+import { FaMapMarkerAlt, FaCalendarAlt } from "react-icons/fa";
 import usePublications from "../hooks/publications/usePublications";
 import { fetchCiudades } from "../services/city.service";
 
@@ -150,11 +151,10 @@ function Explore() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-10">
       <div className="max-w-7xl mx-auto px-4">
-
         {/* Título */}
         <section className="mb-10 text-center">
           <span className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-semibold mb-4">
-            <FaSearch className="text-blue-500" size={20} />
+            <FaSearch className="text-blue-500" size={18} />
             Explora servicios
           </span>
           <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">Encuentra el servicio que necesitas</h1>
@@ -166,22 +166,27 @@ function Explore() {
         {/* Filtros */}
         <section className="bg-white rounded-xl shadow-lg p-8 mb-10">
           <form className="flex flex-col sm:flex-row items-center gap-4" onSubmit={handleBuscar}>
-            <input
-              type="text"
-              value={pendingSearch.search}
-              onChange={handleInputChange}
-              placeholder="Buscar por palabra clave..."
-              className="flex-[2] min-w-0 p-3 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
-            />
+            <div className="relative flex-1 w-full">
+              <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <input
+                type="text"
+                value={pendingSearch.search}
+                onChange={handleInputChange}
+                placeholder="Buscar por palabra clave..."
+                className="pl-10 py-3 border border-blue-200 rounded-lg focus:ring-blue-500 text-lg w-full"
+              />
+            </div>
+
             {/* Ciudad */}
             <div className="relative w-full sm:w-auto flex-1 min-w-[160px] max-w-xs">
+              <FaMapMarkerAlt className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 pointer-events-none" />
               <input
                 type="text"
                 value={pendingSearch.ciudad}
                 onChange={handleCiudadChange}
                 onBlur={handleCiudadBlur}
                 placeholder="Ciudad..."
-                className="p-3 border border-blue-200 rounded-lg text-lg bg-white w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="pl-10 py-3 border border-blue-200 rounded-lg text-lg bg-white w-full focus:ring-blue-500"
                 autoComplete="off"
               />
               {ciudadSugerencias.length > 0 && (
@@ -198,12 +203,13 @@ function Explore() {
                 </ul>
               )}
             </div>
+
             {/* Categoría */}
             <div className="relative w-full sm:w-auto flex-1 min-w-[160px] max-w-xs">
               <select
                 value={pendingSearch.categoria}
                 onChange={handleCategoriaChange}
-                className="appearance-none p-3 pr-10 border border-blue-200 rounded-lg text-lg bg-white w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="appearance-none p-3 pr-10 border border-blue-200 rounded-lg text-lg bg-white w-full focus:ring-blue-500"
               >
                 <option value="">Todas las categorías</option>
                 {categorias.map(cat => (
@@ -212,12 +218,13 @@ function Explore() {
               </select>
               <FaChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-blue-400 pointer-events-none" size={18} />
             </div>
+
             {/* Modalidad */}
             <div className="relative w-full sm:w-auto flex-1 min-w-[160px] max-w-xs">
               <select
                 value={pendingSearch.modalidad}
                 onChange={handleModalidadChange}
-                className="appearance-none p-3 pr-10 border border-blue-200 rounded-lg text-lg bg-white w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="appearance-none p-3 pr-10 border border-blue-200 rounded-lg text-lg bg-white w-full focus:ring-blue-500"
               >
                 <option value="">Todas las modalidades</option>
                 {modalidades.map(mod => (
@@ -226,6 +233,7 @@ function Explore() {
               </select>
               <FaChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-blue-400 pointer-events-none" size={18} />
             </div>
+
             <button
               type="submit"
               className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold shadow hover:bg-blue-700 transition-all"
@@ -249,28 +257,23 @@ function Explore() {
                   <Link
                     key={servicio.id}
                     to={`/servicio/${servicio.id}`}
-                    className="bg-white p-8 rounded-xl shadow-lg border border-blue-100 block hover:shadow-xl hover:border-blue-500 transition-all h-[260px] flex flex-col"
+                    className="bg-white p-8 rounded-xl shadow-lg border border-blue-100 hover:shadow-xl hover:border-blue-500 transition-all h-[260px] flex flex-col"
                   >
-                    <h3 className="font-bold text-2xl mb-2 text-blue-700 truncate">
-                      {servicio.titulo}
-                    </h3>
-
-                    <p className="text-gray-600 text-base mb-2">
-                      <span className="font-semibold">{servicio.categoria}</span> • {servicio.modalidad}
+                    <h3 className="font-bold text-2xl mb-2 text-blue-700 truncate">{servicio.titulo}</h3>
+                    <p className="text-gray-600 text-base mb-2 flex items-center gap-2">
+                      <span className="bg-blue-50 text-blue-700 px-2 py-1 rounded font-semibold text-xs">{servicio.categoria}</span>
+                      <span className="border border-green-200 text-green-700 px-2 py-1 rounded text-xs">{servicio.modalidad}</span>
                     </p>
-
-                    <p className="text-gray-700 mb-2 line-clamp-3">
-                      {servicio.descripcion}
-                    </p>
-
-                    {/* Esto lo fuerza al fondo inferior */}
-                    <p className="text-gray-500 text-xs mt-auto">
+                    <p className="text-gray-700 mb-2 line-clamp-3">{servicio.descripcion}</p>
+                    <p className="text-gray-500 text-xs mt-auto flex items-center gap-1">
+                      <FaCalendarAlt className="w-3 h-3" />
                       {servicio.createdAt}
+                      <FaMapMarkerAlt className="w-3 h-3 ml-2" />
+                      {servicio.ciudad}
                     </p>
                   </Link>
                 ))}
               </div>
-
               {/* Paginación */}
               <div className="flex justify-center items-center mt-8 gap-4">
                 <button
@@ -284,11 +287,9 @@ function Explore() {
                 >
                   Anterior
                 </button>
-
                 <span className="text-lg font-medium text-gray-700">
                   Página {paginaActual} de {totalPaginas}
                 </span>
-
                 <button
                   disabled={paginaActual === totalPaginas}
                   onClick={() => cambiarPagina(paginaActual + 1)}
