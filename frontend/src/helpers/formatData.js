@@ -1,12 +1,13 @@
+import { startCase } from 'lodash';
+import { format as formatRut } from 'rut.js';
+import { format as formatTempo } from "@formkit/tempo";
+
 // Devuelve primer nombre y primer apellido
 export function getFirstNameLastName(user) {
   const nombre = user.nombres ? user.nombres.split(' ')[0] : '';
   const apellido = user.apellidos ? user.apellidos.split(' ')[0] : '';
   return `${startCase(nombre)} ${startCase(apellido)}`.trim();
 }
-import { startCase } from 'lodash';
-import { format as formatRut } from 'rut.js';
-import { format as formatTempo } from "@formkit/tempo";
 
 export function formatUserData(user) { // View
   return {
@@ -49,7 +50,7 @@ export function formatPostUpdate(user) {
 export function formatPublicacionData(publicacion) {
   return {
     id: publicacion.id ?? null,
-    titulo: startCase(publicacion.titulo ?? ""),
+    titulo: (publicacion.titulo ?? ""),
     estado: startCase(publicacion.estado ?? ""),
     descripcion: publicacion.descripcion ?? "No disponible",
     direccion: publicacion.direccion ?? "No disponible",
