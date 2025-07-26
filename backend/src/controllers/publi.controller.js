@@ -36,7 +36,7 @@ export async function getPublication(req, res) {
         modalidad: publication.modalidad,
         descripcion: publication.descripcion,
         createdAt: publication.createdAt,
-        ciudad: publication.city ? {
+        city: publication.city ? {
           id: publication.city.id,
           name: publication.city.name,
           region: publication.city.region ? {

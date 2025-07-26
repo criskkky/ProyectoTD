@@ -269,7 +269,7 @@ function Explore() {
                       <FaCalendarAlt className="w-3 h-3" />
                       {servicio.createdAt}
                       <FaMapMarkerAlt className="w-3 h-3 ml-2" />
-                      {servicio.ciudad}
+                      {servicio.city}
                     </p>
                   </Link>
                 ))}
