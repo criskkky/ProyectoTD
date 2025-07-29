@@ -113,10 +113,12 @@ const handleSubmit = (e) => {
           type="text"
           value={form.titulo}
           onChange={handleChange}
+          minLength={3}
           maxLength={255}
           className="w-full border rounded px-3 py-2"
           required
         />
+        {errors.titulo && <span className="text-red-500 text-sm block mt-1">{errors.titulo}</span>}
         {errors.titulo && <span className="text-red-500 text-sm">{errors.titulo}</span>}
       </div>
 
@@ -125,6 +127,7 @@ const handleSubmit = (e) => {
         <select name="estado" value={form.estado} onChange={handleChange} className="w-full border rounded px-3 py-2">
           {estados.map(e => <option key={e} value={e}>{e.charAt(0).toUpperCase() + e.slice(1)}</option>)}
         </select>
+        {errors.estado && <span className="text-red-500 text-sm block mt-1">{errors.estado}</span>}
       </div>
 
       <div>
@@ -139,6 +142,7 @@ const handleSubmit = (e) => {
           className="w-full border rounded px-3 py-2"
           required
         />
+        {errors.descripcion && <span className="text-red-500 text-sm block mt-1">{errors.descripcion}</span>}
         {errors.descripcion && <span className="text-red-500 text-sm">{errors.descripcion}</span>}
       </div>
 
@@ -154,6 +158,7 @@ const handleSubmit = (e) => {
           minLength={5}
           maxLength={255}
         />
+        {errors.direccion && <span className="text-red-500 text-sm block mt-1">{errors.direccion}</span>}
       </div>
 
       <div>
@@ -184,6 +189,7 @@ const handleSubmit = (e) => {
             </ul>
           )}
         </div>
+        {errors.city && <span className="text-red-500 text-sm block mt-1">{errors.city}</span>}
         {errors.city && <span className="text-red-500 text-sm">{errors.city}</span>}
       </div>
 
@@ -198,6 +204,7 @@ const handleSubmit = (e) => {
           className="w-full border rounded px-3 py-2"
           pattern="^([a-zA-Z0-9]+(, )?)*[a-zA-Z0-9]+$"
         />
+        {errors.etiquetas && <span className="text-red-500 text-sm block mt-1">{errors.etiquetas}</span>}
       </div>
 
       <div>
@@ -212,6 +219,7 @@ const handleSubmit = (e) => {
           pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
           required
         />
+        {errors.contacto_email && <span className="text-red-500 text-sm block mt-1">{errors.contacto_email}</span>}
         {errors.contacto_email && <span className="text-red-500 text-sm">{errors.contacto_email}</span>}
       </div>
 
@@ -227,6 +235,7 @@ const handleSubmit = (e) => {
           className="w-full border rounded px-3 py-2"
           maxLength={12}
         />
+        {errors.contacto_whatsapp && <span className="text-red-500 text-sm block mt-1">{errors.contacto_whatsapp}</span>}
       </div>
 
       <div>
@@ -241,6 +250,7 @@ const handleSubmit = (e) => {
           className="w-full border rounded px-3 py-2"
           maxLength={12}
         />
+        {errors.contacto_telefono && <span className="text-red-500 text-sm block mt-1">{errors.contacto_telefono}</span>}
       </div>
 
       <div>
@@ -254,6 +264,7 @@ const handleSubmit = (e) => {
           onChange={handleChange}
           className="w-full border rounded px-3 py-2"
         />
+        {errors.enlace_externo && <span className="text-red-500 text-sm block mt-1">{errors.enlace_externo}</span>}
       </div>
 
       <div>
@@ -272,6 +283,7 @@ const handleSubmit = (e) => {
             </option>
           ))}
         </select>
+        {errors.modalidad && <span className="text-red-500 text-sm block mt-1">{errors.modalidad}</span>}
         {errors.modalidad && <span className="text-red-500 text-sm">{errors.modalidad}</span>}
       </div>
 
@@ -291,6 +303,7 @@ const handleSubmit = (e) => {
             </option>
           ))}
         </select>
+        {errors.categoria && <span className="text-red-500 text-sm block mt-1">{errors.categoria}</span>}
         {errors.categoria && <span className="text-red-500 text-sm">{errors.categoria}</span>}
       </div>
 
