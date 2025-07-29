@@ -61,14 +61,17 @@ const Dashboard = () => {
     setSelectedPublication(publication);
     setShowPubliForm(true);
   };
-
-  const handleSubmitPubliForm = (formData) => {
+  
+  const handleSubmitPubliForm = async (formData) => {
     if (selectedPublication) {
-      handleEditarPublicacion(selectedPublication.id, formData);
+      await handleEditarPublicacion(selectedPublication.id, formData);
     } else {
-      handleCrearPublicacion(formData);
+      await handleCrearPublicacion(formData);
     }
     setShowPubliForm(false);
+    if (user.id) {
+      fetchPublicaciones(user.id);
+    }
   };
 
   const handleEditarPerfil = () => {
