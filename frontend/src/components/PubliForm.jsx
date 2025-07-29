@@ -7,9 +7,9 @@ const [form, setForm] = useState({
   estado: initialData.estado || "activo",
   descripcion: initialData.descripcion || "",
   direccion: initialData.direccion || "",
-  city: initialData.city || null, // 👈 Esto ahora será el ID
-  cityNombre: initialData.cityNombre || "", // 👈 Esto es el nombre para mostrar
-  etiquetas: initialData.etiquetas || "",
+  city: initialData.city || null,
+  cityNombre: initialData.cityNombre || "",
+  etiquetas: Array.isArray(initialData.etiquetas) ? initialData.etiquetas.join(", ") : (initialData.etiquetas || ""),
   contacto_email: initialData.contacto_email || "",
   contacto_whatsapp: initialData.contacto_whatsapp || "",
   contacto_telefono: initialData.contacto_telefono || "",
@@ -69,15 +69,24 @@ const validate = () => {
   if (!form.modalidad) newErrors.modalidad = "La modalidad es obligatoria";
   if (!form.categoria) newErrors.categoria = "La categoría es obligatoria";
   if (!form.contacto_email) newErrors.contacto_email = "El email es obligatorio";
+  if (form.etiquetas) {
+    const tagsArray = form.etiquetas.split(",").map(tag => tag.trim()).filter(tag => tag);
+    if (tagsArray.length > 10) newErrors.etiquetas = "Máximo 10 etiquetas permitidas";
+    if (tagsArray.some(tag => tag.length > 30)) newErrors.etiquetas = "Cada etiqueta debe tener máximo 30 caracteres";
+  }
   setErrors(newErrors);
   return Object.keys(newErrors).length === 0;
 };
 
 const handleSubmit = (e) => {
   e.preventDefault();
-  console.log("Datos enviados:", form); // 👈 Agrega este log para depuración
+  console.log("Datos enviados:", form); // Para depuración
   if (validate()) {
-    const { cityNombre, ...dataToSend } = form;
+    const { cityNombre, etiquetas, ...rest } = form;
+    const dataToSend = {
+      ...rest,
+      etiquetas: etiquetas ? etiquetas.split(",").map(tag => tag.trim()).filter(tag => tag) : []
+    };
     onSubmit(dataToSend);
   }
 };
