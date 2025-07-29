@@ -22,21 +22,35 @@ const usePublications = () => {
   const handleCrearPublicacion = async (newData) => {
     try {
       const nuevaPublicacion = await createPublicacion(newData);
-      // Si el backend responde con error de límite, mostrar alerta específica
-      if (nuevaPublicacion?.statusCode === 403 && nuevaPublicacion?.message?.toLowerCase().includes("límite de publicaciones")) {
+      // Si la respuesta es un error, no agregar al estado
+      if (
+        nuevaPublicacion?.statusCode === 403 &&
+        nuevaPublicacion?.message?.toLowerCase().includes("límite de publicaciones")
+      ) {
         showErrorAlert("Límite alcanzado", nuevaPublicacion.message);
         return;
       }
-      setPublicaciones((prev) => [...prev, nuevaPublicacion]);
-      showSuccessAlert("¡Creado!", "La publicación ha sido creada exitosamente.");
+      if (nuevaPublicacion?.error || nuevaPublicacion?.statusCode === 400) {
+        showErrorAlert("Error", nuevaPublicacion?.message || "No se pudo crear la publicación.");
+        return;
+      }
+      // Validar que la publicación creada tenga los campos esperados
+      if (nuevaPublicacion && nuevaPublicacion.id) {
+        setPublicaciones((prev) => [...prev, nuevaPublicacion]);
+        showSuccessAlert("¡Creado!", "La publicación ha sido creada exitosamente.");
+      } else {
+        showErrorAlert("Error", "No se pudo crear la publicación.");
+      }
     } catch (error) {
-      // Si el error viene como respuesta del backend
-      if (error?.response?.status === 403 && error?.response?.data?.message?.toLowerCase().includes("límite de publicaciones")) {
+      if (
+        error?.response?.status === 403 &&
+        error?.response?.data?.message?.toLowerCase().includes("límite de publicaciones")
+      ) {
         showErrorAlert("Límite alcanzado", error.response.data.message);
         return;
       }
-      console.error("Error al crear publicación:", error);
       showErrorAlert("Error", "No se pudo crear la publicación.");
+      console.error("Error al crear publicación:", error);
     }
   };
 

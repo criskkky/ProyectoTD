@@ -34,7 +34,7 @@ export const publiBodyValidation = Joi.object({
       "any.required": "El estado es requerido.",
     }),
   descripcion: Joi.string()
-    .min(10)
+    .min(20)
     .max(2000)
     .required()
     .messages({
@@ -51,19 +51,19 @@ export const publiBodyValidation = Joi.object({
     "number.base": "La ciudad debe ser un ID numérico válido.",
     "any.required": "La ciudad es obligatoria."
   }),
-  etiquetas: Joi.array().items(Joi.string().max(30)).max(10).optional().messages({
+  etiquetas: Joi.array().items(Joi.string().max(30)).max(3).optional().messages({
     "array.base": "Las etiquetas deben ser un arreglo de palabras clave.",
     "string.max": "Cada etiqueta debe tener como máximo 30 caracteres.",
-    "array.max": "Máximo 10 etiquetas permitidas."
+    "array.max": "Máximo 3 etiquetas permitidas."
   }),
-  contacto_email: Joi.string().email().optional().messages({
+  contacto_email: Joi.string().email().required().messages({
     "string.email": "El email de contacto debe ser válido."
   }),
-  contacto_whatsapp: Joi.string().max(30).optional().messages({
-    "string.max": "El WhatsApp debe tener como máximo 30 caracteres."
+  contacto_whatsapp: Joi.string().max(12).optional().messages({
+    "string.max": "El WhatsApp debe tener como máximo 12 caracteres."
   }),
-  contacto_telefono: Joi.string().max(30).optional().messages({
-    "string.max": "El teléfono debe tener como máximo 30 caracteres."
+  contacto_telefono: Joi.string().max(12).optional().messages({
+    "string.max": "El teléfono debe tener como máximo 12 caracteres."
   }),
   enlace_externo: Joi.string().uri().optional().messages({
     "string.uri": "El enlace externo debe ser una URL válida."
@@ -84,7 +84,7 @@ export const publiBodyValidation = Joi.object({
       "servicios generales",
       "tecnología"
     )
-    .optional()
+    .required()
     .messages({
       "any.only": "La categoría debe ser una de las permitidas.",
     }),

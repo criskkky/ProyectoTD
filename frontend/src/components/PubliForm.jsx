@@ -71,7 +71,7 @@ const validate = () => {
   if (!form.contacto_email) newErrors.contacto_email = "El email es obligatorio";
   if (form.etiquetas) {
     const tagsArray = form.etiquetas.split(",").map(tag => tag.trim()).filter(tag => tag);
-    if (tagsArray.length > 10) newErrors.etiquetas = "Máximo 10 etiquetas permitidas";
+    if (tagsArray.length > 3) newErrors.etiquetas = "Máximo 3 etiquetas permitidas";
     if (tagsArray.some(tag => tag.length > 30)) newErrors.etiquetas = "Cada etiqueta debe tener máximo 30 caracteres";
   }
   setErrors(newErrors);
@@ -82,6 +82,7 @@ const handleSubmit = (e) => {
   e.preventDefault();
   console.log("Datos enviados:", form); // Para depuración
   if (validate()) {
+    // eslint-disable-next-line no-unused-vars
     const { cityNombre, etiquetas, ...rest } = form;
     const dataToSend = {
       ...rest,
@@ -106,7 +107,7 @@ const handleSubmit = (e) => {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className="block font-semibold mb-1">Título *</label>
+        <label className="block font-semibold mb-1">Título <span className="text-red-500">*</span></label>
         <input
           name="titulo"
           type="text"
@@ -120,18 +121,20 @@ const handleSubmit = (e) => {
       </div>
 
       <div>
-        <label className="block font-semibold mb-1">Estado *</label>
+        <label className="block font-semibold mb-1">Estado <span className="text-red-500">*</span></label>
         <select name="estado" value={form.estado} onChange={handleChange} className="w-full border rounded px-3 py-2">
           {estados.map(e => <option key={e} value={e}>{e.charAt(0).toUpperCase() + e.slice(1)}</option>)}
         </select>
       </div>
 
       <div>
-        <label className="block font-semibold mb-1">Descripción *</label>
+        <label className="block font-semibold mb-1">Descripción <span className="text-red-500">*</span></label>
         <textarea
           name="descripcion"
           value={form.descripcion}
+          placeholder="Descripción detallada del servicio..."
           onChange={handleChange}
+          minLength={20}
           maxLength={2000}
           className="w-full border rounded px-3 py-2"
           required
@@ -145,13 +148,16 @@ const handleSubmit = (e) => {
           name="direccion"
           type="text"
           value={form.direccion}
+          placeholder="Calle Nr. 123"
           onChange={handleChange}
           className="w-full border rounded px-3 py-2"
+          minLength={5}
+          maxLength={255}
         />
       </div>
 
       <div>
-        <label className="block font-semibold mb-1">Ciudad *</label>
+        <label className="block font-semibold mb-1">Ciudad <span className="text-red-500">*</span></label>
         <div className="relative">
           <input
             name="cityNombre"
@@ -187,19 +193,23 @@ const handleSubmit = (e) => {
           name="etiquetas"
           type="text"
           value={form.etiquetas}
+          placeholder="Ej: etiqueta1, etiqueta2, etiqueta3"
           onChange={handleChange}
           className="w-full border rounded px-3 py-2"
+          pattern="^([a-zA-Z0-9]+(, )?)*[a-zA-Z0-9]+$"
         />
       </div>
 
       <div>
-        <label className="block font-semibold mb-1">Email de contacto *</label>
+        <label className="block font-semibold mb-1">Email de contacto <span className="text-red-500">*</span></label>
         <input
           name="contacto_email"
           type="email"
           value={form.contacto_email}
+          placeholder="usuario@ejemplo.com"
           onChange={handleChange}
           className="w-full border rounded px-3 py-2"
+          pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
           required
         />
         {errors.contacto_email && <span className="text-red-500 text-sm">{errors.contacto_email}</span>}
@@ -211,8 +221,11 @@ const handleSubmit = (e) => {
           name="contacto_whatsapp"
           type="text"
           value={form.contacto_whatsapp}
+          placeholder="+56912345678"
+          pattern="^\+?[0-9]{1,3}?[0-9]{9}$"
           onChange={handleChange}
           className="w-full border rounded px-3 py-2"
+          maxLength={12}
         />
       </div>
 
@@ -222,8 +235,11 @@ const handleSubmit = (e) => {
           name="contacto_telefono"
           type="text"
           value={form.contacto_telefono}
+          placeholder="+56912345678"
+          pattern="^\+?[0-9]{1,3}?[0-9]{9}$"
           onChange={handleChange}
           className="w-full border rounded px-3 py-2"
+          maxLength={12}
         />
       </div>
 
@@ -233,13 +249,15 @@ const handleSubmit = (e) => {
           name="enlace_externo"
           type="text"
           value={form.enlace_externo}
+          placeholder="https://ejemplo.com"
+          pattern="https?://.+"
           onChange={handleChange}
           className="w-full border rounded px-3 py-2"
         />
       </div>
 
       <div>
-        <label className="block font-semibold mb-1">Modalidad *</label>
+        <label className="block font-semibold mb-1">Modalidad <span className="text-red-500">*</span></label>
         <select
           name="modalidad"
           value={form.modalidad}
@@ -258,7 +276,7 @@ const handleSubmit = (e) => {
       </div>
 
       <div>
-        <label className="block font-semibold mb-1">Categoría *</label>
+        <label className="block font-semibold mb-1">Categoría <span className="text-red-500">*</span></label>
         <select
           name="categoria"
           value={form.categoria}
