@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FaUserCircle, FaClipboardList, FaPlusCircle, FaEdit, FaTrash } from "react-icons/fa";
 import ProfilePopup from "../components/ProfilePopup";
-import PubliPopup from "../components/PubliPopup";
+import PubliForm from "../components/PubliForm";
 import useEditProfile from "../hooks/profile/useEditProfile";
 import usePublications from "../hooks/publications/usePublications";
 import { startCase } from 'lodash';
@@ -30,7 +30,7 @@ const Dashboard = () => {
     (publi) => publi.createdBy?.id === user.id
   );
 
-  const [showPubliPopup, setShowPubliPopup] = useState(false);
+  const [showPubliForm, setShowPubliForm] = useState(false);
   const [selectedPublication, setSelectedPublication] = useState(null);
 
   useEffect(() => {
@@ -54,21 +54,21 @@ const Dashboard = () => {
 
   const openCrearPublicacionPopup = () => {
     setSelectedPublication(null);
-    setShowPubliPopup(true);
+    setShowPubliForm(true);
   };
 
-  const handleEditarPublicacionPopup = (publication) => {
+  const handleEditarPublicacionForm = (publication) => {
     setSelectedPublication(publication);
-    setShowPubliPopup(true);
+    setShowPubliForm(true);
   };
 
-  const handleSubmitPubliPopup = (formData) => {
+  const handleSubmitPubliForm = (formData) => {
     if (selectedPublication) {
       handleEditarPublicacion(selectedPublication.id, formData);
     } else {
       handleCrearPublicacion(formData);
     }
-    setShowPubliPopup(false);
+    setShowPubliForm(false);
   };
 
   const handleEditarPerfil = () => {
@@ -159,7 +159,7 @@ const Dashboard = () => {
                             <td className="py-3 px-2 flex gap-2">
                               <button
                                 className="flex items-center gap-1 px-2 py-1 rounded hover:bg-blue-50 text-blue-600 hover:text-blue-800 font-semibold transition"
-                                onClick={() => handleEditarPublicacionPopup(servicio)}
+                                onClick={() => handleEditarPublicacionForm(servicio)}
                                 title="Editar"
                               >
                                 <FaEdit className="w-4 h-4" />
@@ -240,12 +240,25 @@ const Dashboard = () => {
           data={[user]}
           action={handleEditProfile}
         />
-        <PubliPopup
-          show={showPubliPopup}
-          setShow={setShowPubliPopup}
-          data={[selectedPublication]}
-          action={handleSubmitPubliPopup}
-        />
+        {/* Modal para crear/editar publicación */}
+        {showPubliForm && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm overflow-y-auto">
+            <div className="relative bg-white rounded-lg shadow-lg w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto">
+              <button
+                className="absolute top-2 right-2 text-red-500 hover:text-red-700"
+                onClick={() => setShowPubliForm(false)}
+              >
+                &times;
+              </button>
+              <h2 className="text-2xl font-bold mb-4">{selectedPublication ? "Editar publicación" : "Crear publicación"}</h2>
+              <PubliForm
+                initialData={selectedPublication || {}}
+                onSubmit={handleSubmitPubliForm}
+                buttonText={selectedPublication ? "Actualizar" : "Crear"}
+              />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

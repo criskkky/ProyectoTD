@@ -3,7 +3,7 @@ import { FaEdit, FaTrash, FaUserCircle, FaClipboardList } from "react-icons/fa";
 import useUsers from "@/hooks/users/useGetUsers";
 import usePublications from "@/hooks/publications/usePublications";
 import { startCase } from "lodash";
-import PubliPopup from "@/components/PubliPopup";
+import PubliForm from "../components/PubliForm";
 import ProfilePopup from "@/components/ProfilePopup";
 import useDeleteUser from "@/hooks/users/useDeleteUser";
 
@@ -15,7 +15,7 @@ const AdminPanel = () => {
   const [userSearchType, setUserSearchType] = useState("email");
 
   const [user, setUser] = useState({});
-  const [showPubliPopup, setShowPubliPopup] = useState(false);
+  const [showPubliForm, setShowPubliForm] = useState(false);
   const [selectedPublication, setSelectedPublication] = useState(null);
   const [showProfilePopup, setShowProfilePopup] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -84,16 +84,16 @@ const AdminPanel = () => {
     );
   }
 
-  const handleEditarPublicacionPopup = (publication) => {
+  const handleEditarPublicacionForm = (publication) => {
     setSelectedPublication(publication);
-    setShowPubliPopup(true);
+    setShowPubliForm(true);
   };
 
-  const handleSubmitPubliPopup = (formData) => {
+  const handleSubmitPubliForm = (formData) => {
     if (selectedPublication) {
       handleEditarPublicacion(selectedPublication.id, formData);
     }
-    setShowPubliPopup(false);
+    setShowPubliForm(false);
   };
 
   const handleEditarUsuarioPopup = (usuario) => {
@@ -159,7 +159,7 @@ const AdminPanel = () => {
                         <td className="py-3 px-2 flex gap-2">
                           <button
                             className="flex items-center gap-1 px-2 py-1 rounded hover:bg-blue-50 text-blue-600 hover:text-blue-800 font-semibold transition"
-                            onClick={() => handleEditarPublicacionPopup(publi)}
+                            onClick={() => handleEditarPublicacionForm(publi)}
                             title="Editar"
                           >
                             <FaEdit className="w-4 h-4" />
@@ -276,12 +276,25 @@ const AdminPanel = () => {
           </div>
         </div>
         {/* Popups */}
-        <PubliPopup
-          show={showPubliPopup}
-          setShow={setShowPubliPopup}
-          data={[selectedPublication]}
-          action={handleSubmitPubliPopup}
-        />
+        {/* Modal para editar publicación */}
+        {showPubliForm && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm overflow-y-auto">
+            <div className="relative bg-white rounded-lg shadow-lg w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto">
+              <button
+                className="absolute top-2 right-2 text-red-500 hover:text-red-700"
+                onClick={() => setShowPubliForm(false)}
+              >
+                &times;
+              </button>
+              <h2 className="text-2xl font-bold mb-4">{selectedPublication ? "Editar publicación" : "Crear publicación"}</h2>
+              <PubliForm
+                initialData={selectedPublication || {}}
+                onSubmit={handleSubmitPubliForm}
+                buttonText={selectedPublication ? "Actualizar" : "Crear"}
+              />
+            </div>
+          </div>
+        )}
         <ProfilePopup
           show={showProfilePopup}
           setShow={setShowProfilePopup}
