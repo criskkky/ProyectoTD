@@ -121,10 +121,10 @@ const Dashboard = () => {
                     <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                       <FaClipboardList className="w-8 h-8 text-gray-400" />
                     </div>
-                    <p className="text-gray-500 mb-4">¿Listo para crear más publicaciones?</p>
+                    <p className="text-gray-500 mb-4">¿Listo para crear publicaciones?</p>
                     <button
                       onClick={openCrearPublicacionPopup}
-                      className="flex items-center gap-2 border border-blue-200 text-blue-600 hover:bg-blue-50 bg-transparent font-semibold py-2 px-4 rounded"
+                      className="flex items-center gap-2 border border-blue-200 text-blue-600 hover:bg-blue-50 bg-transparent font-semibold py-2 px-4 rounded mx-auto"
                     >
                       <FaPlusCircle className="mr-1" /> Crear nueva publicación
                     </button>
