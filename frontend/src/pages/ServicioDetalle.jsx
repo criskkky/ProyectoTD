@@ -2,7 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getPublicacionById } from "@/services/publi.service.js";
-import { FaExclamationTriangle, FaClipboardList, FaMapMarkerAlt, FaUser, FaEnvelope, FaWhatsapp, FaPhone, FaTag, FaExternalLinkAlt } from "react-icons/fa";
+import { FaExclamationTriangle, FaClipboardList, FaMapMarkerAlt, FaUser, FaEnvelope, FaWhatsapp, FaPhone, FaTag, FaCalendarAlt, FaExternalLinkAlt } from "react-icons/fa";
 import { useAuth } from "@/context/AuthContext.jsx";
 import { getFirstNameLastName } from "@/helpers/formatData.js";
 
@@ -84,8 +84,8 @@ function ServicioDetalle() {
                 <span>Región: {servicio.region || "No disponible"}</span>
               </div>
               <div className="flex items-center gap-1">
-                <FaExclamationTriangle className="w-4 h-4 text-blue-600" />
-                <span>Publicado: {servicio.createdAt}</span>
+                <FaCalendarAlt className="w-4 h-4 text-blue-600" />
+                <span>{servicio.createdAt}</span>
               </div>
             </div>
           </div>
