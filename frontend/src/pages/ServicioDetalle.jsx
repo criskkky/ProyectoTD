@@ -35,14 +35,17 @@ function ServicioDetalle() {
   if (loading) return <p>Cargando servicio...</p>;
   if (!servicio) return <p>No se encontró el servicio.</p>;
 
-  // Helper para mostrar blur si no está logueado
-  const BlurInfo = ({ label, icon: Icon }) => (
+  // Helper para mostrar blur solo si no está logueado
+  const BlurInfo = ({ label, icon: Icon, children }) => (
     <div className="mb-2">
       <div className="flex items-center gap-2 mb-1">
         {Icon && <Icon className="w-5 h-5 text-blue-600" />}
         <span className="font-semibold text-gray-700">{label}:</span>
       </div>
-      <span className="blur-sm bg-gray-100 px-2 rounded text-gray-400 inline-block">No disponible</span>
+      {isAuthenticated
+        ? (children ?? <span className="bg-gray-100 px-2 rounded text-gray-700 inline-block">No disponible</span>)
+        : <span className="blur-sm bg-gray-100 px-2 rounded text-gray-400 inline-block">No disponible</span>
+      }
     </div>
   );
 
@@ -75,10 +78,10 @@ function ServicioDetalle() {
             )}
             <p className="mb-4 text-gray-700 text-base leading-relaxed">{servicio.descripcion}</p>
             <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-gray-600 text-sm">
-              <div className="flex items-center gap-1">
-                <FaMapMarkerAlt className="w-4 h-4 text-blue-600" />
-                <span>Ciudad: {servicio.city || "No disponible"}</span>
-              </div>
+            <div className="flex items-center gap-1">
+              <FaMapMarkerAlt className="w-4 h-4 text-blue-600" />
+              <span>Ciudad: {servicio.cityNombre || "No disponible"}</span>
+            </div>
               <div className="flex items-center gap-1">
                 <FaMapMarkerAlt className="w-4 h-4 text-blue-600" />
                 <span>Región: {servicio.region || "No disponible"}</span>
