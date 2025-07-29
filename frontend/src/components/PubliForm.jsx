@@ -1,25 +1,28 @@
 import React, { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import { fetchCities } from '../services/city.service';
 
 export default function PubliForm({ initialData = {}, onSubmit, buttonText = "Guardar" }) {
-const [form, setForm] = useState({
-  titulo: initialData.titulo || "",
-  estado: initialData.estado || "activo",
-  descripcion: initialData.descripcion || "",
-  direccion: initialData.direccion || "",
-  city: initialData.city || null,
-  cityNombre: initialData.cityNombre || "",
-  etiquetas: Array.isArray(initialData.etiquetas) ? initialData.etiquetas.join(", ") : (initialData.etiquetas || ""),
-  contacto_email: initialData.contacto_email || "",
-  contacto_whatsapp: initialData.contacto_whatsapp || "",
-  contacto_telefono: initialData.contacto_telefono || "",
-  enlace_externo: initialData.enlace_externo || "",
-  modalidad: initialData.modalidad || "",
-  categoria: initialData.categoria || "",
-});
+  const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm({
+    defaultValues: {
+      titulo: initialData.titulo || "",
+      estado: initialData.estado || "activo",
+      descripcion: initialData.descripcion || "",
+      direccion: initialData.direccion || "",
+      cityNombre: initialData.cityNombre || "",
+      city: initialData.city || null,
+      etiquetas: Array.isArray(initialData.etiquetas) ? initialData.etiquetas.join(", ") : (initialData.etiquetas || ""),
+      contacto_email: initialData.contacto_email || "",
+      contacto_whatsapp: initialData.contacto_whatsapp || "",
+      contacto_telefono: initialData.contacto_telefono || "",
+      enlace_externo: initialData.enlace_externo || "",
+      modalidad: initialData.modalidad || "",
+      categoria: initialData.categoria || "",
+    }
+  });
+
   const [ciudadesTodas, setCiudadesTodas] = useState([]);
   const [ciudadSugerencias, setCiudadSugerencias] = useState([]);
-  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     async function cargarCiudades() {
@@ -29,282 +32,316 @@ const [form, setForm] = useState({
     cargarCiudades();
   }, []);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    if (name === "cityNombre") {
-      setForm(prev => ({ ...prev, cityNombre: value, city: null }));
-      if (value.length > 1 && ciudadesTodas.length > 0) {
-        const sugeridas = ciudadesTodas.filter(c =>
-          c.name && c.name.toLowerCase().includes(value.toLowerCase())
-        );
-        setCiudadSugerencias(sugeridas);
-      } else {
-        setCiudadSugerencias([]);
-      }
+  const cityNombre = watch("cityNombre");
+
+  const handleCiudadChange = (e) => {
+    const value = e.target.value;
+    setValue("cityNombre", value, { shouldValidate: true });
+    setValue("city", null, { shouldValidate: true });
+    if (value.length > 1 && ciudadesTodas.length > 0) {
+      const sugeridas = ciudadesTodas.filter(c =>
+        c.name && c.name.toLowerCase().includes(value.toLowerCase())
+      );
+      setCiudadSugerencias(sugeridas);
     } else {
-      setForm(prev => ({ ...prev, [name]: value }));
+      setCiudadSugerencias([]);
     }
   };
 
   const handleCiudadSelect = (ciudadSeleccionada) => {
-    setForm(prev => ({ ...prev, city: ciudadSeleccionada.id, cityNombre: ciudadSeleccionada.name }));
+    setValue("city", ciudadSeleccionada.id, { shouldValidate: true });
+    setValue("cityNombre", ciudadSeleccionada.name, { shouldValidate: true });
     setCiudadSugerencias([]);
   };
 
   const handleCiudadBlur = () => {
-    if (form.cityNombre.length > 1 && ciudadSugerencias.length > 0) {
+    if (cityNombre.length > 1 && ciudadSugerencias.length > 0) {
       const ciudad = ciudadSugerencias[0];
       if (ciudad && ciudad.name) {
-        setForm(prev => ({ ...prev, city: ciudad.id, cityNombre: ciudad.name }));
+        setValue("city", ciudad.id, { shouldValidate: true });
+        setValue("cityNombre", ciudad.name, { shouldValidate: true });
       }
       setCiudadSugerencias([]);
     }
   };
 
-const validate = () => {
-  const newErrors = {};
-  if (!form.titulo) newErrors.titulo = "El título es obligatorio";
-  if (!form.descripcion) newErrors.descripcion = "La descripción es obligatoria";
-  if (!form.city || isNaN(form.city) || form.city <= 0) newErrors.city = "La ciudad es obligatoria y debe ser un ID válido";
-  if (!form.modalidad) newErrors.modalidad = "La modalidad es obligatoria";
-  if (!form.categoria) newErrors.categoria = "La categoría es obligatoria";
-  if (!form.contacto_email) newErrors.contacto_email = "El email es obligatorio";
-  if (form.etiquetas) {
-    const tagsArray = form.etiquetas.split(",").map(tag => tag.trim()).filter(tag => tag);
-    if (tagsArray.length > 3) newErrors.etiquetas = "Máximo 3 etiquetas permitidas";
-    if (tagsArray.some(tag => tag.length > 30)) newErrors.etiquetas = "Cada etiqueta debe tener máximo 30 caracteres";
-  }
-  setErrors(newErrors);
-  return Object.keys(newErrors).length === 0;
-};
-
-const handleSubmit = (e) => {
-  e.preventDefault();
-  console.log("Datos enviados:", form); // Para depuración
-  if (validate()) {
-    // eslint-disable-next-line no-unused-vars
-    const { cityNombre, etiquetas, ...rest } = form;
+  const onFormSubmit = (data) => {
+    const { cityNombre, etiquetas, ...rest } = data;
     const dataToSend = {
       ...rest,
       etiquetas: etiquetas ? etiquetas.split(",").map(tag => tag.trim()).filter(tag => tag) : []
     };
     onSubmit(dataToSend);
-  }
-};
+  };
 
   const categorias = [
-    "arte",
-    "construcción",
-    "educacion",
-    "salud",
-    "servicios generales",
-    "tecnología"
+    { value: "arte", label: "Arte" },
+    { value: "construcción", label: "Construcción" },
+    { value: "educacion", label: "Educación" },
+    { value: "salud", label: "Salud" },
+    { value: "servicios generales", label: "Servicios generales" },
+    { value: "tecnología", label: "Tecnología" }
   ];
 
-  const modalidades = ["presencial", "online", "mixta"];
-  const estados = ["activo", "inactivo", "bloqueado"];
+  const modalidades = [
+    { value: "presencial", label: "Presencial" },
+    { value: "online", label: "Online" },
+    { value: "mixta", label: "Mixta" }
+  ];
+
+  const estados = [
+    { value: "activo", label: "Activo" },
+    { value: "inactivo", label: "Inactivo" },
+    { value: "bloqueado", label: "Bloqueado" }
+  ];
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
+    <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-4" autoComplete="off">
+      <div className="flex flex-col gap-1">
         <label className="block font-semibold mb-1">Título <span className="text-red-500">*</span></label>
         <input
-          name="titulo"
+          {...register("titulo", {
+            required: "El título es obligatorio",
+            minLength: { value: 3, message: "El título debe tener al menos 3 caracteres" },
+            maxLength: { value: 255, message: "El título debe tener como máximo 255 caracteres" }
+          })}
           type="text"
-          value={form.titulo}
-          onChange={handleChange}
-          minLength={3}
-          maxLength={255}
-          className="w-full border rounded px-3 py-2"
-          required
+          className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
-        {errors.titulo && <span className="text-red-500 text-sm block mt-1">{errors.titulo}</span>}
-        {errors.titulo && <span className="text-red-500 text-sm">{errors.titulo}</span>}
+        <div className="text-red-500 text-sm min-h-[1.5em]">
+          {errors.titulo?.message || ""}
+        </div>
       </div>
 
-      <div>
+      <div className="flex flex-col gap-1">
         <label className="block font-semibold mb-1">Estado <span className="text-red-500">*</span></label>
-        <select name="estado" value={form.estado} onChange={handleChange} className="w-full border rounded px-3 py-2">
-          {estados.map(e => <option key={e} value={e}>{e.charAt(0).toUpperCase() + e.slice(1)}</option>)}
+        <select
+          {...register("estado", {
+            required: "El estado es obligatorio",
+            validate: value => ["activo", "inactivo", "bloqueado"].includes(value) || "El estado debe ser activo, inactivo o bloqueado"
+          })}
+          className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+        >
+          <option value="">Selecciona estado</option>
+          {estados.map(e => (
+            <option key={e.value} value={e.value}>{e.label}</option>
+          ))}
         </select>
-        {errors.estado && <span className="text-red-500 text-sm block mt-1">{errors.estado}</span>}
+        <div className="text-red-500 text-sm min-h-[1.5em]">
+          {errors.estado?.message || ""}
+        </div>
       </div>
 
-      <div>
+      <div className="flex flex-col gap-1">
         <label className="block font-semibold mb-1">Descripción <span className="text-red-500">*</span></label>
         <textarea
-          name="descripcion"
-          value={form.descripcion}
+          {...register("descripcion", {
+            required: "La descripción es obligatoria",
+            minLength: { value: 20, message: "La descripción debe tener al menos 20 caracteres" },
+            maxLength: { value: 2000, message: "La descripción debe tener como máximo 2000 caracteres" }
+          })}
           placeholder="Descripción detallada del servicio..."
-          onChange={handleChange}
-          minLength={20}
-          maxLength={2000}
-          className="w-full border rounded px-3 py-2"
-          required
+          className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
-        {errors.descripcion && <span className="text-red-500 text-sm block mt-1">{errors.descripcion}</span>}
-        {errors.descripcion && <span className="text-red-500 text-sm">{errors.descripcion}</span>}
+        <div className="text-red-500 text-sm min-h-[1.5em]">
+          {errors.descripcion?.message || ""}
+        </div>
       </div>
 
-      <div>
+      <div className="flex flex-col gap-1">
         <label className="block font-semibold mb-1">Dirección</label>
         <input
-          name="direccion"
+          {...register("direccion", {
+            maxLength: { value: 255, message: "La dirección debe tener como máximo 255 caracteres" }
+          })}
           type="text"
-          value={form.direccion}
           placeholder="Calle Nr. 123"
-          onChange={handleChange}
-          className="w-full border rounded px-3 py-2"
-          minLength={5}
-          maxLength={255}
+          className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
-        {errors.direccion && <span className="text-red-500 text-sm block mt-1">{errors.direccion}</span>}
-      </div>
-
-      <div>
-        <label className="block font-semibold mb-1">Ciudad <span className="text-red-500">*</span></label>
-        <div className="relative">
-          <input
-            name="cityNombre"
-            type="text"
-            value={form.cityNombre}
-            onChange={handleChange}
-            onBlur={handleCiudadBlur}
-            placeholder="Ciudad..."
-            className="w-full border rounded px-3 py-2"
-            autoComplete="off"
-            required
-          />
-          {ciudadSugerencias.length > 0 && (
-            <ul className="absolute z-10 left-0 right-0 bg-white border rounded mt-1 shadow max-h-40 overflow-y-auto">
-              {ciudadSugerencias.map(c => (
-                <li
-                  key={c.id}
-                  className="px-4 py-2 cursor-pointer hover:bg-blue-50"
-                  onMouseDown={() => handleCiudadSelect(c)}
-                >
-                  {c.name}
-                </li>
-              ))}
-            </ul>
-          )}
+        <div className="text-red-500 text-sm min-h-[1.5em]">
+          {errors.direccion?.message || ""}
         </div>
-        {errors.city && <span className="text-red-500 text-sm block mt-1">{errors.city}</span>}
-        {errors.city && <span className="text-red-500 text-sm">{errors.city}</span>}
       </div>
 
-      <div>
+      <div className="flex flex-col gap-1 relative">
+        <label className="block font-semibold mb-1">Ciudad <span className="text-red-500">*</span></label>
+        <input
+          {...register("cityNombre", {
+            required: "La ciudad es obligatoria",
+            validate: {
+              citySelected: () => watch("city") !== null || "Debe seleccionar una ciudad válida"
+            }
+          })}
+          type="text"
+          placeholder="Ciudad..."
+          onChange={handleCiudadChange}
+          onBlur={handleCiudadBlur}
+          className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+        <input
+          type="hidden"
+          {...register("city", {
+            required: "La ciudad es obligatoria",
+            validate: value => value && !isNaN(value) && value > 0 || "La ciudad debe ser un ID válido"
+          })}
+        />
+        {ciudadSugerencias.length > 0 && (
+          <ul className="absolute z-10 left-0 right-0 bg-white border rounded mt-1 shadow max-h-40 overflow-y-auto">
+            {ciudadSugerencias.map(c => (
+              <li
+                key={c.id}
+                className="px-4 py-2 cursor-pointer hover:bg-blue-50"
+                onMouseDown={() => handleCiudadSelect(c)}
+              >
+                {c.name}
+              </li>
+            ))}
+          </ul>
+        )}
+        <div className="text-red-500 text-sm min-h-[1.5em]">
+          {errors.cityNombre?.message || errors.city?.message || ""}
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-1">
         <label className="block font-semibold mb-1">Etiquetas (separadas por coma)</label>
         <input
-          name="etiquetas"
+          {...register("etiquetas", {
+            validate: {
+              maxTags: value => {
+                const tagsArray = value ? value.split(",").map(tag => tag.trim()).filter(tag => tag) : [];
+                return tagsArray.length <= 3 || "Máximo 3 etiquetas permitidas";
+              },
+              maxLength: value => {
+                const tagsArray = value ? value.split(",").map(tag => tag.trim()).filter(tag => tag) : [];
+                return !tagsArray.some(tag => tag.length > 30) || "Cada etiqueta debe tener máximo 30 caracteres";
+              }
+            }
+          })}
           type="text"
-          value={form.etiquetas}
           placeholder="Ej: etiqueta1, etiqueta2, etiqueta3"
-          onChange={handleChange}
-          className="w-full border rounded px-3 py-2"
-          pattern="^([a-zA-Z0-9]+(, )?)*[a-zA-Z0-9]+$"
+          className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
-        {errors.etiquetas && <span className="text-red-500 text-sm block mt-1">{errors.etiquetas}</span>}
+        <div className="text-red-500 text-sm min-h-[1.5em]">
+          {errors.etiquetas?.message || ""}
+        </div>
       </div>
 
-      <div>
+      <div className="flex flex-col gap-1">
         <label className="block font-semibold mb-1">Email de contacto <span className="text-red-500">*</span></label>
         <input
-          name="contacto_email"
+          {...register("contacto_email", {
+            required: "El email es obligatorio",
+            pattern: {
+              value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+              message: "El email de contacto debe ser válido"
+            }
+          })}
           type="email"
-          value={form.contacto_email}
           placeholder="usuario@ejemplo.com"
-          onChange={handleChange}
-          className="w-full border rounded px-3 py-2"
-          pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-          required
+          className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
-        {errors.contacto_email && <span className="text-red-500 text-sm block mt-1">{errors.contacto_email}</span>}
-        {errors.contacto_email && <span className="text-red-500 text-sm">{errors.contacto_email}</span>}
+        <div className="text-red-500 text-sm min-h-[1.5em]">
+          {errors.contacto_email?.message || ""}
+        </div>
       </div>
 
-      <div>
+      <div className="flex flex-col gap-1">
         <label className="block font-semibold mb-1">WhatsApp de contacto</label>
         <input
-          name="contacto_whatsapp"
+          {...register("contacto_whatsapp", {
+            maxLength: { value: 12, message: "El WhatsApp debe tener como máximo 12 caracteres" }
+          })}
           type="text"
-          value={form.contacto_whatsapp}
           placeholder="+56912345678"
-          pattern="^\+?[0-9]{1,3}?[0-9]{9}$"
-          onChange={handleChange}
-          className="w-full border rounded px-3 py-2"
-          maxLength={12}
+          className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
-        {errors.contacto_whatsapp && <span className="text-red-500 text-sm block mt-1">{errors.contacto_whatsapp}</span>}
+        <div className="text-red-500 text-sm min-h-[1.5em]">
+          {errors.contacto_whatsapp?.message || ""}
+        </div>
       </div>
 
-      <div>
+      <div className="flex flex-col gap-1">
         <label className="block font-semibold mb-1">Teléfono de contacto</label>
         <input
-          name="contacto_telefono"
+          {...register("contacto_telefono", {
+            maxLength: { value: 12, message: "El teléfono debe tener como máximo 12 caracteres" }
+          })}
           type="text"
-          value={form.contacto_telefono}
           placeholder="+56912345678"
-          pattern="^\+?[0-9]{1,3}?[0-9]{9}$"
-          onChange={handleChange}
-          className="w-full border rounded px-3 py-2"
-          maxLength={12}
+          className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
-        {errors.contacto_telefono && <span className="text-red-500 text-sm block mt-1">{errors.contacto_telefono}</span>}
+        <div className="text-red-500 text-sm min-h-[1.5em]">
+          {errors.contacto_telefono?.message || ""}
+        </div>
       </div>
 
-      <div>
+      <div className="flex flex-col gap-1">
         <label className="block font-semibold mb-1">Enlace externo</label>
         <input
-          name="enlace_externo"
+          {...register("enlace_externo", {
+            validate: value => {
+              if (!value) return true;
+              try {
+                new URL(value);
+                return true;
+              } catch {
+                return "El enlace externo debe ser una URL válida";
+              }
+            }
+          })}
           type="text"
-          value={form.enlace_externo}
           placeholder="https://ejemplo.com"
-          pattern="https?://.+"
-          onChange={handleChange}
-          className="w-full border rounded px-3 py-2"
+          className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
-        {errors.enlace_externo && <span className="text-red-500 text-sm block mt-1">{errors.enlace_externo}</span>}
+        <div className="text-red-500 text-sm min-h-[1.5em]">
+          {errors.enlace_externo?.message || ""}
+        </div>
       </div>
 
-      <div>
+      <div className="flex flex-col gap-1">
         <label className="block font-semibold mb-1">Modalidad <span className="text-red-500">*</span></label>
         <select
-          name="modalidad"
-          value={form.modalidad}
-          onChange={handleChange}
-          className="w-full border rounded px-3 py-2"
-          required
+          {...register("modalidad", {
+            required: "La modalidad es obligatoria",
+            validate: value => ["presencial", "online", "mixta"].includes(value) || "La modalidad debe ser presencial, online o mixta"
+          })}
+          className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
         >
           <option value="">Selecciona modalidad</option>
           {modalidades.map(m => (
-            <option key={m} value={m}>
-              {m.charAt(0).toUpperCase() + m.slice(1)}
-            </option>
+            <option key={m.value} value={m.value}>{m.label}</option>
           ))}
         </select>
-        {errors.modalidad && <span className="text-red-500 text-sm block mt-1">{errors.modalidad}</span>}
-        {errors.modalidad && <span className="text-red-500 text-sm">{errors.modalidad}</span>}
+        <div className="text-red-500 text-sm min-h-[1.5em]">
+          {errors.modalidad?.message || ""}
+        </div>
       </div>
 
-      <div>
+      <div className="flex flex-col gap-1">
         <label className="block font-semibold mb-1">Categoría <span className="text-red-500">*</span></label>
         <select
-          name="categoria"
-          value={form.categoria}
-          onChange={handleChange}
-          className="w-full border rounded px-3 py-2"
-          required
+          {...register("categoria", {
+            required: "La categoría es obligatoria",
+            validate: value => [
+              "arte",
+              "construcción",
+              "educacion",
+              "salud",
+              "servicios generales",
+              "tecnología"
+            ].includes(value) || "La categoría debe ser una de las permitidas"
+          })}
+          className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
         >
           <option value="">Selecciona categoría</option>
           {categorias.map(cat => (
-            <option key={cat} value={cat}>
-              {cat.charAt(0).toUpperCase() + cat.slice(1)}
-            </option>
+            <option key={cat.value} value={cat.value}>{cat.label}</option>
           ))}
         </select>
-        {errors.categoria && <span className="text-red-500 text-sm block mt-1">{errors.categoria}</span>}
-        {errors.categoria && <span className="text-red-500 text-sm">{errors.categoria}</span>}
+        <div className="text-red-500 text-sm min-h-[1.5em]">
+          {errors.categoria?.message || ""}
+        </div>
       </div>
 
       <button
