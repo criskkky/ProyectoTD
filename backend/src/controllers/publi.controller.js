@@ -51,7 +51,7 @@ export async function getPublication(req, res) {
     // Si está autenticado, devuelve todo incluyendo ciudad y región
     const fullFields = {
       ...publication,
-      ciudad: publication.city ? {
+      city: publication.city ? {
         id: publication.city.id,
         name: publication.city.name,
         region: publication.city.region ? {
@@ -69,10 +69,10 @@ export async function getPublication(req, res) {
 export async function getPublications(req, res) {
   try {
     // Leer filtros desde query params
-    const { search = "", categoria = "", modalidad = "", ciudad = "" } = req.query;
+    const { search = "", categoria = "", modalidad = "", city = "" } = req.query;
 
     // Pasar los filtros al service
-    const [publications, errorPublications] = await getPublisService({ search, categoria, modalidad, ciudad });
+    const [publications, errorPublications] = await getPublisService({ search, categoria, modalidad, city });
 
     if (errorPublications) return handleErrorClient(res, 404, errorPublications);
 
@@ -82,7 +82,7 @@ export async function getPublications(req, res) {
       // Mapear cada publicación para incluir ciudad y región
       const mapped = publications.map(pub => ({
         ...pub,
-        ciudad: pub.city ? {
+        city: pub.city ? {
           id: pub.city.id,
           name: pub.city.name,
           region: pub.city.region ? {
@@ -100,7 +100,7 @@ export async function getPublications(req, res) {
 
 export async function updatePublication(req, res) {
   try {
-    const { id } = req.query;
+    const { id } = req.params;
     const { body } = req;
 
     const { error: queryError } = publiQueryValidation.validate({ id });
@@ -134,8 +134,8 @@ export async function updatePublication(req, res) {
     }
 
     // Si el admin quiere bloquear, puede cambiar el estado
-    if (req.user.rol === "admin" && body.estado === "bloqueado") {
-      body.estado = "bloqueado";
+    if (req.user.rol !== "admin" && body.estado === "bloqueado") {
+      return handleErrorClient(res, 403, "No tienes permisos para bloquear esta publicación");
     }
 
     const [publication, publicationError] = await updatePubliService({ id }, body);

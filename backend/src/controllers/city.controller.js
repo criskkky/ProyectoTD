@@ -10,14 +10,16 @@ export async function getCities(req, res) {
     if (q.length > 1) {
       cities = await cityRepository
         .createQueryBuilder('city')
+        .select(['city.id', 'city.name']) // Seleccionar solo id y name
         .where('LOWER(city.name) LIKE :q', { q: `%${q}%` })
         .getMany();
     } else {
-      cities = await cityRepository.find();
+      cities = await cityRepository.find({
+        select: ['id', 'name'] // Seleccionar solo id y name
+      });
     }
-    const cityNames = cities.map(c => c.name);
-    console.log(`[CIUDADES] q='${q}' => ${cityNames.length} ciudades encontradas`);
-    handleSuccess(res, 200, 'Ciudades encontradas', { cities: cityNames });
+    // Devolver array de objetos { id, name }
+    handleSuccess(res, 200, 'Ciudades encontradas', { cities });
   } catch (error) {
     handleErrorServer(res, 500, error.message);
   }

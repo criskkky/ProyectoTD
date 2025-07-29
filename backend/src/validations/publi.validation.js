@@ -26,6 +26,13 @@ export const publiBodyValidation = Joi.object({
       "string.max": "El título debe tener como máximo 255 caracteres.",
       "any.required": "El título es requerido.",
     }),
+  estado: Joi.string()
+    .valid("activo", "inactivo", "bloqueado")
+    .required()
+    .messages({
+      "any.only": "El estado debe ser activo, inactivo o bloqueado.",
+      "any.required": "El estado es requerido.",
+    }),
   descripcion: Joi.string()
     .min(10)
     .max(2000)

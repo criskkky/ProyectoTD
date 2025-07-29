@@ -30,11 +30,6 @@ const PubliSchema = new EntitySchema({
       length: 255,
       nullable: true,
     },
-    // Relación con City
-    city: {
-      type: "int",
-      nullable: false,
-    },
     etiquetas: {
       type: "simple-array", // palabras clave separadas por coma
       nullable: true,

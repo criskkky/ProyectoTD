@@ -51,10 +51,11 @@ export function formatPublicacionData(publicacion) {
   return {
     id: publicacion.id ?? null,
     titulo: (publicacion.titulo ?? ""),
-    estado: startCase(publicacion.estado ?? ""),
+    estado: (publicacion.estado ?? ""),
     descripcion: publicacion.descripcion ?? "No disponible",
     direccion: publicacion.direccion ?? "No disponible",
-    city: publicacion.city?.name ?? "No disponible",
+    city: publicacion.city?.id ?? null, // Usar el ID de la ciudad
+    cityNombre: publicacion.city?.name ?? "No disponible", // Nombre para mostrar
     region: publicacion.city?.region?.name ?? "No disponible",
     etiquetas: Array.isArray(publicacion.etiquetas)
       ? publicacion.etiquetas
@@ -65,8 +66,8 @@ export function formatPublicacionData(publicacion) {
     contacto_whatsapp: publicacion.contacto_whatsapp ?? "No disponible",
     contacto_telefono: publicacion.contacto_telefono ?? "No disponible",
     enlace_externo: publicacion.enlace_externo ?? "No disponible",
-    modalidad: startCase(publicacion.modalidad ?? ""),
-    categoria: startCase(publicacion.categoria ?? ""),
+    modalidad: (publicacion.modalidad ?? ""),
+    categoria: (publicacion.categoria ?? ""),
     createdAt: publicacion.createdAt ? formatTempo(publicacion.createdAt, "DD-MM-YYYY") : "No disponible",
     updatedAt: publicacion.updatedAt ? formatTempo(publicacion.updatedAt, "DD-MM-YYYY") : "No disponible",
     createdBy: publicacion.createdBy ?? null,

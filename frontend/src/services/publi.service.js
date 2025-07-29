@@ -1,13 +1,13 @@
 import axios from './root.service.js';
 import { formatPublicacionData } from '@/helpers/formatData.js';
 
-export async function getPublicaciones({ search = "", categoria = "", modalidad = "", ciudad = "" } = {}) {
+export async function getPublicaciones({ search = "", categoria = "", modalidad = "", city = "" } = {}) {
     try {
         const params = {};
         if (search) params.search = search;
         if (categoria) params.categoria = categoria;
         if (modalidad) params.modalidad = modalidad;
-        if (ciudad && ciudad.trim() !== "") params.ciudad = ciudad;
+        if (city && city.trim() !== "") params.city = city;
         const { data } = await axios.get('/posts/', { params });
         const formattedData = data.data.map(formatPublicacionData);
         return formattedData;
@@ -19,7 +19,8 @@ export async function getPublicaciones({ search = "", categoria = "", modalidad 
 
 export async function updatePublicacion(id, data) {
     try {
-        const response = await axios.patch(`/posts/${id}`, data);
+        const { id: _id, ...dataSinId } = data;  // eliminar id del objeto data
+        const response = await axios.patch(`/posts/${id}`, dataSinId);
         return response.data.data;
     } catch (error) {
         console.error("Error al actualizar publicación:", error);

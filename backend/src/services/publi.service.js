@@ -9,7 +9,7 @@ export async function getPubliService({ id }) {
     const publiRepository = AppDataSource.getRepository(Publication);
     const publication = await publiRepository.findOne({
       where: { id: Number(id) },
-      relations: ["createdBy", "city", "city.region"], // Trae usuario, ciudad y región
+      relations: ["createdBy", "city", "city.region"], // Trae usuario, city y región
     });
     if (!publication) return [null, "Publicación no encontrada"];
     return [publication, null];
@@ -18,7 +18,7 @@ export async function getPubliService({ id }) {
   }
 }
 
-export async function getPublisService({ search = "", categoria = "", modalidad = "", ciudad = "" } = {}) {
+export async function getPublisService({ search = "", categoria = "", modalidad = "", city = "" } = {}) {
   try {
     const publiRepository = AppDataSource.getRepository(Publication);
     // Consulta base
@@ -31,9 +31,9 @@ export async function getPublisService({ search = "", categoria = "", modalidad 
     if (categoria) query.andWhere("publication.categoria = :categoria", { categoria });
     if (modalidad) query.andWhere("publication.modalidad = :modalidad", { modalidad });
 
-    // Filtro por ciudad (por nombre, case-insensitive)
-    if (ciudad && ciudad.trim()) {
-      query.andWhere("LOWER(city.name) = :ciudad", { ciudad: ciudad.trim().toLowerCase() });
+    // Filtro por city (por nombre, case-insensitive)
+    if (city && city.trim()) {
+      query.andWhere("LOWER(city.name) = :city", { city: city.trim().toLowerCase() });
     }
 
     // Filtro por texto (título, descripción, etiquetas)
@@ -54,9 +54,22 @@ export async function getPublisService({ search = "", categoria = "", modalidad 
 
 export async function updatePubliService({ id }, data) {
   try {
+    const cityRepository = AppDataSource.getRepository(CitySchema);
     const publiRepository = AppDataSource.getRepository(Publication);
     const publication = await publiRepository.findOne({ where: { id: Number(id) } });
     if (!publication) return [null, "Publicación no encontrada"];
+
+    if (data.city) {
+      const cityId = Number(data.city);
+      if (isNaN(cityId) || cityId <= 0) {
+        return [null, "El ID de la ciudad debe ser un número entero positivo"];
+      }
+      const city = await cityRepository.findOne({ where: { id: cityId }, relations: ["region"] });
+      if (!city) {
+        return [null, `La ciudad con ID ${cityId} no existe`];
+      }
+      data.city = city;
+    }
 
     publiRepository.merge(publication, data);
     const updatedPublication = await publiRepository.save(publication);
@@ -97,13 +110,13 @@ export async function createPubliService(data, userRol, userId) {
       return [null, `Límite de publicaciones alcanzado para el rol '${userRol}'. Máximo permitido: ${maxPosts}`];
     }
 
-    // Validar que la ciudad existe
+    // Validar que la city existe
     if (!data.city) {
-      return [null, "Debe especificar una ciudad válida (city)"];
+      return [null, "Debe especificar una city válida (city)"];
     }
     const city = await cityRepository.findOne({ where: { id: Number(data.city) }, relations: ["region"] });
     if (!city) {
-      return [null, "La ciudad especificada no existe"];
+      return [null, "La city especificada no existe"];
     }
     // Asignar la relación city correctamente
     const newPublication = publiRepository.create({ ...data, city });
