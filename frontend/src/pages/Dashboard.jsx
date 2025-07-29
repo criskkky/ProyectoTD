@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FaUserCircle, FaClipboardList, FaPlusCircle, FaEdit, FaTrash } from "react-icons/fa";
-import ProfilePopup from "../components/ProfilePopup";
+import ProfileForm from "../components/ProfileForm";
 import PubliForm from "../components/PubliForm";
 import useEditProfile from "../hooks/profile/useEditProfile";
 import usePublications from "../hooks/publications/usePublications";
@@ -8,12 +8,10 @@ import { startCase } from 'lodash';
 import { formatUserData, getFirstNameLastName } from '../helpers/formatData';
 
 const Dashboard = () => {
+  const [showProfileForm, setShowProfileForm] = useState(false);
   const {
-    showPopup,
-    setShowPopup,
     user,
     setUser,
-    openEditProfile,
     handleEditProfile,
   } = useEditProfile();
 
@@ -75,7 +73,7 @@ const Dashboard = () => {
   };
 
   const handleEditarPerfil = () => {
-    openEditProfile(user);
+    setShowProfileForm(true);
   };
 
   return (
@@ -237,12 +235,28 @@ const Dashboard = () => {
         </div>
 
         {/* Popups */}
-        <ProfilePopup
-          show={showPopup}
-          setShow={setShowPopup}
-          data={[user]}
-          action={handleEditProfile}
-        />
+        {/* Formulario de edición de perfil integrado */}
+        {showProfileForm && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm overflow-y-auto">
+            <div className="relative bg-white rounded-lg shadow-lg w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto">
+              <button
+                className="absolute top-2 right-2 text-red-500 hover:text-red-700"
+                onClick={() => setShowProfileForm(false)}
+              >
+                &times;
+              </button>
+              <h2 className="text-2xl font-bold mb-4">Editar perfil</h2>
+              <ProfileForm
+                initialData={user}
+                onSubmit={async (formData) => {
+                  await handleEditProfile(formData);
+                  setShowProfileForm(false);
+                }}
+                buttonText="Actualizar"
+              />
+            </div>
+          </div>
+        )}
         {/* Modal para crear/editar publicación */}
         {showPubliForm && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm overflow-y-auto">
