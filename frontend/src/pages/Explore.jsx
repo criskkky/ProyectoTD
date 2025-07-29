@@ -27,31 +27,36 @@ function Explore() {
   const [search, setSearch] = useState(queryParams.search);
   const [categoria, setCategoria] = useState(queryParams.categoria);
   const [modalidad, setModalidad] = useState(queryParams.modalidad);
-  const [city, setCity] = useState(queryParams.city);
+  const [city, setCity] = useState(queryParams.city); // nombre
+  const [cityNombre, setCityNombre] = useState(queryParams.city); // inicializa con el nombre
   const [paginaActual, setPaginaActual] = useState(queryParams.page);
 
   const [pendingSearch, setPendingSearch] = useState({
     search: queryParams.search,
     categoria: queryParams.categoria,
     modalidad: queryParams.modalidad,
-    city: queryParams.city
+    city: queryParams.city,
+    cityNombre: queryParams.city
   });
 
-  const [citiesAll, setCitiesAll] = useState([]);
-  const [citySuggestions, setCitySuggestions] = useState([]);
+  const [citiesAll, setCitiesAll] = useState([]); // [{id, name}]
+  const [citySuggestions, setCitySuggestions] = useState([]); // [{id, name}]
 
   useEffect(() => {
     const params = getQueryParams();
-    setPendingSearch({
+    setPendingSearch(prev => ({
+      ...prev,
       search: params.search,
       categoria: params.categoria,
       modalidad: params.modalidad,
-      city: params.city
-    });
+      city: params.city,
+      cityNombre: params.city
+    }));
     setSearch(params.search);
     setCategoria(params.categoria);
     setModalidad(params.modalidad);
     setCity(params.city);
+    setCityNombre(params.city);
     setPaginaActual(params.page);
   }, [location.search, getQueryParams]);
 
@@ -66,22 +71,24 @@ function Explore() {
   };
   const handleCityChange = (e) => {
     const value = e.target.value;
-    setPendingSearch({ ...pendingSearch, city: value });
+    setPendingSearch({ ...pendingSearch, cityNombre: value, city: value });
     if (value.length > 1 && citiesAll.length > 0) {
-      const suggestions = citiesAll.filter(c => c.toLowerCase().includes(value.toLowerCase()));
+      const suggestions = citiesAll.filter(c => c.name && c.name.toLowerCase().includes(value.toLowerCase()));
       setCitySuggestions(suggestions);
     } else {
       setCitySuggestions([]);
     }
   };
-  const handleCitySelect = (selectedCity) => {
-    setPendingSearch({ ...pendingSearch, city: selectedCity });
+  const handleCitySelect = (ciudadSeleccionada) => {
+    setPendingSearch({ ...pendingSearch, city: ciudadSeleccionada.name, cityNombre: ciudadSeleccionada.name });
     setCitySuggestions([]);
   };
   const handleCityBlur = () => {
-    const value = pendingSearch.city;
-    if (value.length > 1 && citySuggestions.length > 0) {
-      setPendingSearch({ ...pendingSearch, city: citySuggestions[0] });
+    if (pendingSearch.cityNombre.length > 1 && citySuggestions.length > 0) {
+      const ciudad = citySuggestions[0];
+      if (ciudad && ciudad.name) {
+        setPendingSearch({ ...pendingSearch, city: ciudad.name, cityNombre: ciudad.name });
+      }
       setCitySuggestions([]);
     }
   };
@@ -92,6 +99,7 @@ function Explore() {
     setCategoria(pendingSearch.categoria);
     setModalidad(pendingSearch.modalidad);
     setCity(pendingSearch.city);
+    setCityNombre(pendingSearch.cityNombre);
     setPaginaActual(1); // Reiniciar a la página 1
 
     const params = new URLSearchParams();
@@ -182,7 +190,7 @@ function Explore() {
               <FaMapMarkerAlt className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 pointer-events-none" />
               <input
                 type="text"
-                value={pendingSearch.city}
+                value={pendingSearch.cityNombre}
                 onChange={handleCityChange}
                 onBlur={handleCityBlur}
                 placeholder="Ciudad..."
@@ -193,11 +201,11 @@ function Explore() {
                 <ul className="absolute z-10 left-0 right-0 bg-white border border-blue-200 rounded-lg mt-1 shadow-lg max-h-40 overflow-y-auto">
                   {citySuggestions.map((c) => (
                     <li
-                      key={c}
+                      key={c.id}
                       className="px-4 py-2 cursor-pointer hover:bg-blue-50"
                       onMouseDown={() => handleCitySelect(c)}
                     >
-                      {c}
+                      {c.name}
                     </li>
                   ))}
                 </ul>
