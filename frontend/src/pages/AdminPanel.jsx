@@ -169,7 +169,7 @@ const AdminPanel = () => {
                     <tr className="border-b bg-gray-50">
                       <th className="py-3 px-2 font-semibold text-gray-700">ID</th>
                       <th className="py-3 px-2 font-semibold text-gray-700">Título</th>
-                      <th className="py-3 px-2 font-semibold text-gray-700">Usuario</th>
+                      <th className="py-3 px-2 font-semibold text-gray-700 w-32 max-w-[8rem]">Usuario</th>
                       <th className="py-3 px-2 font-semibold text-gray-700">Estado</th>
                       <th className="py-3 px-2 font-semibold text-gray-700">Fecha</th>
                       <th className="py-3 px-2 font-semibold text-gray-700">Acciones</th>
@@ -180,10 +180,10 @@ const AdminPanel = () => {
                       <tr key={publi.id} className="border rounded-xl shadow bg-white">
                         <td className="py-3 px-2 font-mono text-xs text-gray-700">{publi.id}</td>
                         <td className="py-3 px-2 font-medium text-gray-900">{publi.titulo}</td>
-                        <td className="py-3 px-2">{publi.createdBy?.email || "-"}</td>
+                        <td className="py-3 px-2 w-32 max-w-[8rem] truncate" title={publi.createdBy?.email}>{publi.createdBy?.email || "-"}</td>
                         <td className="py-3 px-2">{publi.estado}</td>
                         <td className="py-3 px-2 text-gray-600">{publi.createdAt}</td>
-                        <td className="py-3 px-2 flex gap-2">
+                        <td className="py-3 px-2 flex flex-col gap-2 items-start">
                           <button
                             className="flex items-center gap-1 px-2 py-1 rounded hover:bg-blue-50 text-blue-600 hover:text-blue-800 font-semibold transition"
                             onClick={() => handleEditarPublicacionForm(publi)}
@@ -264,7 +264,7 @@ const AdminPanel = () => {
                         <td className="py-3 px-2">
                           <span className={`inline-block px-2 py-1 rounded text-xs mt-1 ${usuario.rol === "admin" ? "bg-red-100 text-red-700" : usuario.rol === "user" ? "bg-blue-100 text-blue-700" : "bg-gray-200 text-gray-800"}`}>{startCase(usuario.rol)}</span>
                         </td>
-                        <td className="py-3 px-2 flex gap-2">
+                        <td className="py-3 px-2 flex flex-col gap-2 items-start">
                           <button
                             className="flex items-center gap-1 px-2 py-1 rounded hover:bg-blue-50 text-blue-600 hover:text-blue-800 font-semibold transition"
                             onClick={() => handleEditarUsuarioPopup(usuario)}
