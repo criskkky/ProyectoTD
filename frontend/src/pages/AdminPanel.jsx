@@ -135,12 +135,12 @@ const AdminPanel = () => {
         <h1 className="text-3xl font-bold text-gray-900 mb-8">Panel de Administración</h1>
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Gestión de publicaciones */}
-          <div className="bg-white rounded-xl shadow-md p-6">
+          <div className="bg-white rounded-xl shadow-md p-6 flex flex-col">
             <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <FaClipboardList /> Todas las publicaciones
             </h2>
             {/* Buscador publicaciones */}
-            <div className="flex gap-2 mb-4">
+            <div className="flex gap-2 mb-4 flex-shrink-0">
               <select value={publiSearchType} onChange={e => setPubliSearchType(e.target.value)} className="border rounded px-2 py-1">
                 <option value="id">ID</option>
                 <option value="titulo">Título</option>
@@ -163,48 +163,53 @@ const AdminPanel = () => {
             {loadingPublicaciones ? (
               <p>Cargando publicaciones...</p>
             ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-sm md:text-base border-separate border-spacing-y-2">
-                  <thead>
-                    <tr className="border-b bg-gray-50">
-                      <th className="py-3 px-2 font-semibold text-gray-700">ID</th>
-                      <th className="py-3 px-2 font-semibold text-gray-700">Título</th>
-                      <th className="py-3 px-2 font-semibold text-gray-700 w-32 max-w-[8rem]">Usuario</th>
-                      <th className="py-3 px-2 font-semibold text-gray-700">Estado</th>
-                      <th className="py-3 px-2 font-semibold text-gray-700">Fecha</th>
-                      <th className="py-3 px-2 font-semibold text-gray-700">Acciones</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredPublicaciones.map((publi) => (
-                      <tr key={publi.id} className="border rounded-xl shadow bg-white">
-                        <td className="py-3 px-2 font-mono text-xs text-gray-700">{publi.id}</td>
-                        <td className="py-3 px-2 font-medium text-gray-900">{publi.titulo}</td>
-                        <td className="py-3 px-2 w-32 max-w-[8rem] truncate" title={publi.createdBy?.email}>{publi.createdBy?.email || "-"}</td>
-                        <td className="py-3 px-2">{publi.estado}</td>
-                        <td className="py-3 px-2 text-gray-600">{publi.createdAt}</td>
-                        <td className="py-3 px-2 flex flex-col gap-2 items-start">
-                          <button
-                            className="flex items-center gap-1 px-2 py-1 rounded hover:bg-blue-50 text-blue-600 hover:text-blue-800 font-semibold transition"
-                            onClick={() => handleEditarPublicacionForm(publi)}
-                            title="Editar"
-                          >
-                            <FaEdit className="w-4 h-4" />
-                          </button>
-                          <button
-                            className="flex items-center gap-1 px-2 py-1 rounded hover:bg-red-50 text-red-600 hover:text-red-800 font-semibold transition"
-                            onClick={() => handleEliminarPublicacion(publi.id)}
-                            title="Eliminar"
-                          >
-                            <FaTrash className="w-4 h-4" />
-                          </button>
-                        </td>
+              <div className="flex flex-col flex-1">
+                {/* Contenedor con altura fija para la tabla */}
+                <div className="h-96 overflow-y-auto border border-gray-200 rounded-lg">
+                  <table className="w-full text-left text-sm md:text-base">
+                    <thead className="sticky top-0 bg-gray-50 z-10">
+                      <tr className="border-b">
+                        <th className="py-3 px-2 font-semibold text-gray-700">ID</th>
+                        <th className="py-3 px-2 font-semibold text-gray-700">Título</th>
+                        <th className="py-3 px-2 font-semibold text-gray-700 w-32 max-w-[8rem]">Usuario</th>
+                        <th className="py-3 px-2 font-semibold text-gray-700">Estado</th>
+                        <th className="py-3 px-2 font-semibold text-gray-700">Fecha</th>
+                        <th className="py-3 px-2 font-semibold text-gray-700">Acciones</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {filteredPublicaciones.map((publi) => (
+                        <tr key={publi.id} className="border-b hover:bg-gray-50">
+                          <td className="py-3 px-2 font-mono text-xs text-gray-700">{publi.id}</td>
+                          <td className="py-3 px-2 font-medium text-gray-900">{publi.titulo}</td>
+                          <td className="py-3 px-2 w-32 max-w-[8rem] truncate" title={publi.createdBy?.email}>{publi.createdBy?.email || "-"}</td>
+                          <td className="py-3 px-2">{publi.estado}</td>
+                          <td className="py-3 px-2 text-gray-600">{publi.createdAt}</td>
+                          <td className="py-3 px-2">
+                            <div className="flex gap-2">
+                              <button
+                                className="flex items-center gap-1 px-2 py-1 rounded hover:bg-blue-50 text-blue-600 hover:text-blue-800 font-semibold transition"
+                                onClick={() => handleEditarPublicacionForm(publi)}
+                                title="Editar"
+                              >
+                                <FaEdit className="w-4 h-4" />
+                              </button>
+                              <button
+                                className="flex items-center gap-1 px-2 py-1 rounded hover:bg-red-50 text-red-600 hover:text-red-800 font-semibold transition"
+                                onClick={() => handleEliminarPublicacion(publi.id)}
+                                title="Eliminar"
+                              >
+                                <FaTrash className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
                 {/* Controles de paginación */}
-                <div className="flex justify-center items-center gap-2 mt-4">
+                <div className="flex justify-center items-center gap-2 mt-4 flex-shrink-0">
                   <button
                     className="px-3 py-1 rounded border bg-gray-100 text-gray-700 font-semibold disabled:opacity-50"
                     onClick={() => setPubliPage((p) => Math.max(1, p - 1))}
@@ -221,12 +226,12 @@ const AdminPanel = () => {
             )}
           </div>
           {/* Gestión de usuarios */}
-          <div className="bg-white rounded-xl shadow-md p-6">
+          <div className="bg-white rounded-xl shadow-md p-6 flex flex-col">
             <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <FaUserCircle /> Todos los usuarios
             </h2>
             {/* Buscador usuarios */}
-            <div className="flex gap-2 mb-4">
+            <div className="flex gap-2 mb-4 flex-shrink-0">
               <select value={userSearchType} onChange={e => setUserSearchType(e.target.value)} className="border rounded px-2 py-1">
                 <option value="id">ID</option>
                 <option value="email">Email</option>
@@ -244,49 +249,54 @@ const AdminPanel = () => {
             {loadingUsers ? (
               <p>Cargando usuarios...</p>
             ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-sm md:text-base border-separate border-spacing-y-2">
-                  <thead>
-                    <tr className="border-b bg-gray-50">
-                      <th className="py-3 px-2 font-semibold text-gray-700">ID</th>
-                      <th className="py-3 px-2 font-semibold text-gray-700">Nombre</th>
-                      <th className="py-3 px-2 font-semibold text-gray-700">Email</th>
-                      <th className="py-3 px-2 font-semibold text-gray-700">Rol</th>
-                      <th className="py-3 px-2 font-semibold text-gray-700">Acciones</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredUsers.map((usuario) => (
-                      <tr key={usuario.id} className="border rounded-xl shadow bg-white">
-                        <td className="py-3 px-2 font-mono text-xs text-gray-700">{usuario.id}</td>
-                        <td className="py-3 px-2 font-medium text-gray-900">{startCase(usuario.nombres)} {startCase(usuario.apellidos)}</td>
-                        <td className="py-3 px-2">{usuario.email}</td>
-                        <td className="py-3 px-2">
-                          <span className={`inline-block px-2 py-1 rounded text-xs mt-1 ${usuario.rol === "admin" ? "bg-red-100 text-red-700" : usuario.rol === "user" ? "bg-blue-100 text-blue-700" : "bg-gray-200 text-gray-800"}`}>{startCase(usuario.rol)}</span>
-                        </td>
-                        <td className="py-3 px-2 flex flex-col gap-2 items-start">
-                          <button
-                            className="flex items-center gap-1 px-2 py-1 rounded hover:bg-blue-50 text-blue-600 hover:text-blue-800 font-semibold transition"
-                            onClick={() => handleEditarUsuarioPopup(usuario)}
-                            title="Editar"
-                          >
-                            <FaEdit className="w-4 h-4" />
-                          </button>
-                          <button
-                            className="flex items-center gap-1 px-2 py-1 rounded hover:bg-red-50 text-red-600 hover:text-red-800 font-semibold transition disabled:opacity-50 disabled:cursor-not-allowed"
-                            onClick={() => handleDelete([usuario])}
-                            title="Eliminar"
-                            disabled={usuario.id === user.id}
-                          >
-                            <FaTrash className="w-4 h-4" />
-                          </button>
-                        </td>
+              <div className="flex flex-col flex-1">
+                {/* Contenedor con altura fija para la tabla */}
+                <div className="h-96 overflow-y-auto border border-gray-200 rounded-lg">
+                  <table className="w-full text-left text-sm md:text-base">
+                    <thead className="sticky top-0 bg-gray-50 z-10">
+                      <tr className="border-b">
+                        <th className="py-3 px-2 font-semibold text-gray-700">ID</th>
+                        <th className="py-3 px-2 font-semibold text-gray-700">Nombre</th>
+                        <th className="py-3 px-2 font-semibold text-gray-700">Email</th>
+                        <th className="py-3 px-2 font-semibold text-gray-700">Rol</th>
+                        <th className="py-3 px-2 font-semibold text-gray-700">Acciones</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {filteredUsers.map((usuario) => (
+                        <tr key={usuario.id} className="border-b hover:bg-gray-50">
+                          <td className="py-3 px-2 font-mono text-xs text-gray-700">{usuario.id}</td>
+                          <td className="py-3 px-2 font-medium text-gray-900">{startCase(usuario.nombres)} {startCase(usuario.apellidos)}</td>
+                          <td className="py-3 px-2">{usuario.email}</td>
+                          <td className="py-3 px-2">
+                            <span className={`inline-block px-2 py-1 rounded text-xs mt-1 ${usuario.rol === "admin" ? "bg-red-100 text-red-700" : usuario.rol === "user" ? "bg-blue-100 text-blue-700" : "bg-gray-200 text-gray-800"}`}>{startCase(usuario.rol)}</span>
+                          </td>
+                          <td className="py-3 px-2">
+                            <div className="flex gap-2">
+                              <button
+                                className="flex items-center gap-1 px-2 py-1 rounded hover:bg-blue-50 text-blue-600 hover:text-blue-800 font-semibold transition"
+                                onClick={() => handleEditarUsuarioPopup(usuario)}
+                                title="Editar"
+                              >
+                                <FaEdit className="w-4 h-4" />
+                              </button>
+                              <button
+                                className="flex items-center gap-1 px-2 py-1 rounded hover:bg-red-50 text-red-600 hover:text-red-800 font-semibold transition disabled:opacity-50 disabled:cursor-not-allowed"
+                                onClick={() => handleDelete([usuario])}
+                                title="Eliminar"
+                                disabled={usuario.id === user.id}
+                              >
+                                <FaTrash className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
                 {/* Controles de paginación */}
-                <div className="flex justify-center items-center gap-2 mt-4">
+                <div className="flex justify-center items-center gap-2 mt-4 flex-shrink-0">
                   <button
                     className="px-3 py-1 rounded border bg-gray-100 text-gray-700 font-semibold disabled:opacity-50"
                     onClick={() => setUserPage((p) => Math.max(1, p - 1))}
