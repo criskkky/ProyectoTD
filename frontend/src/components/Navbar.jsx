@@ -46,9 +46,9 @@ const Navbar = () => {
     <header className="border-b bg-white/80 backdrop-blur-md sticky top-0 z-50">
       <nav className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
         {/* Logo */}
-        <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-            <FaBriefcase className="w-5 h-5 text-white" />
+        <div className="flex items-center space-x-1">
+          <div className="w-10 h-10 rounded-lg flex items-center justify-center">
+            <img src="../public/icon-blue.png" alt="Logo" className="w-10 h-10 text-blue" />
           </div>
           <span className="text-xl font-bold text-gray-900">ProyectoTD</span>
         </div>
