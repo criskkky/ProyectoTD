@@ -37,12 +37,14 @@ export const publiBodyValidation = Joi.object({
     .min(20)
     .max(2000)
     .required()
+    .pattern(/^(?!.*(https?:\/\/|www\.|\d|\b[a-zA-Z0-9._%+-]+\.(com|cl|net|org|info|es|co|edu|gov|mx|ar|pe|ec|uy|ve|br|fr|de|it|pt|ru|jp|cn|in)\b)).*$/i)
     .messages({
       "string.base": "La descripción debe ser de tipo string.",
       "string.empty": "La descripción no puede estar vacía.",
-      "string.min": "La descripción debe tener al menos 10 caracteres.",
+      "string.min": "La descripción debe tener al menos 20 caracteres.",
       "string.max": "La descripción debe tener como máximo 2000 caracteres.",
       "any.required": "La descripción es requerida.",
+      "string.pattern.base": "La descripción no puede contener números, enlaces ni dominios, solo palabras.",
     }),
   direccion: Joi.string().max(255).optional().messages({
     "string.max": "La dirección debe tener como máximo 255 caracteres."

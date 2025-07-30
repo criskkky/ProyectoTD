@@ -145,7 +145,14 @@ export default function PubliForm({ initialData = {}, onSubmit, buttonText = "Gu
           {...register("descripcion", {
             required: "La descripción es obligatoria",
             minLength: { value: 20, message: "La descripción debe tener al menos 20 caracteres" },
-            maxLength: { value: 2000, message: "La descripción debe tener como máximo 2000 caracteres" }
+            maxLength: { value: 2000, message: "La descripción debe tener como máximo 2000 caracteres" },
+            validate: value => {
+              if (/[0-9]/.test(value)) return "La descripción no puede contener números";
+              if (/https?:\/\//.test(value) || /www\./.test(value)) return "La descripción no puede contener enlaces";
+              if (/\b[a-zA-Z0-9._%+-]+\.(com|cl|net|org|info|es|co|edu|gov|mx|ar|pe|ec|uy|ve|br|fr|de|it|pt|ru|jp|cn|in)\b/.test(value)) return "La descripción no puede contener dominios";
+              if (!/^([a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s.,;:¡!¿?\-_'"()]+)$/.test(value)) return "La descripción solo puede contener palabras y signos de puntuación";
+              return true;
+            }
           })}
           placeholder="Descripción detallada del servicio..."
           className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
