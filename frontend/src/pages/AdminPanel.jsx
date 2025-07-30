@@ -12,6 +12,7 @@ const AdminPanel = () => {
   // Buscadores
   const [publiSearch, setPubliSearch] = useState("");
   const [publiSearchType, setPubliSearchType] = useState("titulo");
+  const [publiEstado, setPubliEstado] = useState("");
   const [userSearch, setUserSearch] = useState("");
   const [userSearchType, setUserSearchType] = useState("email");
 
@@ -52,11 +53,16 @@ const AdminPanel = () => {
 
   // Filtrado publicaciones
   const filteredPublicaciones = paginatedPublicaciones.filter((publi) => {
-    if (!publiSearch) return true;
-    if (publiSearchType === "id") return String(publi.id).includes(publiSearch);
-    if (publiSearchType === "titulo") return publi.titulo?.toLowerCase().includes(publiSearch.toLowerCase());
-    if (publiSearchType === "usuario") return publi.createdBy?.email?.toLowerCase().includes(publiSearch.toLowerCase());
-    return true;
+    let match = true;
+    if (publiSearch) {
+      if (publiSearchType === "id") match = String(publi.id).includes(publiSearch);
+      else if (publiSearchType === "titulo") match = publi.titulo?.toLowerCase().includes(publiSearch.toLowerCase());
+      else if (publiSearchType === "usuario") match = publi.createdBy?.email?.toLowerCase().includes(publiSearch.toLowerCase());
+    }
+    if (publiEstado) {
+      match = match && publi.estado?.toLowerCase() === publiEstado;
+    }
+    return match;
   });
   // Filtrado usuarios
   const filteredUsers = paginatedUsers.filter((usuario) => {
@@ -64,6 +70,7 @@ const AdminPanel = () => {
     if (userSearchType === "id") return String(usuario.id).includes(userSearch);
     if (userSearchType === "email") return usuario.email?.toLowerCase().includes(userSearch.toLowerCase());
     if (userSearchType === "nombre") return (`${usuario.nombres} ${usuario.apellidos}`).toLowerCase().includes(userSearch.toLowerCase());
+    if (userSearchType === "rut") return usuario.rut?.toLowerCase().includes(userSearch.toLowerCase());
     return true;
   });
 
@@ -146,6 +153,12 @@ const AdminPanel = () => {
                 placeholder={`Buscar por ${publiSearchType}`}
                 className="border rounded px-2 py-1 w-full"
               />
+              <select value={publiEstado} onChange={e => setPubliEstado(e.target.value)} className="border rounded px-2 py-1">
+                <option value="">Todos</option>
+                <option value="activo">Activo</option>
+                <option value="inactivo">Inactivo</option>
+                <option value="bloqueado">Bloqueado</option>
+              </select>
             </div>
             {loadingPublicaciones ? (
               <p>Cargando publicaciones...</p>
@@ -218,6 +231,7 @@ const AdminPanel = () => {
                 <option value="id">ID</option>
                 <option value="email">Email</option>
                 <option value="nombre">Nombre</option>
+                <option value="rut">RUT</option>
               </select>
               <input
                 type="text"
