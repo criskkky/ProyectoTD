@@ -212,8 +212,8 @@ async function createUsers() {
             city: getRandomCityId(),
             etiquetas: ["servicio", pub.categoria, user.nombres.split(" ")[0].toLowerCase()],
             contacto_email: user.email,
-            contacto_whatsapp: `+5699${Math.floor(10000000 + Math.random() * 89999999)}`,
-            contacto_telefono: `+5698${Math.floor(10000000 + Math.random() * 89999999)}`,
+            contacto_whatsapp: `+569${Math.floor(10000000 + Math.random() * 90000000)}`.slice(0, 12),
+            contacto_telefono: `+569${Math.floor(10000000 + Math.random() * 90000000)}`.slice(0, 12),
             enlace_externo: `https://sistema.com/oferta-${user.nombres.toLowerCase().replace(" ", "-")}-${index + 1}`,
             createdBy: createdUser,
           })
