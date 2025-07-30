@@ -110,7 +110,14 @@ export default function PubliForm({ initialData = {}, onSubmit, buttonText = "Gu
           {...register("titulo", {
             required: "El título es obligatorio",
             minLength: { value: 3, message: "El título debe tener al menos 3 caracteres" },
-            maxLength: { value: 255, message: "El título debe tener como máximo 255 caracteres" }
+            maxLength: { value: 255, message: "El título debe tener como máximo 255 caracteres" },
+            validate: value => {
+              if (/[0-9]/.test(value)) return "El título no puede contener números";
+              if (/https?:\/\//.test(value) || /www\./.test(value)) return "El título no puede contener enlaces";
+              if (/\b[a-zA-Z0-9._%+-]+\.(com|cl|net|org|info|es|co|edu|gov|mx|ar|pe|ec|uy|ve|br|fr|de|it|pt|ru|jp|cn|in)\b/.test(value)) return "El título no puede contener dominios";
+              if (!/^([a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s.,;:¡!¿?\-_'"()]+)$/.test(value)) return "El título solo puede contener texto y signos de puntuación";
+              return true;
+            }
           })}
           type="text"
           className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"

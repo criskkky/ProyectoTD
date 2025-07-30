@@ -19,12 +19,14 @@ export const publiBodyValidation = Joi.object({
     .min(3)
     .max(255)
     .required()
+    .pattern(/^(?!.*(https?:\/\/|www\.|\d|\b[a-zA-Z0-9._%+-]+\.(com|cl|net|org|info|es|co|edu|gov|mx|ar|pe|ec|uy|ve|br|fr|de|it|pt|ru|jp|cn|in)\b)).*$/i)
     .messages({
       "string.base": "El título debe ser de tipo string.",
       "string.empty": "El título no puede estar vacío.",
       "string.min": "El título debe tener al menos 3 caracteres.",
       "string.max": "El título debe tener como máximo 255 caracteres.",
       "any.required": "El título es requerido.",
+      "string.pattern.base": "El título no puede contener números, enlaces ni dominios, solo texto.",
     }),
   estado: Joi.string()
     .valid("activo", "inactivo", "bloqueado")
