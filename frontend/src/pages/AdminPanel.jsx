@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { FaEdit, FaTrash, FaUserCircle, FaClipboardList } from "react-icons/fa";
 import useUsers from "@/hooks/users/useGetUsers";
+import useEditUser from "@/hooks/users/useEditUser";
 import usePublications from "@/hooks/publications/usePublications";
 import { startCase } from "lodash";
 import PubliForm from "../components/PubliForm";
-import ProfilePopup from "@/components/ProfilePopup";
+import UserForm from "../components/UserForm";
 import useDeleteUser from "@/hooks/users/useDeleteUser";
 
 const AdminPanel = () => {
@@ -17,7 +18,7 @@ const AdminPanel = () => {
   const [user, setUser] = useState({});
   const [showPubliForm, setShowPubliForm] = useState(false);
   const [selectedPublication, setSelectedPublication] = useState(null);
-  const [showProfilePopup, setShowProfilePopup] = useState(false);
+  const [showUserForm, setShowUserForm] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 
   const {
@@ -32,8 +33,10 @@ const AdminPanel = () => {
     users,
     loading: loadingUsers,
     fetchUsers,
-    handleEditarUsuario,
+    setUsers,
   } = useUsers();
+
+  const { handleUpdate: handleEditarUsuario, setDataUser } = useEditUser(setUsers);
   const { handleDelete } = useDeleteUser(fetchUsers);
 
   // Paginación publicaciones
@@ -97,15 +100,25 @@ const AdminPanel = () => {
   };
 
   const handleEditarUsuarioPopup = (usuario) => {
-    setSelectedUser(usuario);
-    setShowProfilePopup(true);
+    setSelectedUser({
+      ...usuario,
+      rol: usuario.rol || "user" // Asegurar que rol siempre tenga un valor
+    });
+    setDataUser([usuario]); // Configurar dataUser para useEditUser
+    setShowUserForm(true);
   };
 
-  const handleSubmitProfilePopup = (formData) => {
+  const handleSubmitUserForm = async (formData) => {
     if (selectedUser) {
-      handleEditarUsuario(selectedUser.id, formData);
+      try {
+        await handleEditarUsuario(formData);
+        setShowUserForm(false);
+        setSelectedUser(null);
+        setDataUser([]); // Limpiar dataUser después de la edición
+      } catch (error) {
+        console.error('Error al actualizar el usuario:', error);
+      }
     }
-    setShowProfilePopup(false);
   };
 
   return (
@@ -295,12 +308,25 @@ const AdminPanel = () => {
             </div>
           </div>
         )}
-        <ProfilePopup
-          show={showProfilePopup}
-          setShow={setShowProfilePopup}
-          data={[selectedUser]}
-          action={handleSubmitProfilePopup}
-        />
+        {/* Modal para editar usuario */}
+        {showUserForm && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm overflow-y-auto">
+            <div className="relative bg-white rounded-lg shadow-lg w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto">
+              <button
+                className="absolute top-2 right-2 text-red-500 hover:text-red-700"
+                onClick={() => setShowUserForm(false)}
+              >
+                &times;
+              </button>
+              <h2 className="text-2xl font-bold mb-4">Editar usuario</h2>
+              <UserForm
+                initialData={selectedUser || {}}
+                onSubmit={handleSubmitUserForm}
+                buttonText="Actualizar"
+              />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

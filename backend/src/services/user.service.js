@@ -45,6 +45,10 @@ export async function updateUserService(query, body) {
   try {
     const { id, rut, email } = query;
 
+    if (!id && !rut && !email) {
+      return [null, "Se requiere id, rut o email para identificar al usuario"];
+    }
+
     const userRepository = AppDataSource.getRepository(User);
 
     const userFound = await userRepository.findOne({
@@ -53,6 +57,7 @@ export async function updateUserService(query, body) {
 
     if (!userFound) return [null, "Usuario no encontrado"];
 
+    // Verificar unicidad de rut y email
     const existingUser = await userRepository.findOne({
       where: [{ rut: body.rut }, { email: body.email }],
     });
@@ -61,21 +66,12 @@ export async function updateUserService(query, body) {
       return [null, "Ya existe un usuario con el mismo rut o email"];
     }
 
-    if (body.password) {
-      const matchPassword = await comparePassword(
-        body.password,
-        userFound.password,
-      );
-
-      if (!matchPassword) return [null, "La contraseña no coincide"];
-    }
-
     const dataUserUpdate = {
       nombres: body.nombres,
       apellidos: body.apellidos,
       rut: body.rut,
       email: body.email,
-      rol: body.rol,
+      rol: body.rol || userFound.rol, // Mantener rol existente si no se proporciona
       updatedAt: new Date(),
     };
 
@@ -83,7 +79,12 @@ export async function updateUserService(query, body) {
       dataUserUpdate.password = await encryptPassword(body.newPassword);
     }
 
-    await userRepository.update({ id: userFound.id }, dataUserUpdate);
+    try {
+      await userRepository.update({ id: userFound.id }, dataUserUpdate);
+    } catch (updateError) {
+      console.error("Error al ejecutar la actualización en la base de datos:", updateError);
+      return [null, `Error al actualizar el usuario: ${updateError.message}`];
+    }
 
     const userData = await userRepository.findOne({
       where: { id: userFound.id },
@@ -98,7 +99,7 @@ export async function updateUserService(query, body) {
     return [userUpdated, null];
   } catch (error) {
     console.error("Error al modificar un usuario:", error);
-    return [null, "Error interno del servidor"];
+    return [null, `Error interno del servidor: ${error.message}`];
   }
 }
 

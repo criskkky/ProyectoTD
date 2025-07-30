@@ -14,23 +14,28 @@ const useEditUser = (setUsers) => {
     };
 
     const handleUpdate = async (updatedUserData) => {
-        if (updatedUserData) {
+        if (updatedUserData && dataUser.length > 0) {
             try {
-            const updatedUser = await updateUser(updatedUserData, dataUser[0].rut);
-            showSuccessAlert('¡Actualizado!','El usuario ha sido actualizado correctamente.');
-            setIsPopupOpen(false);
-            const formattedUser = formatPostUpdate(updatedUser);
-
-            setUsers(prevUsers => prevUsers.map(user => {
-                console.log("Usuario actual:", user);
-                if (user.id === formattedUser.id) {
-                    console.log("Reemplazando con:", formattedUser);
+                const { id, newPassword, ...rest } = updatedUserData;
+                const dataToSend = { ...rest };
+                if (newPassword && newPassword.trim() !== "") {
+                    dataToSend.newPassword = newPassword;
                 }
-                return user.email === formattedUser.email ? formattedUser : user;
-            }));
-            
 
-            setDataUser([]);
+                const updatedUser = await updateUser(dataToSend, dataUser[0].id);
+                showSuccessAlert('¡Actualizado!','El usuario ha sido actualizado correctamente.');
+                setIsPopupOpen(false);
+                const formattedUser = formatPostUpdate(updatedUser);
+
+                setUsers(prevUsers => prevUsers.map(user => {
+                    console.log("Usuario actual:", user);
+                    if (user.id === formattedUser.id) {
+                        console.log("Reemplazando con:", formattedUser);
+                    }
+                    return user.id === formattedUser.id ? formattedUser : user;
+                }));
+
+                setDataUser([]);
             } catch (error) {
                 console.error('Error al actualizar el usuario:', error);
                 showErrorAlert('Cancelado','Ocurrió un error al actualizar el usuario.');
