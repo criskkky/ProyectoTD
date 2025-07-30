@@ -115,7 +115,8 @@ export default function PubliForm({ initialData = {}, onSubmit, buttonText = "Gu
               if (/[0-9]/.test(value)) return "El título no puede contener números";
               if (/https?:\/\//.test(value) || /www\./.test(value)) return "El título no puede contener enlaces";
               if (/\b[a-zA-Z0-9._%+-]+\.(com|cl|net|org|info|es|co|edu|gov|mx|ar|pe|ec|uy|ve|br|fr|de|it|pt|ru|jp|cn|in)\b/.test(value)) return "El título no puede contener dominios";
-              if (!/^([a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s.,;:¡!¿?\-_'"()]+)$/.test(value)) return "El título solo puede contener texto y signos de puntuación";
+              if (/[.]/.test(value)) return "El título no puede contener puntos";
+              if (!/^([a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s,;:¡!¿?\-_"()]+)$/.test(value)) return "El título solo puede contener texto";
               return true;
             }
           })}
