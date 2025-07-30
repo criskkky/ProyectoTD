@@ -92,9 +92,10 @@ const AdminPanel = () => {
     setShowPubliForm(true);
   };
 
-  const handleSubmitPubliForm = (formData) => {
+  const handleSubmitPubliForm = async (formData) => {
     if (selectedPublication) {
-      handleEditarPublicacion(selectedPublication.id, formData);
+      await handleEditarPublicacion(selectedPublication.id, formData);
+      await fetchPublicaciones();
     }
     setShowPubliForm(false);
   };
