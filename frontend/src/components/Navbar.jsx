@@ -48,7 +48,7 @@ const Navbar = () => {
         {/* Logo */}
         <div className="flex items-center space-x-1">
           <div className="w-10 h-10 rounded-lg flex items-center justify-center">
-            <img src="../public/icon-blue.png" alt="Logo" className="w-10 h-10 text-blue" />
+            <img src="/icon-blue.png" alt="Logo" className="w-10 h-10 text-blue" />
           </div>
           <span className="text-xl font-bold text-gray-900">ProyectoTD</span>
         </div>
