@@ -84,7 +84,8 @@ export default function ProfileForm({ initialData = {}, onSubmit, buttonText = "
             pattern: {
               value: /^(?:(?:[1-9]\d{0}|[1-2]\d{1})(\.\d{3}){2}|[1-9]\d{6}|[1-2]\d{7}|29\.999\.999|29999999)-[\dkK]$/,
               message: "Formato rut inválido, debe ser xx.xxx.xxx-x o xxxxxxxx-x."
-            }
+            },
+            disabled: true
           })}
           type="text"
           placeholder="12345678-9"
@@ -122,10 +123,10 @@ export default function ProfileForm({ initialData = {}, onSubmit, buttonText = "
         <label className="block font-semibold mb-1">Rol <span className="text-red-500">*</span></label>
         <select
           {...register("rol", {
-            required: "El rol es obligatorio"
+            required: "El rol es obligatorio",
           })}
           className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-          disabled={initialData.rol !== "admin"}
+          disabled
         >
           <option value="user">Usuario</option>
           <option value="premium">Premium</option>

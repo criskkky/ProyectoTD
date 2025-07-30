@@ -14,7 +14,7 @@ export function formatUserData(user) { // View
     ...user,
     nombres: startCase(user.nombres),
     apellidos: startCase(user.apellidos),
-    rol: startCase(user.rol),
+    rol: user.rol,
     rut: formatRut(user.rut),
     createdAt: formatTempo(user.createdAt, "DD-MM-YYYY")
   };
