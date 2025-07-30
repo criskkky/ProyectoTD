@@ -21,6 +21,13 @@ export default function PubliForm({ initialData = {}, onSubmit, buttonText = "Gu
     }
   });
 
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, []);
+
   const [ciudadesTodas, setCiudadesTodas] = useState([]);
   const [ciudadSugerencias, setCiudadSugerencias] = useState([]);
 

@@ -15,6 +15,13 @@ export default function ProfileForm({ initialData = {}, onSubmit, buttonText = "
   });
 
   useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, []);
+
+  useEffect(() => {
     if (initialData) {
       Object.entries(initialData).forEach(([key, value]) => {
         setValue(key, value);

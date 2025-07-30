@@ -15,6 +15,13 @@ export default function UserForm({ initialData = {}, onSubmit, buttonText = "Gua
   });
 
   useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, []);
+
+  useEffect(() => {
     if (initialData) {
       Object.entries(initialData).forEach(([key, value]) => {
         if (key === 'rut' && value) {
@@ -167,7 +174,7 @@ export default function UserForm({ initialData = {}, onSubmit, buttonText = "Gua
 
       <button
         type="submit"
-        className="bg-blue-600 text-white px-6 py-3 rounded font-semibold shadow hover:bg-blue-700 transition-all w-full mt-4"
+        className="bg-blue-600 text-white px-6 py-3 rounded font-semibold shadow hover:bg-blue-700 transition-all w-full"
       >
         {buttonText}
       </button>
