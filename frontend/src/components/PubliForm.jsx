@@ -103,9 +103,16 @@ export default function PubliForm({ initialData = {}, onSubmit, buttonText = "Gu
   ];
 
   // Filtra la opción "bloqueado" si el usuario no es admin
-  const estadosFiltrados = userRole === "admin"
+  let estadosFiltrados = userRole === "admin"
     ? estados
     : estados.filter(e => e.value !== "bloqueado");
+
+  // Si el estado actual es bloqueado y el usuario no es admin, solo mostrar bloqueado y deshabilitar el select
+  const estadoActual = initialData.estado || "activo";
+  const esBloqueadoNoAdmin = estadoActual === "bloqueado" && userRole !== "admin";
+  if (esBloqueadoNoAdmin) {
+    estadosFiltrados = [{ value: "bloqueado", label: "Bloqueado" }];
+  }
 
   return (
     <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-4" autoComplete="off">
@@ -141,6 +148,7 @@ export default function PubliForm({ initialData = {}, onSubmit, buttonText = "Gu
             validate: value => estadosFiltrados.map(e => e.value).includes(value) || "El estado debe ser válido"
           })}
           className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+          disabled={esBloqueadoNoAdmin}
         >
           <option value="">Selecciona estado</option>
           {estadosFiltrados.map(e => (
