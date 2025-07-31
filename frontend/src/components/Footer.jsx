@@ -27,9 +27,9 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold mb-4">Categorías</h4>
             <ul className="space-y-2 text-gray-400">
-              <li><button className="hover:text-white transition-colors" onClick={() => navigate('/explore?cat=salud')}>Salud</button></li>
-              <li><button className="hover:text-white transition-colors" onClick={() => navigate('/explore?cat=educacion')}>Educación</button></li>
-              <li><button className="hover:text-white transition-colors" onClick={() => navigate('/explore?cat=tecnologia')}>Tecnología</button></li>
+              <li><button className="hover:text-white transition-colors" onClick={() => navigate('/explore?categoria=salud')}>Salud</button></li>
+              <li><button className="hover:text-white transition-colors" onClick={() => navigate('/explore?categoria=educacion')}>Educación</button></li>
+              <li><button className="hover:text-white transition-colors" onClick={() => navigate('/explore?categoria=tecnología')}>Tecnología</button></li>
             </ul>
           </div>
           <div>
