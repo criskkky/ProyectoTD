@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { fetchCities } from '../services/city.service';
 
-export default function PubliForm({ initialData = {}, onSubmit, buttonText = "Guardar" }) {
+export default function PubliForm({ initialData = {}, onSubmit, buttonText = "Guardar", userRole = "user" }) {
   const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm({
     defaultValues: {
       titulo: initialData.titulo || "",
@@ -102,6 +102,11 @@ export default function PubliForm({ initialData = {}, onSubmit, buttonText = "Gu
     { value: "bloqueado", label: "Bloqueado" }
   ];
 
+  // Filtra la opción "bloqueado" si el usuario no es admin
+  const estadosFiltrados = userRole === "admin"
+    ? estados
+    : estados.filter(e => e.value !== "bloqueado");
+
   return (
     <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-4" autoComplete="off">
       <div className="flex flex-col gap-1">
@@ -133,12 +138,12 @@ export default function PubliForm({ initialData = {}, onSubmit, buttonText = "Gu
         <select
           {...register("estado", {
             required: "El estado es obligatorio",
-            validate: value => ["activo", "inactivo", "bloqueado"].includes(value) || "El estado debe ser activo, inactivo o bloqueado"
+            validate: value => estadosFiltrados.map(e => e.value).includes(value) || "El estado debe ser válido"
           })}
           className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
         >
           <option value="">Selecciona estado</option>
-          {estados.map(e => (
+          {estadosFiltrados.map(e => (
             <option key={e.value} value={e.value}>{e.label}</option>
           ))}
         </select>

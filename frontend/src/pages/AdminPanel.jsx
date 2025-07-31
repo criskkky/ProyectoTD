@@ -329,6 +329,7 @@ const AdminPanel = () => {
                 initialData={selectedPublication || {}}
                 onSubmit={handleSubmitPubliForm}
                 buttonText={selectedPublication ? "Actualizar" : "Crear"}
+                userRole={user.rol}
               />
             </div>
           </div>
