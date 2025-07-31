@@ -166,9 +166,14 @@ const Dashboard = () => {
                                 <FaEdit className="w-4 h-4" />
                               </button>
                               <button
-                                className="flex items-center gap-1 px-2 py-1 rounded hover:bg-red-50 text-red-600 hover:text-red-800 font-semibold transition"
-                                onClick={() => handleEliminarPublicacion(servicio.id)}
+                                className={`flex items-center gap-1 px-2 py-1 rounded font-semibold transition ${servicio.estado === "bloqueado" && user.rol !== "admin" ? "opacity-50 cursor-not-allowed" : "hover:bg-red-50 text-red-600 hover:text-red-800"}`}
+                                onClick={() => {
+                                  if (servicio.estado !== "bloqueado" || user.rol === "admin") {
+                                    handleEliminarPublicacion(servicio.id);
+                                  }
+                                }}
                                 title="Eliminar"
+                                disabled={servicio.estado === "bloqueado" && user.rol !== "admin"}
                               >
                                 <FaTrash className="w-4 h-4" />
                               </button>

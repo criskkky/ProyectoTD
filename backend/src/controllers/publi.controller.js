@@ -165,6 +165,11 @@ export async function deletePublication(req, res) {
     const [currentPublication, errorCurrent] = await getPubliService({ id });
     if (errorCurrent) return handleErrorClient(res, 404, errorCurrent);
 
+    // Si la publicación está bloqueada, solo el admin puede eliminarla
+    if (currentPublication.estado === "bloqueado" && req.user.rol !== "admin") {
+      return handleErrorClient(res, 403, "Solo el administrador puede eliminar publicaciones bloqueadas");
+    }
+
     // Permitir solo si es el creador o admin
     if (req.user.rol !== "admin" && currentPublication.createdBy.id !== req.user.id) {
       return handleErrorClient(res, 403, "No tienes permisos para eliminar esta publicación");
