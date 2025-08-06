@@ -138,10 +138,12 @@ function Explore() {
 
   // PAGINACIÓN
   const publicacionesPorPagina = 9;
-  const totalPaginas = Math.ceil(publicaciones.length / publicacionesPorPagina);
+  // Filtrar solo publicaciones con estado 'activo'
+  const publicacionesActivas = publicaciones.filter(publicacion => publicacion.estado === 'activo');
+  const totalPaginas = Math.ceil(publicacionesActivas.length / publicacionesPorPagina);
   const indiceInicio = (paginaActual - 1) * publicacionesPorPagina;
   const indiceFin = indiceInicio + publicacionesPorPagina;
-  const publicacionesPaginadas = publicaciones.slice(indiceInicio, indiceFin);
+  const publicacionesPaginadas = publicacionesActivas.slice(indiceInicio, indiceFin);
 
   const cambiarPagina = (nuevaPagina) => {
     const params = new URLSearchParams(location.search);
@@ -256,7 +258,7 @@ function Explore() {
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Publicaciones Disponibles</h2>
           {loading ? (
             <div className="text-center py-10 text-blue-600 font-semibold text-xl">Cargando publicaciones...</div>
-          ) : (publicaciones.length === 0 ? (
+          ) : (publicacionesActivas.length === 0 ? (
             <div className="text-center py-10 text-gray-500 text-lg">No hay publicaciones disponibles en este momento.</div>
           ) : (
             <>
