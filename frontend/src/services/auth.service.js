@@ -7,7 +7,8 @@ export async function login(dataUser) {
     try {
         const response = await axios.post('/auth/login', {
             email: dataUser.email, 
-            password: dataUser.password
+            password: dataUser.password,
+            turnstileToken: dataUser.turnstileToken
         });
         const { status, data } = response;
         if (status === 200) {
@@ -26,19 +27,23 @@ export async function login(dataUser) {
 export async function register(data) {
     try {
         // Remover password del objeto data y convertir el resto a minúsculas
-        const { password, ...rest } = data;
+        const { password, turnstileToken, ...rest } = data;
         const dataRegister = {
             ...convertirMinusculas(rest),
             password // Añadir nuevamente la contraseña
         };
         const { nombres, apellidos, email, rut } = dataRegister;
-        const response = await axios.post('/auth/register', {
+        
+        const payload = {
             nombres,
             apellidos,
             email,
             rut,
-            password
-        });
+            password,
+            turnstileToken // Agregar el token de Turnstile
+        };
+        
+        const response = await axios.post('/auth/register', payload);
         return response.data;
     } catch (error) {
         return error.response.data;

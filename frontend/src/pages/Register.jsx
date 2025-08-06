@@ -2,7 +2,9 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { register } from '@/services/auth.service.js';
 import Form from "@/components/Form";
+import CloudflareTurnstile from '@/components/CloudflareTurnstile';
 import useRegister from '@/hooks/auth/useRegister.jsx';
+import useTurnstile from '@/hooks/useTurnstile.jsx';
 import { showErrorAlert, showSuccessAlert } from '@/helpers/sweetAlert.js';
 import { formatPostUpdate } from '@/helpers/formatData.js';
 
@@ -15,6 +17,17 @@ const Register = () => {
     handleInputChange
   } = useRegister();
 
+  const {
+    turnstileToken,
+    turnstileError,
+    turnstileRef,
+    handleTurnstileVerify,
+    handleTurnstileError,
+    handleTurnstileExpire,
+    validateTurnstile,
+    handleSubmitError
+  } = useTurnstile();
+
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({});
 
@@ -26,19 +39,36 @@ const Register = () => {
   };
 
   const registerSubmit = async (data) => {
-    const finalData = formatPostUpdate({ ...formData, ...data }); // Formatea los datos antes de enviarlos
     try {
+      // Validar captcha antes de enviar
+      if (!validateTurnstile()) {
+        return;
+      }
+
+      // Incluir token de Turnstile en los datos
+      const registerData = {
+        ...formData,
+        ...data,
+        turnstileToken
+      };
+
+      const finalData = formatPostUpdate(registerData); // Formatea los datos antes de enviarlos
       const response = await register(finalData);
+      
       if (response.status === 'Success') {
         showSuccessAlert('¡Registrado!', 'Usuario registrado exitosamente.');
         setTimeout(() => {
           navigate('/auth');
         }, 1000)
       } else if (response.status === 'Client error') {
+        // Si hay error, resetear el captcha para que se pueda intentar de nuevo
+        handleSubmitError();
         errorData(response.details);
       }
     } catch (error) {
       console.error("Error al registrar un usuario: ", error);
+      // En caso de error, resetear el captcha
+      handleSubmitError();
       showErrorAlert('Cancelado', 'Ocurrió un error al registrarse.');
     }
   };
@@ -160,6 +190,24 @@ const Register = () => {
             onSubmit={registerSubmit}
             footerContent={
               <>
+                {/* Turnstile CAPTCHA */}
+                <div className="mt-4 mb-6">
+                  <CloudflareTurnstile
+                    ref={turnstileRef}
+                    siteKey={import.meta.env.VITE_TURNSTILE_SITE_KEY}
+                    onVerify={handleTurnstileVerify}
+                    onError={handleTurnstileError}
+                    onExpire={handleTurnstileExpire}
+                    theme="light"
+                    size="normal"
+                    className="flex justify-center"
+                  />
+                  {turnstileError && (
+                    <div className="mt-2 text-center text-red-600 text-sm font-medium">
+                      {turnstileError}
+                    </div>
+                  )}
+                </div>
                 <button
                   type="button"
                   className="w-full py-2 px-4 mb-2 bg-[#FFA500] hover:bg-[#df9100] text-white font-semibold rounded-lg shadow transition-colors"

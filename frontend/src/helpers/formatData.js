@@ -39,8 +39,16 @@ export function formatPostUpdate(user) {
     email: user.email,
   };
 
-  if (user.newPassword && user.newPassword.trim() !== "") {
-    formatted.password = user.newPassword.trim(); // 👈 Usa newPassword
+  // Para registro usar 'password', para edición usar 'newPassword'
+  if (user.password && user.password.trim() !== "") {
+    formatted.password = user.password.trim();
+  } else if (user.newPassword && user.newPassword.trim() !== "") {
+    formatted.password = user.newPassword.trim();
+  }
+
+  // Mantener el turnstileToken si existe
+  if (user.turnstileToken) {
+    formatted.turnstileToken = user.turnstileToken;
   }
 
   return formatted;

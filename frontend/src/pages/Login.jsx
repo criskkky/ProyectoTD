@@ -2,7 +2,9 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { login } from '@/services/auth.service.js';
 import Form from '@/components/Form';
+import CloudflareTurnstile from '@/components/CloudflareTurnstile';
 import useLogin from '@/hooks/auth/useLogin.jsx';
+import useTurnstile from '@/hooks/useTurnstile.jsx';
 import { MdErrorOutline } from 'react-icons/md';
 
 const Login = () => {
@@ -15,20 +17,47 @@ const Login = () => {
     handleInputChange
   } = useLogin();
 
+  const {
+    turnstileToken,
+    turnstileError,
+    turnstileRef,
+    handleTurnstileVerify,
+    handleTurnstileError,
+    handleTurnstileExpire,
+    validateTurnstile,
+    handleSubmitError
+  } = useTurnstile();
+
   const loginSubmit = async (data) => {
     try {
-      const response = await login(data);
+      // Validar captcha antes de enviar
+      if (!validateTurnstile()) {
+        return;
+      }
+
+      // Incluir token de Turnstile en los datos
+      const loginData = {
+        ...data,
+        turnstileToken
+      };
+
+      const response = await login(loginData);
       if (response.status === 'Success') {
         setErrorMsg("");
         navigate('/home');
       } else if (response.status === 'Client error') {
+        // Si hay error, resetear el captcha
+        handleSubmitError();
         errorData(response.details);
         setErrorMsg("Correo o contraseña incorrectos.");
       } else {
+        handleSubmitError();
         setErrorMsg("Error al iniciar sesión. Intenta nuevamente.");
       }
     } catch (error) {
+      handleSubmitError();
       setErrorMsg("Error de conexión. Intenta nuevamente.");
+      console.error('Login error:', error);
     }
   };
 
@@ -86,15 +115,35 @@ const Login = () => {
           buttonText="Iniciar sesión"
           onSubmit={loginSubmit}
           footerContent={
-            <p className="mt-4 text-center text-sm text-gray-600">
-              ¿No tienes cuenta?,{" "}
-              <a
-                href="/register"
-                className="text-blue-600 hover:underline font-semibold"
-              >
-                ¡Regístrate aquí!
-              </a>
-            </p>
+            <>
+              {/* Turnstile CAPTCHA */}
+              <div className="mt-4 mb-6">
+                <CloudflareTurnstile
+                  ref={turnstileRef}
+                  siteKey={import.meta.env.VITE_TURNSTILE_SITE_KEY}
+                  onVerify={handleTurnstileVerify}
+                  onError={handleTurnstileError}
+                  onExpire={handleTurnstileExpire}
+                  theme="light"
+                  size="normal"
+                  className="flex justify-center"
+                />
+                {turnstileError && (
+                  <div className="mt-2 text-center text-red-600 text-sm font-medium">
+                    {turnstileError}
+                  </div>
+                )}
+              </div>
+              <p className="mt-4 text-center text-sm text-gray-600">
+                ¿No tienes cuenta?,{" "}
+                <a
+                  href="/register"
+                  className="text-blue-600 hover:underline font-semibold"
+                >
+                  ¡Regístrate aquí!
+                </a>
+              </p>
+            </>
           }
           className="space-y-6"
           titleClassName="text-2xl font-bold text-center text-blue-700 mb-6"
