@@ -74,8 +74,32 @@ export default function PubliForm({ initialData = {}, onSubmit, buttonText = "Gu
 
   const onFormSubmit = (data) => {
     const { cityNombre, etiquetas, ...rest } = data;
+    
+    // Limpiar campos opcionales vacíos para evitar errores de validación
+    const cleanedData = { ...rest };
+    
+    // Si contacto_whatsapp está vacío, no lo enviamos
+    if (!cleanedData.contacto_whatsapp?.trim()) {
+      delete cleanedData.contacto_whatsapp;
+    }
+    
+    // Si contacto_telefono está vacío, no lo enviamos  
+    if (!cleanedData.contacto_telefono?.trim()) {
+      delete cleanedData.contacto_telefono;
+    }
+    
+    // Si enlace_externo está vacío, no lo enviamos
+    if (!cleanedData.enlace_externo?.trim()) {
+      delete cleanedData.enlace_externo;
+    }
+    
+    // Si direccion está vacío, no lo enviamos
+    if (!cleanedData.direccion?.trim()) {
+      delete cleanedData.direccion;
+    }
+    
     const dataToSend = {
-      ...rest,
+      ...cleanedData,
       etiquetas: etiquetas ? etiquetas.split(",").map(tag => tag.trim()).filter(tag => tag) : []
     };
     onSubmit(dataToSend);

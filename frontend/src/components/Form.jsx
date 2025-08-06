@@ -18,7 +18,20 @@ const Form = ({ title, fields, buttonText, onSubmit, footerContent, backgroundCo
   };
 
   const onFormSubmit = (data) => {
-    onSubmit(data);
+    // Limpiar campos opcionales vacíos para evitar errores de validación del backend
+    const cleanedData = { ...data };
+    
+    // Iterar sobre los campos para identificar cuáles son opcionales y están vacíos
+    fields.forEach(field => {
+      if (!field.required && cleanedData[field.name] !== undefined) {
+        // Si el campo no es requerido y está vacío (string vacío o solo espacios), eliminarlo
+        if (typeof cleanedData[field.name] === 'string' && !cleanedData[field.name].trim()) {
+          delete cleanedData[field.name];
+        }
+      }
+    });
+    
+    onSubmit(cleanedData);
   };
 
   return (
