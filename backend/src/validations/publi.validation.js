@@ -84,6 +84,7 @@ export const publiBodyValidation = Joi.object({
       "arte",
       "construcción",
       "educacion",
+      "idiomas",
       "salud",
       "servicios generales",
       "tecnología"
@@ -91,6 +92,7 @@ export const publiBodyValidation = Joi.object({
     .required()
     .messages({
       "any.only": "La categoría debe ser una de las permitidas.",
+      "any.required": "La categoría es requerida.",
     }),
   createdBy: Joi.number()
     .integer()

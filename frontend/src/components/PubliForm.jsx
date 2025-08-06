@@ -109,6 +109,7 @@ export default function PubliForm({ initialData = {}, onSubmit, buttonText = "Gu
     { value: "arte", label: "Arte" },
     { value: "construcción", label: "Construcción" },
     { value: "educacion", label: "Educación" },
+    { value: "idiomas", label: "Idiomas" },
     { value: "salud", label: "Salud" },
     { value: "servicios generales", label: "Servicios generales" },
     { value: "tecnología", label: "Tecnología" }
@@ -386,6 +387,7 @@ export default function PubliForm({ initialData = {}, onSubmit, buttonText = "Gu
               "arte",
               "construcción",
               "educacion",
+              "idiomas",
               "salud",
               "servicios generales",
               "tecnología"

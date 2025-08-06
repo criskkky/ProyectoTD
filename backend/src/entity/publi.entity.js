@@ -37,7 +37,7 @@ const PubliSchema = new EntitySchema({
     contacto_email: {
       type: "varchar",
       length: 100,
-      nullable: true,
+      nullable: false,
     },
     contacto_whatsapp: {
       type: "varchar",
@@ -70,7 +70,7 @@ const PubliSchema = new EntitySchema({
         "servicios generales",
         "tecnología"
       ],
-      nullable: true,
+      nullable: false,
     },
     createdAt: {
       type: "timestamp",
