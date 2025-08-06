@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FaEdit, FaTrash, FaUserCircle, FaClipboardList } from "react-icons/fa";
+import { FaEdit, FaTrash, FaUserCircle, FaClipboardList, FaSync } from "react-icons/fa";
 import useUsers from "@/hooks/users/useGetUsers";
 import useEditUser from "@/hooks/users/useEditUser";
 import usePublications from "@/hooks/publications/usePublications";
@@ -9,6 +9,10 @@ import UserForm from "../components/UserForm";
 import useDeleteUser from "@/hooks/users/useDeleteUser";
 
 const AdminPanel = () => {
+  // Estados para refresh
+  const [refreshing, setRefreshing] = useState(false);
+  const [lastRefresh, setLastRefresh] = useState(new Date());
+  
   // Buscadores
   const [publiSearch, setPubliSearch] = useState("");
   const [publiSearchType, setPubliSearchType] = useState("titulo");
@@ -38,21 +42,13 @@ const AdminPanel = () => {
   } = useUsers();
 
   const { handleUpdate: handleEditarUsuario, setDataUser } = useEditUser(setUsers);
-  const { handleDelete } = useDeleteUser(fetchUsers);
+  const { handleDelete } = useDeleteUser(async () => {
+    await fetchUsers();
+    setLastRefresh(new Date());
+  });
 
-  // Paginación publicaciones
-  const [publiPage, setPubliPage] = useState(1);
-  const PUBLICACIONES_PER_PAGE = 10;
-  const totalPubliPages = Math.ceil((Array.isArray(publicaciones) ? publicaciones.length : 0) / PUBLICACIONES_PER_PAGE);
-  const paginatedPublicaciones = Array.isArray(publicaciones) ? publicaciones.slice((publiPage - 1) * PUBLICACIONES_PER_PAGE, publiPage * PUBLICACIONES_PER_PAGE) : [];
-  // Paginación usuarios
-  const [userPage, setUserPage] = useState(1);
-  const USERS_PER_PAGE = 10;
-  const totalUserPages = Math.ceil((Array.isArray(users) ? users.length : 0) / USERS_PER_PAGE);
-  const paginatedUsers = Array.isArray(users) ? users.slice((userPage - 1) * USERS_PER_PAGE, userPage * USERS_PER_PAGE) : [];
-
-  // Filtrado publicaciones
-  const filteredPublicaciones = paginatedPublicaciones.filter((publi) => {
+  // Filtrado publicaciones (ANTES de paginación)
+  const filteredPublicaciones = Array.isArray(publicaciones) ? publicaciones.filter((publi) => {
     let match = true;
     if (publiSearch) {
       if (publiSearchType === "id") match = String(publi.id).includes(publiSearch);
@@ -63,16 +59,39 @@ const AdminPanel = () => {
       match = match && publi.estado?.toLowerCase() === publiEstado;
     }
     return match;
-  });
-  // Filtrado usuarios
-  const filteredUsers = paginatedUsers.filter((usuario) => {
+  }) : [];
+
+  // Filtrado usuarios (ANTES de paginación)
+  const filteredUsers = Array.isArray(users) ? users.filter((usuario) => {
     if (!userSearch) return true;
     if (userSearchType === "id") return String(usuario.id).includes(userSearch);
     if (userSearchType === "email") return usuario.email?.toLowerCase().includes(userSearch.toLowerCase());
     if (userSearchType === "nombre") return (`${usuario.nombres} ${usuario.apellidos}`).toLowerCase().includes(userSearch.toLowerCase());
     if (userSearchType === "rut") return usuario.rut?.toLowerCase().includes(userSearch.toLowerCase());
     return true;
-  });
+  }) : [];
+
+  // Paginación publicaciones (DESPUÉS del filtrado)
+  const [publiPage, setPubliPage] = useState(1);
+  const PUBLICACIONES_PER_PAGE = 10;
+  const totalPubliPages = Math.ceil(filteredPublicaciones.length / PUBLICACIONES_PER_PAGE);
+  const paginatedPublicaciones = filteredPublicaciones.slice((publiPage - 1) * PUBLICACIONES_PER_PAGE, publiPage * PUBLICACIONES_PER_PAGE);
+
+  // Paginación usuarios (DESPUÉS del filtrado)
+  const [userPage, setUserPage] = useState(1);
+  const USERS_PER_PAGE = 10;
+  const totalUserPages = Math.ceil(filteredUsers.length / USERS_PER_PAGE);
+  const paginatedUsers = filteredUsers.slice((userPage - 1) * USERS_PER_PAGE, userPage * USERS_PER_PAGE);
+
+  // Resetear página cuando cambia el filtro de publicaciones
+  useEffect(() => {
+    setPubliPage(1);
+  }, [publiSearch, publiSearchType, publiEstado]);
+
+  // Resetear página cuando cambia el filtro de usuarios
+  useEffect(() => {
+    setUserPage(1);
+  }, [userSearch, userSearchType]);
 
   useEffect(() => {
     const usuario = JSON.parse(sessionStorage.getItem("usuario")) || {};
@@ -82,6 +101,43 @@ const AdminPanel = () => {
       fetchUsers();
     }
   }, [fetchPublicaciones, fetchUsers]);
+
+  // Auto-refresh cada 30 segundos
+  useEffect(() => {
+    if (user.rol !== "admin") return;
+
+    const interval = setInterval(() => {
+      fetchPublicaciones();
+      fetchUsers();
+      setLastRefresh(new Date());
+    }, 30000); // 30 segundos
+
+    return () => clearInterval(interval);
+  }, [user.rol, fetchPublicaciones, fetchUsers]);
+
+  // Función para refresh manual
+  const handleManualRefresh = async () => {
+    if (user.rol !== "admin") return;
+    
+    setRefreshing(true);
+    try {
+      await Promise.all([
+        fetchPublicaciones(),
+        fetchUsers()
+      ]);
+      setLastRefresh(new Date());
+    } catch (error) {
+      console.error('Error al refrescar datos:', error);
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
+  // Wrapper para eliminar publicaciones que actualiza timestamp
+  const handleEliminarPublicacionWrapper = async (id) => {
+    await handleEliminarPublicacion(id);
+    setLastRefresh(new Date());
+  };
 
   if (user.rol !== "admin") {
     return (
@@ -103,6 +159,7 @@ const AdminPanel = () => {
     if (selectedPublication) {
       await handleEditarPublicacion(selectedPublication.id, formData);
       await fetchPublicaciones();
+      setLastRefresh(new Date());
     }
     setShowPubliForm(false);
   };
@@ -123,6 +180,8 @@ const AdminPanel = () => {
         setShowUserForm(false);
         setSelectedUser(null);
         setDataUser([]); // Limpiar dataUser después de la edición
+        await fetchUsers(); // Refrescar usuarios después de editar
+        setLastRefresh(new Date());
       } catch (error) {
         console.error('Error al actualizar el usuario:', error);
       }
@@ -132,7 +191,26 @@ const AdminPanel = () => {
   return (
     <div className="bg-gray-50 min-h-screen py-10 px-4 md:px-0">
       <div className="max-w-7xl mx-auto px-2 md:px-0 py-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Panel de Administración</h1>
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">Panel de Administración</h1>
+          <div className="flex items-center gap-4">
+            <div className="text-sm text-gray-500">
+              Última actualización: {lastRefresh.toLocaleTimeString()}
+            </div>
+            <button
+              onClick={handleManualRefresh}
+              disabled={refreshing}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${
+                refreshing 
+                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
+                  : 'bg-blue-600 text-white hover:bg-blue-700'
+              }`}
+            >
+              <FaSync className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
+              {refreshing ? 'Actualizando...' : 'Actualizar'}
+            </button>
+          </div>
+        </div>
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Gestión de publicaciones */}
           <div className="bg-white rounded-xl shadow-md p-6 flex flex-col">
@@ -178,7 +256,7 @@ const AdminPanel = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {filteredPublicaciones.map((publi) => (
+                      {paginatedPublicaciones.map((publi) => (
                         <tr key={publi.id} className="border-b hover:bg-gray-50">
                           <td className="py-3 px-2 font-mono text-xs text-gray-700">{publi.id}</td>
                           <td className="py-3 px-2 font-medium text-gray-900">{publi.titulo}</td>
@@ -196,7 +274,7 @@ const AdminPanel = () => {
                               </button>
                               <button
                                 className="flex items-center gap-1 px-2 py-1 rounded hover:bg-red-50 text-red-600 hover:text-red-800 font-semibold transition"
-                                onClick={() => handleEliminarPublicacion(publi.id)}
+                                onClick={() => handleEliminarPublicacionWrapper(publi.id)}
                                 title="Eliminar"
                               >
                                 <FaTrash className="w-4 h-4" />
@@ -263,7 +341,7 @@ const AdminPanel = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {filteredUsers.map((usuario) => (
+                      {paginatedUsers.map((usuario) => (
                         <tr key={usuario.id} className="border-b hover:bg-gray-50">
                           <td className="py-3 px-2 font-mono text-xs text-gray-700">{usuario.id}</td>
                           <td className="py-3 px-2 font-medium text-gray-900">{startCase(usuario.nombres)} {startCase(usuario.apellidos)}</td>
