@@ -27,13 +27,9 @@ const useEditUser = (setUsers) => {
                 setIsPopupOpen(false);
                 const formattedUser = formatPostUpdate(updatedUser);
 
-                setUsers(prevUsers => prevUsers.map(user => {
-                    console.log("Usuario actual:", user);
-                    if (user.id === formattedUser.id) {
-                        console.log("Reemplazando con:", formattedUser);
-                    }
-                    return user.id === formattedUser.id ? formattedUser : user;
-                }));
+                setUsers(prevUsers => prevUsers.map(user =>
+                    user.id === formattedUser.id ? formattedUser : user
+                ));
 
                 setDataUser([]);
             } catch (error) {

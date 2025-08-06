@@ -2,7 +2,6 @@ import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
 import Login from '@/pages/Login';
 import Home from '@/pages/Home';
-import Users from '@/pages/Users';
 import Register from '@/pages/Register';
 import Error404 from '@/pages/Error404';
 import Root from '@/pages/Root';
@@ -26,14 +25,6 @@ const router = createBrowserRouter([
       {
         path: '/home',
         element: <Home />
-      },
-      {
-        path: '/users',
-        element: (
-          <ProtectedRoute allowedRoles={['admin']}>
-            <Users />
-          </ProtectedRoute>
-        ),
       },
       {
         path: '/dashboard',
